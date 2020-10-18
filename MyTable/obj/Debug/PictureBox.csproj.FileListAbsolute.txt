@@ -1,0 +1,15 @@
+c:\users\san\documents\visual studio 2013\Projects\PictureBox\PictureBox\obj\Debug\PictureBox.csprojResolveAssemblyReference.cache
+c:\users\san\documents\visual studio 2013\Projects\PictureBox\PictureBox\obj\Debug\PictureBox.Form1.resources
+c:\users\san\documents\visual studio 2013\Projects\PictureBox\PictureBox\obj\Debug\PictureBox.Properties.Resources.resources
+c:\users\san\documents\visual studio 2013\Projects\PictureBox\PictureBox\obj\Debug\PictureBox.csproj.GenerateResource.Cache
+C:\Users\San\Documents\Visual Studio 2013\Projects\PictureBox\PictureBox\bin\Debug\MyTable.exe.config
+C:\Users\San\Documents\Visual Studio 2013\Projects\PictureBox\PictureBox\bin\Debug\MyTable.exe
+C:\Users\San\Documents\Visual Studio 2013\Projects\PictureBox\PictureBox\bin\Debug\MyTable.pdb
+C:\Users\San\Documents\Visual Studio 2013\Projects\PictureBox\PictureBox\obj\Debug\MyTable.exe
+C:\Users\San\Documents\Visual Studio 2013\Projects\PictureBox\PictureBox\obj\Debug\MyTable.pdb
+C:\Users\San\Documents\Visual Studio 2013\Projects\PictureBox\PictureBox\obj\Debug\Interop.VBIDE.dll
+C:\Users\San\Documents\Visual Studio 2013\Projects\PictureBox\PictureBox\obj\Debug\PictureBox.csproj.ResolveComReference.cache
+C:\Users\San\documents\visual studio 2013\Projects\PictureBox\PictureBox\bin\Debug\Interop.ACCTRLLib.dll
+C:\Users\San\documents\visual studio 2013\Projects\PictureBox\PictureBox\bin\Debug\AxInterop.ACCTRLLib.dll
+C:\Users\San\documents\visual studio 2013\Projects\PictureBox\PictureBox\obj\Debug\Interop.ACCTRLLib.dll
+C:\Users\San\documents\visual studio 2013\Projects\PictureBox\PictureBox\obj\Debug\AxInterop.ACCTRLLib.dll

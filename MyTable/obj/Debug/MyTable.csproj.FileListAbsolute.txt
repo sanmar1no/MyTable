@@ -1,0 +1,7 @@
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\MyTable.exe.config
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\obj\Debug\Interop.ACCTRLLib.dll
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\obj\Debug\Interop.VBIDE.dll
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\obj\Debug\AxInterop.ACCTRLLib.dll
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\obj\Debug\MyTable.csproj.ResolveComReference.cache
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\obj\Debug\MyTable.exe
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\obj\Debug\MyTable.pdb
