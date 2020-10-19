@@ -723,16 +723,18 @@ namespace PictureBox
             {//совпал номер помещения
                 if (izmMassSCH[0] != null && izmMassSCH[0] != "")//изменение имеет место
                 {
-                    for (int row = 0; row < 60; row++)//пробежимся по таблице
+                    bool findDate = false;
+                    int row = 0;
+                    for (; row < 60; row++)//пробежимся по таблице
                     { //у нас в наличии измененная строка {дата-0,показание_Э-1, показание_В-2, номер_Э-3, К_тр_Э-4, номер_В-5, расход_Э-6, кол-во_Сотр_В-7, 
                         //сч-р_В-8, тех-хо_В-9, расход_В-10, корп_Э-11, помещ_Э-12, этаж_Э-13, %_Э-14, С-кВт_Э-15}+dataRedact= дата редактируемая в datagrid
                         //если dataRedact не пустое, то изменилась дата... измененную дату мы не найдем, но если она пустая, то найдем. как искать?
                         if (chetchiki[row, floor, 0, numroom] == null) break;//пустые строки ниже сбросим
                         if (!(dataRedact[0] == "" || dataRedact[0] == null))
-                        {
-                            string ss = DateTime.Parse(dataRedact[0]).ToShortDateString();
+                        { 
                             if (chetchiki[row, floor, 0, numroom] == DateTime.Parse(dataRedact[0]).ToShortDateString())//dataRedact[0] - дата в строке, которая была до изменения, [1] - ключ (electro или voda)
                             {//изменилась дата: существующая дата изменила свой индекс row, либо она удалена совсем.
+                                findDate = true;
                                 writeStrToMass(floor, numroom, row);//перед удалением запишем недостающие данные
                                 if (removeRowInMassiv(floor, numroom, row))//если получилось удалить строку
                                 {
@@ -764,6 +766,10 @@ namespace PictureBox
                                 break;
                             }
                         }
+                    }
+                    if (!findDate)
+                    {//введена дата, которой раньше не было 
+                        addRowToMassiv(floor, numroom, row);
                     }
                 }
                 else if (izmMassSCH[0] == "")
@@ -818,17 +824,10 @@ namespace PictureBox
                             }
                         }
                     }
-                    string s = arenda[0, floor, 1, numroom];
-                    string s1 = arenda[0, 0, 1, 4];
                     for (int floor1 = 0; floor1 < 4; floor1++)//найдем и перезапишем данные арендатора по другим помещениям
                     {
                         for (int numroom1 = 0; numroom1 < max1; numroom1++)
                         {
-                            if (floor1 == 0 && numroom1 == 4)
-                            {
-                                s1 = arenda[0, 0, 1, 4];
-                                //
-                            }
                             if (!(floor1 == EtazT && numroom1 == PomeshenieT))
                             {
 
@@ -837,7 +836,6 @@ namespace PictureBox
                                     for (int j = 2; j < RMA; j++)
                                     {//перезапишем данные в остальных таблицах с учетом изменения по данному арендатору, кроме даты и самого арендатора (j=2)
                                         arenda[0, floor1, j, numroom1] = arenda[0, floor, j, numroom];
-                                        richTextBox1.Text += arenda[0, floor1, j, numroom1]+"\r\n";
                                     }
                                 }
                             }
@@ -3075,7 +3073,7 @@ namespace PictureBox
             {
                 for (int pomesh = 0; pomesh < max1; pomesh++)
                 {
-                    if (data[et1,9,pomesh]!=null)
+                    if (!(data[et1,9,pomesh]==null||data[et1, 9, pomesh] ==""))
                     {
                         if (data[et1, 9, pomesh] != "расчет")
                         {
@@ -3370,28 +3368,25 @@ namespace PictureBox
                    // WriteSchet(outL2et_pom[0], outL2et_pom[1], DateTime.Parse(dataGridView1[0, e.RowIndex].Value.ToString()), dataGridView1[1, e.RowIndex].Value.ToString(), "+", listBox2.SelectedItem.ToString(), dataGridView1[3, e.RowIndex].Value.ToString(), "+", "+");
                 }
                 timer3.Interval = 100;
-                timer3.Enabled = true;
-                
+                timer3.Enabled = true;                
             }
-
 
             if (!dgCellEdit)
             {
                 //если изменится дата, то она не должна присутствовать в этой таблице. Если присутствует, то переключиться на нее.
-                if (dataGridView1[0, e.RowIndex].Value != null)
+                int selectedRow = e.RowIndex;
+             
+                if (dataGridView1[0, selectedRow].Value != null&& selectedRow< dataGridView1.RowCount -1)
                 {
                     for (int k = 0; k < dataGridView1.RowCount-2; k++)//-2 ошибка???
                     {
-                        if (k != e.RowIndex && DateTime.Parse(dataGridView1[0, k].Value.ToString()).ToShortDateString() == DateTime.Parse(dataGridView1[0, e.RowIndex].Value.ToString()).ToShortDateString())
+                        if (k != selectedRow && DateTime.Parse(dataGridView1[0, k].Value.ToString()).ToShortDateString() == DateTime.Parse(dataGridView1[0, selectedRow].Value.ToString()).ToShortDateString())
                         {
                             //chetchiki[k, outL2et_pom[0], 0, outL2et_pom[1]] = DateTime.Parse(dataGridView1[e.ColumnIndex, e.RowIndex].Value.ToString()).ToShortDateString();
                             //dataGridView1.Rows.Remove(dataGridView1.Rows[k]);
-                            int i = e.RowIndex;
-
                             dataGridView1[0, k].Selected = true;
                             dgCellEdit = true;
-                            dataGridView1.Rows.RemoveAt(i);
-
+                            dataGridView1.Rows.RemoveAt(selectedRow);
                         }
                     }
                     //richTextBox1.Text += dataGridView1[0, e.RowIndex].Value.ToString() + "\r\n";
@@ -3429,7 +3424,12 @@ namespace PictureBox
                                 row1--;
                                 richTextBox1.Text += chetchiki[k, outL2et_pom[0], 0, outL2et_pom[1]] + "\r\n";
                                 //функция удаления строки массива
-                                DelChE(outL2et_pom[0], outL2et_pom[1], k);
+                                // DelChE(outL2et_pom[0], outL2et_pom[1], k);
+                                EtazT = outL2et_pom[0];
+                                PomeshenieT = outL2et_pom[1];
+                                dataRedact[0] = chetchiki[k, outL2et_pom[0], 0, outL2et_pom[1]];
+                                izmMassSCH[0] = "";
+                                //LoadDB(); здесь не нужно, таймер сам прогрузит базу и удалит нужную строку
                                 timer3.Interval = 100;
                                 timer3.Enabled = true;
                                 break;
