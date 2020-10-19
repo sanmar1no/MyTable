@@ -498,7 +498,7 @@ namespace PictureBox
             izmMass = new string[RMD];
             izmMassSCH = new string[RMS];
             izmMassA = new string[RMA];
-            dataRedact = new string[2];
+            dataRedact[0] = null;
         }
         void SaveDB()
         {
@@ -769,7 +769,29 @@ namespace PictureBox
                     }
                     if (!findDate)
                     {//введена дата, которой раньше не было 
-                        addRowToMassiv(floor, numroom, row);
+                        for (row = 0; row < 60; row++)
+                        {
+                            if (chetchiki[row, floor, 0, numroom] != null)
+                            {
+                                if (DateTime.Parse(chetchiki[row, floor, 0, numroom]) < DateTime.Parse(izmMassSCH[0]))
+                                {
+                                    addRowToMassiv(floor, numroom, row);//добавить строку и записать
+                                    break;
+                                }
+                                if (DateTime.Parse(chetchiki[row, floor, 0, numroom]) == DateTime.Parse(izmMassSCH[0]))
+                                {
+                                    writeStrToMass(floor, numroom, row);//записать изменения
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                writeStrToMass(floor, numroom, row);//записать изменения
+                                break;
+                            }
+                            //обработчик крайнего значения (если сделали весь цикл, но условие не выполнили)
+
+                        }
                     }
                 }
                 else if (izmMassSCH[0] == "")
@@ -3350,6 +3372,7 @@ namespace PictureBox
         bool redact = false;//какого лешего она зеленая? используется в моих функциях как глобальная переменная
         private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
+            
             if (dataGridView1[0, e.RowIndex].Value != null && dataGridView1[1, e.RowIndex].Value != null && dataGridView1[3, e.RowIndex].Value != null)
             {//заполнены ячейки дата-показание-коэффициент 
                 redact = true;
@@ -3393,7 +3416,7 @@ namespace PictureBox
                 }
             }
             else dgCellEdit = false;
-            
+ 
         }
         
         private void dataGridView1_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
@@ -3413,7 +3436,7 @@ namespace PictureBox
                 {
                     if (chetchiki[k, outL2et_pom[0], 0, outL2et_pom[1]] != null)
                     {
-                        if (row1 < dataGridView1.RowCount - 1)
+                        if (row1 < dataGridView1.RowCount )
                         {
                             row1++;
                             richTextBox1.Text +=
@@ -3437,7 +3460,7 @@ namespace PictureBox
                         }
                     }
                 }
-                SelectL2(listBox2.SelectedItem.ToString());
+                //SelectL2(listBox2.SelectedItem.ToString());
             }
         }
         void DelChE(int et1, int pomes1, int k)//удаление данных по ээ

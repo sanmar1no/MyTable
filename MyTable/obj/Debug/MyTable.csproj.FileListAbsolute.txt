@@ -21,3 +21,11 @@ c:\Users\User\source\repos\mytable\MyTable\bin\Debug\MyTable.exe
 c:\Users\User\source\repos\mytable\MyTable\bin\Debug\MyTable.pdb
 c:\Users\User\source\repos\mytable\MyTable\bin\Debug\Interop.ACCTRLLib.dll
 c:\Users\User\source\repos\mytable\MyTable\bin\Debug\AxInterop.ACCTRLLib.dll
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\MyTable.exe
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\MyTable.pdb
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\Interop.ACCTRLLib.dll
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\AxInterop.ACCTRLLib.dll
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\obj\Debug\MyTable.csprojResolveAssemblyReference.cache
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\obj\Debug\PictureBox.Form1.resources
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\obj\Debug\MyTable.Properties.Resources.resources
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\obj\Debug\MyTable.csproj.GenerateResource.Cache
