@@ -3133,7 +3133,7 @@ namespace PictureBox
                             {
                                 if (chetchiki[k, et1, 0, pomesh] != null)
                                 {
-                                    if (chetchiki[k, et1, 3, pomesh] != sovpadenie)
+                                    if (chetchiki[k, et1, 3, pomesh] != sovpadenie && chetchiki[k, et1, 3, pomesh]!=null)
                                     {
                                         sovpadenie = chetchiki[k, et1, 3, pomesh];
                                         if (sovpadenie.IndexOf(textBox18.Text) > -1) listBox2.Items.Add(sovpadenie);
