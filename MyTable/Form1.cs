@@ -810,13 +810,16 @@ namespace PictureBox
             {//совпал номер помещения
                 if (izmMassA[0] != null&&izmMassA[0] != "")//изменение имеет место
                 {
-                    for (int row = 0; row < 10; row++)//пробежимся по таблице
+                    bool findDate = false;
+                    int row = 0;
+                    for (; row < 10; row++)//пробежимся по таблице
                     { //
                         if (arenda[row, floor, 0, numroom] == null) break;//пустые строки ниже сбросим
                         if (dataModA != "")
                         {
                             if (arenda[row, floor, 0, numroom] == dataModA)//dataModA - дата в строке, которая была до изменения
                             {//изменилась дата: существующая дата изменила свой индекс row, либо она удалена совсем.
+                                findDate = true;
                                 writeStrToMassA(floor, numroom, row);//перед удалением запишем недостающие данные
                                 removeRowInMassivA(floor, numroom, row);
                                 for (row = 0; row < 10; row++)
@@ -842,6 +845,30 @@ namespace PictureBox
                                     //обработчик крайнего значения (если сделали весь цикл, но условие не выполнили)
 
                                 }
+                                break;
+                            }
+                        }
+                    }
+                    if (!findDate)
+                    {
+                        for (row = 0; row < 10; row++)
+                        {
+                            if (arenda[row, floor, 0, numroom] != null)
+                            {
+                                if (DateTime.Parse(arenda[row, floor, 0, numroom]) < DateTime.Parse(izmMassA[0]))
+                                {
+                                    addRowToMassivA(floor, numroom, row);//добавить строку и записать
+                                    break;
+                                }
+                                if (DateTime.Parse(arenda[row, floor, 0, numroom]) == DateTime.Parse(izmMassA[0]))
+                                {
+                                    writeStrToMassA(floor, numroom, row);//записать изменения
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                writeStrToMassA(floor, numroom, row);//записать изменения
                                 break;
                             }
                         }
@@ -2567,7 +2594,8 @@ namespace PictureBox
                                 comboBox3.Text = arenda[0, et, 3, i];
                                 comboBox4.Text = arenda[0, et, 4, i];
                                 textBox17.Text = arenda[0, et, 5, i];
-                                if (arenda[0, et, 6, i]!=null) richTextBox3.Text = arenda[0, et, 6, i].Replace("&rn", "\n");
+                                if (arenda[0, et, 6, i] != null) richTextBox3.Text = arenda[0, et, 6, i].Replace("&rn", "\n");
+                                else richTextBox3.Clear();
 
                               //  if (selectArenda)
                               //  {

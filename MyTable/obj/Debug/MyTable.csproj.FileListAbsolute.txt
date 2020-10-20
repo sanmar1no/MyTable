@@ -29,3 +29,19 @@ C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\obj\Debug\MyT
 C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\obj\Debug\PictureBox.Form1.resources
 C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\obj\Debug\MyTable.Properties.Resources.resources
 C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\obj\Debug\MyTable.csproj.GenerateResource.Cache
+C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\bin\Debug\MyTable.exe.config
+C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\bin\Debug\MyTable.exe
+C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\bin\Debug\MyTable.pdb
+C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\bin\Debug\Interop.ACCTRLLib.dll
+C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\bin\Debug\AxInterop.ACCTRLLib.dll
+C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\obj\Debug\MyTable.csprojAssemblyReference.cache
+C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\obj\Debug\Interop.ACCTRLLib.dll
+C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\obj\Debug\Interop.VBIDE.dll
+C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\obj\Debug\AxInterop.ACCTRLLib.dll
+C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\obj\Debug\MyTable.csproj.ResolveComReference.cache
+C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\obj\Debug\PictureBox.Form1.resources
+C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\obj\Debug\MyTable.Properties.Resources.resources
+C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\obj\Debug\MyTable.csproj.GenerateResource.cache
+C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\obj\Debug\MyTable.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\obj\Debug\MyTable.exe
+C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\obj\Debug\MyTable.pdb
