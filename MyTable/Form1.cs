@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using Excel1 = Microsoft.Office.Interop.Excel;
 
 
-namespace PictureBox
+namespace MyTable
 {
     public partial class Form1 : Form
     {
@@ -22,7 +22,7 @@ namespace PictureBox
                 UserKey = s;
             }
         }
-        int pomeshTemp = -1;
+        int numRoomTemp = -1;
         int scale = 1;
         int scalekX = 1;
         int scalekY = 1;
@@ -41,9 +41,9 @@ namespace PictureBox
                     double X = (Cursor.Position.X - this.Location.X - pictureBox1.Location.X - 9) * 20 / scale;
                     double Y = (Cursor.Position.Y - this.Location.Y - pictureBox1.Location.Y - 37) * 20 / scale;
                     Point[] figura = new Point[1];
-                    int pomeshTemp2 = sistemaU2(new Point((int)X, (int)Y), out figura);
-                    if (pomeshTemp != pomeshTemp2) pictureBox1.Load(@"Этаж" + (EtazT + 1).ToString() + ".png");
-                    if (pomeshTemp2 >= 0)
+                    int numRoomTemp2 = equationSystem(new Point((int)X, (int)Y), out figura);
+                    if (numRoomTemp != numRoomTemp2) pictureBox1.Load(@"Этаж" + (floorGlobal + 1).ToString() + ".png");
+                    if (numRoomTemp2 >= 0)
                     {
                         label3.Text = "true";
                         bitmap = new Bitmap(pictureBox1.Image);
@@ -57,20 +57,12 @@ namespace PictureBox
                     else
                     {
                         label3.Text = "false";
-                        pictureBox1.Load(@"Этаж" + (EtazT + 1).ToString() + ".png");
+                        pictureBox1.Load(@"Этаж" + (floorGlobal + 1).ToString() + ".png");
                     }//*/
                 }
             }
         }
-        public Bitmap ResizeBitmap(Bitmap b, int nWidth, int nHeight)
-        {
-            Bitmap result = new Bitmap(nWidth, nHeight);
-            using (Graphics g = Graphics.FromImage((Image)result))
-                g.DrawImage(b, 0, 0, nWidth, nHeight);
-            return result;
-        }
-
-
+  
         List<string> File = new List<string>();
         private void pictureBox1_MouseWheel(object sender, MouseEventArgs e)
         {
@@ -121,40 +113,15 @@ namespace PictureBox
                 
                 if (g3)
                 {
-                    int pom1 = sistemaU2(new Point((int)X, (int)Y), out figa1);
+                    int pom1 = equationSystem(new Point((int)X, (int)Y), out figa1);
                     if (pom1 > -1)
                     {
-                        comboBox5.Text=data[EtazT, 0, pom1];//корпус
-                        comboBox6.Text=data[EtazT, 1, pom1];//помещение
+                        comboBox5.Text=data[floorGlobal, 0, pom1];//корпус
+                        comboBox6.Text=data[floorGlobal, 1, pom1];//помещение
                         timer1.Enabled = true;
                     }
                     else timer1.Enabled = false;
                 }
-            }
-        }
-        void BuildFigura(int et1, int pomesh1)
-        {
-            int i1=0;
-            for(int i=0;i<39;i+=2)
-            {
-                if (koord[et1, i, pomesh1] == 0)
-                {
-                    break;
-                }
-                i1++;
-            }
-            figa1 = new Point[i1];
-            i1=0;
-            for (int i = 0; i < 40; i++)
-            {
-                if (koord[et1, i, pomesh1] != 0)
-                {
-                    figa1[i1].X = koord[et1, i, pomesh1];
-                    i++;
-                    figa1[i1].Y = koord[et1, i, pomesh1];
-                    i1++;
-                }
-                else break;
             }
         }
         public Point cur, curnew;
@@ -192,10 +159,10 @@ namespace PictureBox
             //List<string> Arend1 = new List<string>();//арендатор
             List<string> data1 = new List<string>();//корпус
             for (int et = 0; et < 4;et++ )
-                for (int i = 0; i < max1; i++)
+                for (int i = 0; i < maxRoom; i++)
                 {
                    // if (arenda[0, et, 1, i] != null) Arend1.Add(arenda[0, et, 1, i]);
-                    if(EtazT==et)if (data[EtazT, 0, i] != null) data1.Add(data[EtazT, 0, i]);
+                    if(floorGlobal==et)if (data[floorGlobal, 0, i] != null) data1.Add(data[floorGlobal, 0, i]);
                 }
             comboBox1.Items.Clear();
             //Arend1.Sort();
@@ -212,7 +179,7 @@ namespace PictureBox
             List<string> data5 = new List<string>();//марка водомера
             for (int et = 0; et < 4; et++)
             {
-                for (int i = 0; i < max1; i++)
+                for (int i = 0; i < maxRoom; i++)
                 {
                     if (data[et, 4, i] != null) data2.Add(data[et, 4, i]);
                     if (data[et, 7, i] != null) data3.Add(data[et, 7, i]);
@@ -329,7 +296,7 @@ namespace PictureBox
                     File[i] = DobavitRazdeliteli(File[i], 29);//data
                     i++;
                 }
-                if (flag_pokazanie) File[i] = DobavitRazdeliteli(File[i], 5);//chetchiki
+                if (flag_pokazanie) File[i] = DobavitRazdeliteli(File[i], 5);//counters
                 if (File[i] != "[pokazanie]" && flag_pokazanie==false)
                 {
                     File[i] = DobavitRazdeliteli(File[i], 6);//arendator's
@@ -342,29 +309,29 @@ namespace PictureBox
             }
         }
 
-        int[] kolvo = new int[4];
+        int[] countRoom = new int[4];
         int[, ,] koord = new int[4, 40, 1];
         const int RMD = 40;//размер таблицы data
         string[, ,] data = new string[4, RMD, 1];
         const int RMA = 8;
         string[, , ,] arenda = new string[10, 4, RMA, 1];
-        const int RMS = 16;//размер таблицы счетчиков
-        string[, , ,] chetchiki = new string[60, 4, RMS, 1];
-        int EtazT = 0;//текущий этаж
-        int PomeshenieT = 0;//текущее помещение
-        int max1 = 300;
-        string[] izmMass = new string[RMD];
-        string[] izmMassSCH = new string[RMS];
-        string[] izmMassA = new string[RMA];
-        string[] dataRedact = { "", "" };//[1] - ключ electro или voda
+        const int RMC = 16;//размер таблицы счетчиков
+        string[, , ,] counters = new string[60, 4, RMC, 1];
+        int floorGlobal = 0;//текущий этаж
+        int roomGlobal = 0;//текущее помещение
+        int maxRoom = 300;
+        string[] modData = new string[RMD];
+        string[] modCounters = new string[RMC];
+        string[] modArenda = new string[RMA];
+        string[] dataMod = { "", "" };//[1] - ключ electro или voda
         string dataModA = "";//дата измененная для таблицы арендаторов (расширение на перспективу. пока не реализована таблица на форме)
-        string ToData(int etaz, int j, int schetchik, string s)
+        string ToData(int floor, int j, int room, string s)
         {
-            if (etaz == EtazT && schetchik == PomeshenieT)
+            if (floor == floorGlobal && room == roomGlobal)
             {
-                if (izmMass[j] != null)
+                if (modData[j] != null)
                 {
-                    return izmMass[j];
+                    return modData[j];
                 }
                 else return s;
             }
@@ -373,27 +340,27 @@ namespace PictureBox
         void LoadDB() //основная функция загрузки с раздельным внесением информации
         {
             
-            int schetchik = 0;
-            int etaz = 0;
+            int room = 0;
+            int floor = 0;
             //int PomeshenieM = int.Parse(File[0]);            
             for (int i = 0; i < File.Count; i++)
             {
                 if (File[i].IndexOf("[etaz_") > -1)
                 {
-                    kolvo[etaz] = int.Parse(File[i].Substring(8, File[i].Length - 8)) - 1;//количество помещений на этаже
-                    //if (kolvo[etaz] > max1) max1 = kolvo[etaz];
-                    etaz++;
+                    countRoom[floor] = int.Parse(File[i].Substring(8, File[i].Length - 8)) - 1;//количество помещений на этаже
+                    //if (countRoom[floor] > maxRoom) maxRoom = countRoom[floor];
+                    floor++;
                 }
             }
-            etaz = 0;
+            floor = 0;
             for (int i = 0; i < File.Count; i++)
             {
                 if (File[i].IndexOf("[etaz_") > -1)
                 {
-                    etaz = int.Parse(File[i].Substring(6, 1)) - 1;//номер этажа
-                    schetchik = 0;
+                    floor = int.Parse(File[i].Substring(6, 1)) - 1;//номер этажа
+                    room = 0;
                 }
-                if (File[i] == "[" + schetchik + "]")
+                if (File[i] == "[" + room + "]")
                 {
                     i++;
                     string s = File[i];
@@ -403,12 +370,12 @@ namespace PictureBox
                         {
                             if (s.IndexOf(";") > -1)
                             {
-                                koord[etaz, j, schetchik] = int.Parse(s.Substring(0, s.IndexOf(";")));
+                                koord[floor, j, room] = int.Parse(s.Substring(0, s.IndexOf(";")));
                                 s = s.Substring(s.IndexOf(";") + 1);
                             }
                             else
                             {
-                                koord[etaz, j, schetchik] = int.Parse(s);
+                                koord[floor, j, room] = int.Parse(s);
                                 break;
                             }
                         }
@@ -422,13 +389,13 @@ namespace PictureBox
                         {
                            // if (s.IndexOf(";") != 0)
                            // {
-                                data[etaz, j, schetchik] = ToData(etaz, j, schetchik, s.Substring(0, s.IndexOf(";")));
+                                data[floor, j, room] = ToData(floor, j, room, s.Substring(0, s.IndexOf(";")));
                            // }
                             s = s.Substring(s.IndexOf(";") + 1);
                         }
                         else
                         {
-                            data[etaz, j, schetchik] = ToData(etaz, j, schetchik, s);
+                            data[floor, j, room] = ToData(floor, j, room, s);
                             break;
                         }
                     }
@@ -446,12 +413,12 @@ namespace PictureBox
                         {
                             if (s.IndexOf(";") > -1)
                             {
-                                if (s.IndexOf(";") != 0) arenda[k, etaz, j, schetchik] = s.Substring(0, s.IndexOf(";"));
+                                if (s.IndexOf(";") != 0) arenda[k, floor, j, room] = s.Substring(0, s.IndexOf(";"));
                                 s = s.Substring(s.IndexOf(";") + 1);
                             }
                             else
                             {
-                                arenda[k, etaz, j, schetchik] = s;
+                                arenda[k, floor, j, room] = s;
                                 break;
                             }
                         }
@@ -462,52 +429,52 @@ namespace PictureBox
                         if (i >= File.Count()) break;
                         s = File[i];
                         if (s.Substring(0, 1) == "[" || s == "=no koord=") break;
-                        for (int j = 0; j < RMS; j++)
+                        for (int j = 0; j < RMC; j++)
                         {
                             if (s.IndexOf(";") > -1)
                             {
                                 if (s.IndexOf(";") != 0)
                                 {
-                                    chetchiki[k, etaz, j, schetchik] = s.Substring(0, s.IndexOf(";"));
+                                    counters[k, floor, j, room] = s.Substring(0, s.IndexOf(";"));
                                 }
                                 s = s.Substring(s.IndexOf(";") + 1);
                             }
                             else
                             {
-                                chetchiki[k, etaz, j, schetchik] = s;
+                                counters[k, floor, j, room] = s;
                                 break;
                             }
                         }
                     }
 
-                    schetchik++;
+                    room++;
                     i--;
                 }
             }
             /*
             for (int floor = 0; floor < 4; floor++)
             {
-                for (int numRoom = 0; numRoom < max1; numRoom++)
+                for (int numRoom = 0; numRoom < maxRoom; numRoom++)
                 { 
                 
                 }
             }*/
-            toSchet(EtazT, PomeshenieT);//добавить функцию изменения счетчика
-            ToArenda(EtazT, PomeshenieT);//добавить функцию изменения арендатора
+            toCounters(floorGlobal, roomGlobal);//добавить функцию изменения счетчика
+            toArenda(floorGlobal, roomGlobal);//добавить функцию изменения арендатора
 
-            izmMass = new string[RMD];
-            izmMassSCH = new string[RMS];
-            izmMassA = new string[RMA];
-            dataRedact[0] = null;
+            modData = new string[RMD];
+            modCounters = new string[RMC];
+            modArenda = new string[RMA];
+            dataMod[0] = null;
         }
         void SaveDB()
         {
             File.Clear();
-            File.Add((kolvo[0] + kolvo[1] + kolvo[2] + kolvo[3] + 4).ToString());//записали общее количество помещений в начало
+            File.Add((countRoom[0] + countRoom[1] + countRoom[2] + countRoom[3] + 4).ToString());//записали общее количество помещений в начало
             for (int floor = 0; floor < 4; floor++)
             {
-                File.Add("[etaz_" + (floor + 1).ToString() + "]" + (kolvo[floor] + 1).ToString());//запись номера этажа
-                for (int numRoom = 0; numRoom <= kolvo[floor]; numRoom++)
+                File.Add("[etaz_" + (floor + 1).ToString() + "]" + (countRoom[floor] + 1).ToString());//запись номера этажа
+                for (int numRoom = 0; numRoom <= countRoom[floor]; numRoom++)
                 {
                     File.Add("[" + numRoom + "]");//запись номера помещения
                     string s = "";
@@ -536,11 +503,11 @@ namespace PictureBox
                     s = "";
                     for (int k = 0; k < 60; k++)
                     {
-                        if (chetchiki[k, floor, 0, numRoom] == null) break;
+                        if (counters[k, floor, 0, numRoom] == null) break;
                         s = "";
-                        for (int i = 0; i < RMS; i++)
+                        for (int i = 0; i < RMC; i++)
                         {
-                            s += chetchiki[k, floor, i, numRoom] + ";";
+                            s += counters[k, floor, i, numRoom] + ";";
                         }
                         File.Add(s.Substring(0, s.Length - 1));//записали строку счетчиков
                     }
@@ -551,23 +518,23 @@ namespace PictureBox
             System.IO.File.WriteAllLines(@"Data.txt", File, Encoding.Default);
             System.IO.File.WriteAllLines(@DateTime.Now.ToShortDateString() + ".txt", File, Encoding.Default);//резервная копия (на конец дня)
         }
-        void  addRowToMassiv(int floor, int numroom, int row)//записать в массив chetchiki строку izmMassSCH, освободив для нее место в указанной позиции row
+        void  addRowToMassiv(int floor, int numroom, int row)//записать в массив counters строку modCounters, освободив для нее место в указанной позиции row
         {//floor - номер этажа, numroom - номер помещения
             //1. Освободим строку row
             for (int i = 59; i > row; i--) //row не может быть меньше нуля
             {
-                if (chetchiki[i-1, floor, 0, numroom] != null)
+                if (counters[i-1, floor, 0, numroom] != null)
                 {
-                    for (int j = 0; j < RMS; j++)
+                    for (int j = 0; j < RMC; j++)
                     {
-                        chetchiki[i, floor, j, numroom] = chetchiki[i - 1, floor, j, numroom];
+                        counters[i, floor, j, numroom] = counters[i - 1, floor, j, numroom];
                     }
                 }
             }
             //2. запишем в строку row значения
             writeStrToMass(floor, numroom, row);
         }
-        void addRowToMassivA(int floor, int numroom, int row)//записать в массив Arenda строку izmMassA, освободив для нее место в указанной позиции row
+        void addRowToMassivA(int floor, int numroom, int row)//записать в массив Arenda строку modArenda, освободив для нее место в указанной позиции row
         {//floor - номер этажа, numroom - номер помещения
             //1. Освободим строку row
             for (int i = 9; i > row; i--) //row не может быть меньше нуля
@@ -585,33 +552,33 @@ namespace PictureBox
         }
         void writeStrToMass(int floor, int numroom, int row)
         {//запишем в строку row значения массива с измененными значениями.
-            for (int j = 0; j < RMS; j++)
+            for (int j = 0; j < RMC; j++)
             {//заменим элемент массива (только тот, который не изменился)
-                if (izmMassSCH[j] != null) chetchiki[row, floor, j, numroom] = izmMassSCH[j];
-            }//row - строка, которую перезапишем строкой либо izmMassSCH[j] либо соседней(chetchiki[row+-, floor, j, numroom]), если дата за диапазоном.
+                if (modCounters[j] != null) counters[row, floor, j, numroom] = modCounters[j];
+            }//row - строка, которую перезапишем строкой либо modCounters[j] либо соседней(counters[row+-, floor, j, numroom]), если дата за диапазоном.
             //добавим сюда функцию расчета расхода по воде-электричеству...
-            RasxodFull(floor, numroom, DateTime.Parse(chetchiki[row, floor, 0, numroom]));//вопрос, нужно ли проверить заполнение данных по электроэнергии? или это расчет по воде?
+            RasxodFull(floor, numroom, DateTime.Parse(counters[row, floor, 0, numroom]));//вопрос, нужно ли проверить заполнение данных по электроэнергии? или это расчет по воде?
         }
 
         void writeStrToMassA(int floor, int numroom, int row)
         {//запишем в строку row значения массива с измененными значениями.
             for (int j = 0; j < RMA; j++)
             {//заменим элемент массива (только тот, который не изменился)
-                if (izmMassA[j] != null) arenda[row, floor, j, numroom] = izmMassA[j];
-            }//row - строка, которую перезапишем строкой либо izmMassA[j] либо соседней(arenda[row+-, floor, j, numroom]), если дата за диапазоном.
+                if (modArenda[j] != null) arenda[row, floor, j, numroom] = modArenda[j];
+            }//row - строка, которую перезапишем строкой либо modArenda[j] либо соседней(arenda[row+-, floor, j, numroom]), если дата за диапазоном.
         }
         bool removeRowInMassiv(int floor, int numroom, int row)//удалить строку row в таблице счетчиков
         {//floor - номер этажа, numroom - номер помещения
-            if ((izmMassSCH[1] == null && dataRedact[1] == "voda") || (izmMassSCH[8] == null && dataRedact[1] == "electro"))
+            if ((modCounters[1] == null && dataMod[1] == "voda") || (modCounters[8] == null && dataMod[1] == "electro"))
             {
                 //1. удалим строку row
                 for (; row < 59; row++)
                 {
-                    if (chetchiki[row, floor, 0, numroom] != null)
+                    if (counters[row, floor, 0, numroom] != null)
                     {
-                        for (int j = 0; j < RMS; j++)
+                        for (int j = 0; j < RMC; j++)
                         {
-                            chetchiki[row, floor, j, numroom] = chetchiki[row + 1, floor, j, numroom];
+                            counters[row, floor, j, numroom] = counters[row + 1, floor, j, numroom];
                         }
                     }
                     else break;
@@ -628,7 +595,7 @@ namespace PictureBox
 
         bool removeRowInMassivA(int floor, int numroom, int row)//удалить строку row в таблице арендаторов
         {//floor - номер этажа, numroom - номер помещения
-            if (izmMassA[1] == "")
+            if (modArenda[1] == "")
             {
                 //1. удалим строку row
                 for (; row < 9; row++)
@@ -652,50 +619,50 @@ namespace PictureBox
         }
         void writeRowKey(int etaz, int schetchik, int k)
         {
-            if (dataRedact[1] == "electro")//запись с учетом ключа
+            if (dataMod[1] == "electro")//запись с учетом ключа
             {                        //э 1,3,4,6,11,12,13,14,15
-                if (izmMassSCH[0] != null) chetchiki[k, etaz, 0, schetchik] = izmMassSCH[0];//k-1 ошибка?
-                if (izmMassSCH[1] != null) chetchiki[k, etaz, 1, schetchik] = izmMassSCH[1];
-                if (izmMassSCH[3] != null) chetchiki[k, etaz, 3, schetchik] = izmMassSCH[3];
-                if (izmMassSCH[4] != null) chetchiki[k, etaz, 4, schetchik] = izmMassSCH[4];
-                if (izmMassSCH[6] != null) chetchiki[k, etaz, 6, schetchik] = izmMassSCH[6];
-                if (izmMassSCH[11] != null) chetchiki[k, etaz, 11, schetchik] = izmMassSCH[11];
-                if (izmMassSCH[12] != null) chetchiki[k, etaz, 12, schetchik] = izmMassSCH[12];
-                if (izmMassSCH[13] != null) chetchiki[k, etaz, 13, schetchik] = izmMassSCH[13];
-                if (izmMassSCH[14] != null) chetchiki[k, etaz, 14, schetchik] = izmMassSCH[14];
-                if (izmMassSCH[15] != null) chetchiki[k, etaz, 15, schetchik] = izmMassSCH[15];
+                if (modCounters[0] != null) counters[k, etaz, 0, schetchik] = modCounters[0];//k-1 ошибка?
+                if (modCounters[1] != null) counters[k, etaz, 1, schetchik] = modCounters[1];
+                if (modCounters[3] != null) counters[k, etaz, 3, schetchik] = modCounters[3];
+                if (modCounters[4] != null) counters[k, etaz, 4, schetchik] = modCounters[4];
+                if (modCounters[6] != null) counters[k, etaz, 6, schetchik] = modCounters[6];
+                if (modCounters[11] != null) counters[k, etaz, 11, schetchik] = modCounters[11];
+                if (modCounters[12] != null) counters[k, etaz, 12, schetchik] = modCounters[12];
+                if (modCounters[13] != null) counters[k, etaz, 13, schetchik] = modCounters[13];
+                if (modCounters[14] != null) counters[k, etaz, 14, schetchik] = modCounters[14];
+                if (modCounters[15] != null) counters[k, etaz, 15, schetchik] = modCounters[15];
             }
-            if (dataRedact[1] == "voda")
+            if (dataMod[1] == "voda")
             {                        //в 2,5,7,8,9,10
-                if (izmMassSCH[0] != null) chetchiki[k, etaz, 0, schetchik] = izmMassSCH[0];
-                if (izmMassSCH[2] != null) chetchiki[k, etaz, 2, schetchik] = izmMassSCH[2];
-                if (izmMassSCH[5] != null) chetchiki[k, etaz, 5, schetchik] = izmMassSCH[5];
-                if (izmMassSCH[7] != null) chetchiki[k, etaz, 7, schetchik] = izmMassSCH[7];
-                if (izmMassSCH[8] != null) chetchiki[k, etaz, 8, schetchik] = izmMassSCH[8];
-                if (izmMassSCH[9] != null) chetchiki[k, etaz, 9, schetchik] = izmMassSCH[9];
-                if (izmMassSCH[10] != null) chetchiki[k, etaz, 10, schetchik] = izmMassSCH[10];
+                if (modCounters[0] != null) counters[k, etaz, 0, schetchik] = modCounters[0];
+                if (modCounters[2] != null) counters[k, etaz, 2, schetchik] = modCounters[2];
+                if (modCounters[5] != null) counters[k, etaz, 5, schetchik] = modCounters[5];
+                if (modCounters[7] != null) counters[k, etaz, 7, schetchik] = modCounters[7];
+                if (modCounters[8] != null) counters[k, etaz, 8, schetchik] = modCounters[8];
+                if (modCounters[9] != null) counters[k, etaz, 9, schetchik] = modCounters[9];
+                if (modCounters[10] != null) counters[k, etaz, 10, schetchik] = modCounters[10];
             }
         }
         void clearRowKey(int floor, int numroom, int row)
         {
-            if (izmMassSCH[1] == null)//удаление с учетом ключа
+            if (modCounters[1] == null)//удаление с учетом ключа
             {                        //э 1,3,4,6,11,12,13,14,15
-                if (izmMassSCH[3] != null) chetchiki[row, floor, 3, numroom] = null;
-                if (izmMassSCH[4] != null) chetchiki[row, floor, 4, numroom] = null;
-                if (izmMassSCH[6] != null) chetchiki[row, floor, 6, numroom] = null;
-                if (izmMassSCH[11] != null) chetchiki[row, floor, 11, numroom] = null;
-                if (izmMassSCH[12] != null) chetchiki[row, floor, 12, numroom] = null;
-                if (izmMassSCH[13] != null) chetchiki[row, floor, 13, numroom] = null;
-                if (izmMassSCH[14] != null) chetchiki[row, floor, 14, numroom] = null;
-                if (izmMassSCH[15] != null) chetchiki[row, floor, 15, numroom] = null;
+                if (modCounters[3] != null) counters[row, floor, 3, numroom] = null;
+                if (modCounters[4] != null) counters[row, floor, 4, numroom] = null;
+                if (modCounters[6] != null) counters[row, floor, 6, numroom] = null;
+                if (modCounters[11] != null) counters[row, floor, 11, numroom] = null;
+                if (modCounters[12] != null) counters[row, floor, 12, numroom] = null;
+                if (modCounters[13] != null) counters[row, floor, 13, numroom] = null;
+                if (modCounters[14] != null) counters[row, floor, 14, numroom] = null;
+                if (modCounters[15] != null) counters[row, floor, 15, numroom] = null;
             }
-            if (izmMassSCH[8] == null)
+            if (modCounters[8] == null)
             {                        //в 2,5,7,8,9,10
-                if (izmMassSCH[2] != null) chetchiki[row, floor, 2, numroom] = null;
-                if (izmMassSCH[5] != null) chetchiki[row, floor, 5, numroom] = null;
-                if (izmMassSCH[7] != null) chetchiki[row, floor, 7, numroom] = null;
-                if (izmMassSCH[9] != null) chetchiki[row, floor, 9, numroom] = null;
-                if (izmMassSCH[10] != null) chetchiki[row, floor, 10, numroom] = null;
+                if (modCounters[2] != null) counters[row, floor, 2, numroom] = null;
+                if (modCounters[5] != null) counters[row, floor, 5, numroom] = null;
+                if (modCounters[7] != null) counters[row, floor, 7, numroom] = null;
+                if (modCounters[9] != null) counters[row, floor, 9, numroom] = null;
+                if (modCounters[10] != null) counters[row, floor, 10, numroom] = null;
             }
         }
         void clearRowA(int floor, int numroom, int row)
@@ -713,43 +680,43 @@ namespace PictureBox
             }
             else
             {
-                if (floor == EtazT && numroom == PomeshenieT) return true;
+                if (floor == floorGlobal && numroom == roomGlobal) return true;
             }
             return false;
         }
-        void toSchet(int floor, int numroom)
+        void toCounters(int floor, int numroom)
         {
             if (floorNumRoom(floor,numroom))
             {//совпал номер помещения
-                if (izmMassSCH[0] != null && izmMassSCH[0] != "")//изменение имеет место
+                if (modCounters[0] != null && modCounters[0] != "")//изменение имеет место
                 {
                     bool findDate = false;
                     int row = 0;
                     for (; row < 60; row++)//пробежимся по таблице
                     { //у нас в наличии измененная строка {дата-0,показание_Э-1, показание_В-2, номер_Э-3, К_тр_Э-4, номер_В-5, расход_Э-6, кол-во_Сотр_В-7, 
-                        //сч-р_В-8, тех-хо_В-9, расход_В-10, корп_Э-11, помещ_Э-12, этаж_Э-13, %_Э-14, С-кВт_Э-15}+dataRedact= дата редактируемая в datagrid
-                        //если dataRedact не пустое, то изменилась дата... измененную дату мы не найдем, но если она пустая, то найдем. как искать?
-                        if (chetchiki[row, floor, 0, numroom] == null) break;//пустые строки ниже сбросим
-                        if (!(dataRedact[0] == "" || dataRedact[0] == null))
+                        //сч-р_В-8, тех-хо_В-9, расход_В-10, корп_Э-11, помещ_Э-12, этаж_Э-13, %_Э-14, С-кВт_Э-15}+dataMod= дата редактируемая в datagrid
+                        //если dataMod не пустое, то изменилась дата... измененную дату мы не найдем, но если она пустая, то найдем. как искать?
+                        if (counters[row, floor, 0, numroom] == null) break;//пустые строки ниже сбросим
+                        if (!(dataMod[0] == "" || dataMod[0] == null))
                         { 
-                            if (chetchiki[row, floor, 0, numroom] == DateTime.Parse(dataRedact[0]).ToShortDateString())//dataRedact[0] - дата в строке, которая была до изменения, [1] - ключ (electro или voda)
+                            if (counters[row, floor, 0, numroom] == DateTime.Parse(dataMod[0]).ToShortDateString())//dataMod[0] - дата в строке, которая была до изменения, [1] - ключ (electro или voda)
                             {//изменилась дата: существующая дата изменила свой индекс row, либо она удалена совсем.
                                 findDate = true;
                                 writeStrToMass(floor, numroom, row);//перед удалением запишем недостающие данные
                                 if (removeRowInMassiv(floor, numroom, row))//если получилось удалить строку
                                 {
-                                    //izmMassSCH = new string[RMS];//очистим строку изменений 
+                                    //modCounters = new string[RMC];//очистим строку изменений 
                                 }
                                 for (row=0; row < 60; row++)
                                 {
-                                    if (chetchiki[row, floor, 0, numroom] != null)
+                                    if (counters[row, floor, 0, numroom] != null)
                                     {
-                                        if (DateTime.Parse(chetchiki[row, floor, 0, numroom]) < DateTime.Parse(izmMassSCH[0]))
+                                        if (DateTime.Parse(counters[row, floor, 0, numroom]) < DateTime.Parse(modCounters[0]))
                                         {
                                             addRowToMassiv(floor, numroom, row);//добавить строку и записать
                                             break;
                                         }
-                                        if (DateTime.Parse(chetchiki[row, floor, 0, numroom]) == DateTime.Parse(izmMassSCH[0]))
+                                        if (DateTime.Parse(counters[row, floor, 0, numroom]) == DateTime.Parse(modCounters[0]))
                                         {
                                             writeStrToMass(floor, numroom, row);//записать изменения
                                             break;
@@ -771,14 +738,14 @@ namespace PictureBox
                     {//введена дата, которой раньше не было 
                         for (row = 0; row < 60; row++)
                         {
-                            if (chetchiki[row, floor, 0, numroom] != null)
+                            if (counters[row, floor, 0, numroom] != null)
                             {
-                                if (DateTime.Parse(chetchiki[row, floor, 0, numroom]) < DateTime.Parse(izmMassSCH[0]))
+                                if (DateTime.Parse(counters[row, floor, 0, numroom]) < DateTime.Parse(modCounters[0]))
                                 {
                                     addRowToMassiv(floor, numroom, row);//добавить строку и записать
                                     break;
                                 }
-                                if (DateTime.Parse(chetchiki[row, floor, 0, numroom]) == DateTime.Parse(izmMassSCH[0]))
+                                if (DateTime.Parse(counters[row, floor, 0, numroom]) == DateTime.Parse(modCounters[0]))
                                 {
                                     writeStrToMass(floor, numroom, row);//записать изменения
                                     break;
@@ -794,21 +761,21 @@ namespace PictureBox
                         }
                     }
                 }
-                else if (izmMassSCH[0] == "")
+                else if (modCounters[0] == "")
                 {
                     for (int row = 0; row < 60; row++)
                     {
-                        if (chetchiki[row, floor, 0, numroom] == dataRedact[0]) removeRowInMassiv(floor, numroom, row);
+                        if (counters[row, floor, 0, numroom] == dataMod[0]) removeRowInMassiv(floor, numroom, row);
                     }
                 }
             }
         }
 
-        void ToArenda(int floor, int numroom)
+        void toArenda(int floor, int numroom)
         {
             if (floorNumRoom(floor, numroom))
             {//совпал номер помещения
-                if (izmMassA[0] != null&&izmMassA[0] != "")//изменение имеет место
+                if (modArenda[0] != null&&modArenda[0] != "")//изменение имеет место
                 {
                     bool findDate = false;
                     int row = 0;
@@ -826,12 +793,12 @@ namespace PictureBox
                                 {
                                     if (arenda[row, floor, 0, numroom] != null)
                                     {
-                                        if (DateTime.Parse(arenda[row, floor, 0, numroom]) < DateTime.Parse(izmMassA[0]))
+                                        if (DateTime.Parse(arenda[row, floor, 0, numroom]) < DateTime.Parse(modArenda[0]))
                                         {
                                             addRowToMassivA(floor, numroom, row);//добавить строку и записать
                                             break;
                                         }
-                                        if (DateTime.Parse(arenda[row, floor, 0, numroom]) == DateTime.Parse(izmMassA[0]))
+                                        if (DateTime.Parse(arenda[row, floor, 0, numroom]) == DateTime.Parse(modArenda[0]))
                                         {
                                             writeStrToMassA(floor, numroom, row);//записать изменения
                                             break;
@@ -855,12 +822,12 @@ namespace PictureBox
                         {
                             if (arenda[row, floor, 0, numroom] != null)
                             {
-                                if (DateTime.Parse(arenda[row, floor, 0, numroom]) < DateTime.Parse(izmMassA[0]))
+                                if (DateTime.Parse(arenda[row, floor, 0, numroom]) < DateTime.Parse(modArenda[0]))
                                 {
                                     addRowToMassivA(floor, numroom, row);//добавить строку и записать
                                     break;
                                 }
-                                if (DateTime.Parse(arenda[row, floor, 0, numroom]) == DateTime.Parse(izmMassA[0]))
+                                if (DateTime.Parse(arenda[row, floor, 0, numroom]) == DateTime.Parse(modArenda[0]))
                                 {
                                     writeStrToMassA(floor, numroom, row);//записать изменения
                                     break;
@@ -875,9 +842,9 @@ namespace PictureBox
                     }
                     for (int floor1 = 0; floor1 < 4; floor1++)//найдем и перезапишем данные арендатора по другим помещениям
                     {
-                        for (int numroom1 = 0; numroom1 < max1; numroom1++)
+                        for (int numroom1 = 0; numroom1 < maxRoom; numroom1++)
                         {
-                            if (!(floor1 == EtazT && numroom1 == PomeshenieT))
+                            if (!(floor1 == floorGlobal && numroom1 == roomGlobal))
                             {
 
                                 if (arenda[0, floor1, 1, numroom1] == arenda[0, floor, 1, numroom])
@@ -891,7 +858,7 @@ namespace PictureBox
                         }
                     }
                 }
-                else if (izmMassA[0] == "")
+                else if (modArenda[0] == "")
                 {
                     for (int row = 0; row < 10; row++)
                     {
@@ -917,16 +884,16 @@ namespace PictureBox
             {
                 if (File[i].IndexOf("[etaz_") > -1)
                 {
-                    kolvo[etaz] = int.Parse(File[i].Substring(8, File[i].Length - 8)) - 1;//количество помещений на этаже
-                    //if (kolvo[etaz] > max1) max1 = kolvo[etaz];
+                    countRoom[etaz] = int.Parse(File[i].Substring(8, File[i].Length - 8)) - 1;//количество помещений на этаже
+                    //if (countRoom[floor] > maxRoom) maxRoom = countRoom[floor];
                     etaz++;
                 }
             }
             label1.Text = "Загружено";
-            koord = new int[4, 40, max1];//координаты помещения
-            data = new string[4, RMD, max1];//все данные по помещению
-            arenda = new string[10, 4, RMA, max1];//реквизиты арендатора
-            chetchiki = new string[60, 4, RMS, max1];//показания счетчиков на последний период.
+            koord = new int[4, 40, maxRoom];//координаты помещения
+            data = new string[4, RMD, maxRoom];//все данные по помещению
+            arenda = new string[10, 4, RMA, maxRoom];//реквизиты арендатора
+            counters = new string[60, 4, RMC, maxRoom];//показания счетчиков на последний период.
             int schetchik = 0;
             etaz = 0;
             LoadDB();
@@ -935,10 +902,10 @@ namespace PictureBox
             {                
                 if (File[i].IndexOf("[etaz_") > -1)
                 {
-                    etaz = int.Parse(File[i].Substring(6, 1)) - 1;//номер этажа
-                    schetchik = 0;
+                    floor = int.Parse(File[i].Substring(6, 1)) - 1;//номер этажа
+                    room = 0;
                 }
-                if (File[i] == "[" + schetchik + "]")
+                if (File[i] == "[" + room + "]")
                 {
                     i++;
                     string s = File[i];
@@ -948,12 +915,12 @@ namespace PictureBox
                         {
                             if (s.IndexOf(";") > -1)
                             {
-                                koord[etaz, j, schetchik] = int.Parse(s.Substring(0, s.IndexOf(";")));
+                                koord[floor, j, room] = int.Parse(s.Substring(0, s.IndexOf(";")));
                                 s = s.Substring(s.IndexOf(";") + 1);
                             }
                             else
                             {
-                                koord[etaz, j, schetchik] = int.Parse(s);
+                                koord[floor, j, room] = int.Parse(s);
                                 break;
                             }
                         }
@@ -965,12 +932,12 @@ namespace PictureBox
                     {
                         if (s.IndexOf(";") > -1)
                         {
-                            if (s.IndexOf(";") != 0) data[etaz, j, schetchik] = s.Substring(0, s.IndexOf(";"));
+                            if (s.IndexOf(";") != 0) data[floor, j, room] = s.Substring(0, s.IndexOf(";"));
                             s = s.Substring(s.IndexOf(";") + 1);
                         }
                         else
                         {
-                            data[etaz, j, schetchik] = s;
+                            data[floor, j, room] = s;
                             break;
                         }
                     }
@@ -988,12 +955,12 @@ namespace PictureBox
                         {
                             if (s.IndexOf(";") > -1)
                             {
-                                if (s.IndexOf(";") != 0) arenda[k, etaz, j, schetchik] = s.Substring(0, s.IndexOf(";"));
+                                if (s.IndexOf(";") != 0) arenda[k, floor, j, room] = s.Substring(0, s.IndexOf(";"));
                                 s = s.Substring(s.IndexOf(";") + 1);
                             }
                             else
                             {
-                                arenda[k, etaz, j, schetchik] = s;
+                                arenda[k, floor, j, room] = s;
                                 break;
                             }
                         }
@@ -1004,21 +971,21 @@ namespace PictureBox
                         if (i >= File.Count()) break;
                         s = File[i];
                         if (s.Substring(0, 1) == "["||s=="=no koord=") break;
-                        for (int j = 0; j < RMS; j++)
+                        for (int j = 0; j < RMC; j++)
                         {
                             if (s.IndexOf(";") > -1)
                             {
-                                if (s.IndexOf(";") != 0) chetchiki[k, etaz, j, schetchik] = s.Substring(0, s.IndexOf(";"));
+                                if (s.IndexOf(";") != 0) counters[k, floor, j, room] = s.Substring(0, s.IndexOf(";"));
                                 s = s.Substring(s.IndexOf(";") + 1);
                             }
                             else
                             {
-                                chetchiki[k, etaz, j, schetchik] = s;
+                                counters[k, floor, j, room] = s;
                                 break;
                             }
                         }
                     }
-                    schetchik++;
+                    room++;
                     i--;
                 }
             }
@@ -1051,7 +1018,7 @@ namespace PictureBox
             pictureBox1.Height = scalekY * scale;
             pictureBox1.Focus();
             timer2.Enabled = true;
-            pictureBox1.Load(@"Этаж" + (EtazT + 1).ToString() + ".png");//, System.Drawing.Imaging.ImageFormat.Png);
+            pictureBox1.Load(@"Этаж" + (floorGlobal + 1).ToString() + ".png");//, System.Drawing.Imaging.ImageFormat.Png);
 
             if (UserKey == "voda")
             {
@@ -1147,14 +1114,14 @@ namespace PictureBox
         int panelCentrY = 389;
         private void button3_Click(object sender, EventArgs e)
         {
-            double x = panelCentrX - (Centr(textBox1.Text).X) * scale / 20; //626 и 389 - это центр панели с пиктурбоксом
-            double y = panelCentrY - (Centr(textBox1.Text).Y) * scale / 20;
+            double x = panelCentrX - (Center(textBox1.Text).X) * scale / 20; //626 и 389 - это центр панели с пиктурбоксом
+            double y = panelCentrY - (Center(textBox1.Text).Y) * scale / 20;
             richTextBox1.Text += "x=" + x.ToString() + "; y=" + y.ToString() + "\r\n";
             pictureBox1.Location = new Point((int)x, (int)y);
             curnew = pictureBox1.Location;
             pictureBox1.Focus();
         }
-        Point Centr(string koord)//вида: 0,123,45,79    x=0,y=123,x=45,y=79 и т.д.
+        Point Center(string koord)//вида: 0,123,45,79    x=0,y=123,x=45,y=79 и т.д.
         {
             if (koord == "") return new Point(0, 0);
             else
@@ -1235,87 +1202,25 @@ namespace PictureBox
             y = (y + y1) / 2;
             return new Point((int)x, (int)y);
         } //для использования (найти помещение на карте)
-        bool sistemaU(string koord, Point p1) //y=((x-x1)/(x2-x1))*(y2-y1)+y1 - функция с трассировкой вверх по игреку
-        {
-            bool otvet = false;
-            if (koord == "") return false;
-            else
-            {
-                double[,] mass = new double[2, 20]; //потолок - 20 координат
-                int i1 = 0;
-                for (; i1 < 40; i1++)
-                {
-                    if (koord.IndexOf(",") > 0)
-                    {
-                        mass[0, i1] = int.Parse(koord.Substring(0, koord.IndexOf(",")));
-                        koord = koord.Substring(koord.IndexOf(",") + 1);
-                        if (koord.IndexOf(",") > 0)
-                        {
-                            mass[1, i1] = int.Parse(koord.Substring(0, koord.IndexOf(",")));
-                            koord = koord.Substring(koord.IndexOf(",") + 1);
-                        }
-                        else
-                        {
-                            mass[1, i1] = int.Parse(koord);
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                mass[0, i1 + 1] = mass[0, 0];
-                mass[1, i1 + 1] = mass[1, 0];
-                i1 += 2;
-                //тут
 
-                //int i = 1;
-                for (int i = 1; i < i1; i++)
-                {
-                    double y11 = (((double)p1.X - mass[0, i - 1]) / (mass[0, i] - mass[0, i - 1])) * (mass[1, i] - mass[1, i - 1]) + mass[1, i - 1];
-                    //   richTextBox1.Text += y11 + "\r\n";
-                    //добавим ограничение по иксу:
-                    double max = 0;
-                    double min = 0;
-
-                    if (mass[0, i] - mass[0, i - 1] > 0)//(движение слева на право)
-                    {
-                        min = mass[0, i - 1];
-                        max = mass[0, i];
-                    }
-                    else//(движение справа на лево)
-                    {
-                        min = mass[0, i];
-                        max = mass[0, i - 1];
-                    }
-                    if ((double)p1.X < max && (double)p1.X > min && y11 < p1.Y)//ограничиваем по иксу //трассировка вверх (игрек меньше точки)
-                    {
-                        if (otvet == false) otvet = true;
-                        else otvet = false;
-                    }
-                }
-            }
-            return otvet;
-        }
-        int sistemaU2(Point p1, out Point[] P) //y=((x-x1)/(x2-x1))*(y2-y1)+y1 - функция с трассировкой вверх по игреку выводит Помещение
+        int equationSystem(Point p1, out Point[] P) //y=((x-x1)/(x2-x1))*(y2-y1)+y1 - функция с трассировкой вверх по игреку выводит Помещение
         {
             P = new Point[1];
-            int otvet = -1;
+            int room = -1;
 
             //потолок - 20 координат
-            for (int j = 0; j <= kolvo[EtazT]; j++)
+            for (int j = 0; j <= countRoom[floorGlobal]; j++)
             {
                 int i1 = 0;
                 int i2 = 0;
                 double[,] mass = new double[2, 20];
                 for (; i1 < 40; i1++, i2++)//пройти по координатам
                 {
-                    if (koord[EtazT, i1, j] != 0)
+                    if (koord[floorGlobal, i1, j] != 0)
                     {
-                        mass[0, i2] = koord[EtazT, i1, j];
+                        mass[0, i2] = koord[floorGlobal, i1, j];
                         i1++;
-                        mass[1, i2] = koord[EtazT, i1, j];
+                        mass[1, i2] = koord[floorGlobal, i1, j];
                     }
                     else break;
                 }
@@ -1323,7 +1228,7 @@ namespace PictureBox
                 mass[1, i2] = mass[1, 0];
                 //i1 += 2;
 
-                bool otvetB = false;
+                bool rezultBool = false;
                 for (int i = 1; i <= i2; i++)
                 {
                     double y11 = (((double)p1.X - mass[0, i - 1]) / (mass[0, i] - mass[0, i - 1])) * (mass[1, i] - mass[1, i - 1]) + mass[1, i - 1];
@@ -1343,13 +1248,13 @@ namespace PictureBox
                     }
                     if ((double)p1.X < max && (double)p1.X >= min && y11 < p1.Y)//ограничиваем по иксу //трассировка вверх (игрек меньше точки) >= - исправил наконец-то ошибку точки
                     {
-                        if (otvetB == false) otvetB = true;
-                        else otvetB = false;
+                        if (rezultBool == false) rezultBool = true;
+                        else rezultBool = false;
                     }
                 }
-                if (otvetB == true)
+                if (rezultBool == true)
                 {
-                    otvet = j;
+                    room = j;
                     P = new Point[i2];
                     for (int i = 0; i < i2; i++)
                     {
@@ -1359,12 +1264,12 @@ namespace PictureBox
                     break;
                 }
             }
-            return otvet;
+            return room;
         }
         //*/
         private void button4_Click(object sender, EventArgs e)
         {
-            label3.Text = Centr(textBox1.Text).X + ";" + Centr(textBox1.Text).Y;
+            label3.Text = Center(textBox1.Text).X + ";" + Center(textBox1.Text).Y;
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -1400,7 +1305,7 @@ namespace PictureBox
             if (!(s3 == null && s4 == "") && (s3 != s4)) richTextBox1.Text += "4\r\n";//прокатило
         }
         Point[] poligon1 = new Point[20];
-        int GlobalP = 21;
+        int GlobalP = 21; //количество точек многогранника, (максимально 20, 21 - за диапазоном)
         private void button9_Click(object sender, EventArgs e)
         {
             g3 = false;
@@ -1409,19 +1314,19 @@ namespace PictureBox
             textBox1.Text = "";
             button9.Enabled = false;
 
-            PomeshenieT = FindPom(comboBox5.Text, comboBox6.Text);
-            if (PomeshenieT < 0)
+            roomGlobal = FindPom(comboBox5.Text, comboBox6.Text);
+            if (roomGlobal < 0)
             {
-                kolvo[EtazT]++;
-                PomeshenieT = kolvo[EtazT];
-                data[EtazT, 0, PomeshenieT] = comboBox5.Text;
-                data[EtazT, 1, PomeshenieT] = comboBox6.Text;
+                countRoom[floorGlobal]++;
+                roomGlobal = countRoom[floorGlobal];
+                data[floorGlobal, 0, roomGlobal] = comboBox5.Text;
+                data[floorGlobal, 1, roomGlobal] = comboBox6.Text;
             }
-            if (koord[EtazT, 0, PomeshenieT] != 0)
+            if (koord[floorGlobal, 0, roomGlobal] != 0)
             {
                 for (int i = 0; i < 40; i++)
                 {
-                    if (koord[EtazT, i, PomeshenieT] != 0) koord[EtazT, i, PomeshenieT] = 0;
+                    if (koord[floorGlobal, i, roomGlobal] != 0) koord[floorGlobal, i, roomGlobal] = 0;
                     else break;
                 }
             }
@@ -1441,17 +1346,17 @@ namespace PictureBox
                 for (int i = 0; i < GlobalP; i++)
                 {
                     s += poligon1[i].X.ToString() + ",";
-                    koord[EtazT, i1, PomeshenieT] = poligon1[i].X;
+                    koord[floorGlobal, i1, roomGlobal] = poligon1[i].X;
                     s += poligon1[i].Y.ToString() + ",";
                     i1++;
-                    koord[EtazT, i1, PomeshenieT] = poligon1[i].Y;
+                    koord[floorGlobal, i1, roomGlobal] = poligon1[i].Y;
                     i1++;
                     figa1[i] = poligon1[i];
                 }
                 s = s.Substring(0, s.Length - 1);
 
                 g.DrawPolygon(new Pen(Color.Green, 5), figa1);
-                // g.FillEllipse(Brushes.Red, Centr(s).X, Centr(s).Y, 6, 6);
+                // g.FillEllipse(Brushes.Red, Center(s).X, Center(s).Y, 6, 6);
                 textBox1.Text = s;
                 pictureBox1.Image.Dispose();
                 pictureBox1.Image = bitmap;
@@ -1465,23 +1370,23 @@ namespace PictureBox
 
         private void button11_Click(object sender, EventArgs e)
         {
-            Point[] figura = new Point[3];
-            figura[0] = new Point(250, 100);
-            figura[1] = new Point(1400, 200);
-            figura[2] = new Point(500, 650);
+            Point[] figure = new Point[3];
+            figure[0] = new Point(250, 100);
+            figure[1] = new Point(1400, 200);
+            figure[2] = new Point(500, 650);
             bitmap = new Bitmap(pictureBox1.Image);
             g = Graphics.FromImage(bitmap);
             //g.DrawLine(new Pen(Color.Green, 5), new Point(int.Parse(textBox2.Text), int.Parse(textBox3.Text)), new Point(int.Parse(textBox2.Text) + 100, int.Parse(textBox3.Text)));
-            g.DrawPolygon(new Pen(Color.Green, 5), figura);
+            g.DrawPolygon(new Pen(Color.Green, 5), figure);
             string s = "";
             for (int i = 0; i < 3; i++)
             {
-                s += figura[i].X.ToString() + ",";
-                s += figura[i].Y.ToString() + ",";
+                s += figure[i].X.ToString() + ",";
+                s += figure[i].Y.ToString() + ",";
             }
             s = s.Substring(0, s.Length - 1);
             textBox1.Text = s;
-            g.FillEllipse(Brushes.Black, Centr(s).X, Centr(s).Y, 6, 6);
+            g.FillEllipse(Brushes.Black, Center(s).X, Center(s).Y, 6, 6);
             pictureBox1.Image.Dispose();
             pictureBox1.Image = bitmap;
             g.Dispose();
@@ -1499,7 +1404,7 @@ namespace PictureBox
 
         private void button14_Click(object sender, EventArgs e) //save
         {
-            if (checkBox2.Checked) pictureBox1.Image.Save(@"Этаж" + (EtazT + 1).ToString() + ".png", System.Drawing.Imaging.ImageFormat.Png);
+            if (checkBox2.Checked) pictureBox1.Image.Save(@"Этаж" + (floorGlobal + 1).ToString() + ".png", System.Drawing.Imaging.ImageFormat.Png);
             System.IO.File.WriteAllLines(@"Data.txt", File, Encoding.Default);
             System.IO.File.WriteAllLines(@DateTime.Now.ToShortDateString() + ".txt", File, Encoding.Default);
         }
@@ -1530,11 +1435,11 @@ namespace PictureBox
         private void button1_Click(object sender, EventArgs e)//saveDB
         {
             File.Clear();
-            File.Add((kolvo[0] + kolvo[1] + kolvo[2] + kolvo[3] + 4).ToString());//записали общее количество помещений в начало
+            File.Add((countRoom[0] + countRoom[1] + countRoom[2] + countRoom[3] + 4).ToString());//записали общее количество помещений в начало
             for (int etaz = 0; etaz < 4; etaz++)
             {
-                File.Add("[etaz_" + (etaz + 1).ToString() + "]" + (kolvo[etaz] + 1).ToString());//запись номера этажа
-                for (int pomeshenie = 0; pomeshenie <= kolvo[etaz]; pomeshenie++)
+                File.Add("[etaz_" + (etaz + 1).ToString() + "]" + (countRoom[etaz] + 1).ToString());//запись номера этажа
+                for (int pomeshenie = 0; pomeshenie <= countRoom[etaz]; pomeshenie++)
                 {
                     File.Add("[" + pomeshenie + "]");//запись номера помещения
                     string s = "";
@@ -1562,11 +1467,11 @@ namespace PictureBox
                     s = "";
                     for (int k = 0; k < 60; k++)
                     {
-                        if (chetchiki[k, etaz, 0, pomeshenie] == null) break;
+                        if (counters[k, etaz, 0, pomeshenie] == null) break;
                         s = "";
-                        for (int i = 0; i < RMS; i++)
+                        for (int i = 0; i < RMC; i++)
                         {
-                            s += chetchiki[k, etaz, i, pomeshenie] + ";";
+                            s += counters[k, etaz, i, pomeshenie] + ";";
                         }
                         File.Add(s.Substring(0, s.Length - 1));//записали строку счетчиков
                     }
@@ -1579,7 +1484,7 @@ namespace PictureBox
 
         private void button2_Click(object sender, EventArgs e)//этаж1
         {
-            EtazT = 0;
+            floorGlobal = 0;
             LoadCB();//прогружает арендатора и корпус
             ClearCB();//чистит все данные из боксов
             button2.BackColor = Color.DodgerBlue;
@@ -1591,7 +1496,7 @@ namespace PictureBox
 
         private void button16_Click(object sender, EventArgs e)//этаж2
         {
-            EtazT = 1;
+            floorGlobal = 1;
             LoadCB();//прогружает арендатора и корпус
             ClearCB();//чистит все данные из боксов
             button16.BackColor = Color.DodgerBlue;
@@ -1603,7 +1508,7 @@ namespace PictureBox
 
         private void button17_Click(object sender, EventArgs e)//этаж3
         {
-            EtazT = 2;
+            floorGlobal = 2;
             LoadCB();
             ClearCB();
             button17.BackColor = Color.DodgerBlue;
@@ -1615,7 +1520,7 @@ namespace PictureBox
 
         private void button18_Click(object sender, EventArgs e)//этаж4
         {
-            EtazT = 3;
+            floorGlobal = 3;
             LoadCB();
             ClearCB();
             button18.BackColor = Color.DodgerBlue;
@@ -1678,266 +1583,266 @@ namespace PictureBox
         private void button19_Click(object sender, EventArgs e)//записать данные (Сохранить изменения)
         {
             if (comboBox5.Text != "" && comboBox6.Text != "")
-            {//найти индекс помещения. Если совпадений нет, то: kolvo[EtazT]++; PomeshenieT=kolvo[EtazT];
-                if (kolvo[EtazT] == -1)
+            {//найти индекс помещения. Если совпадений нет, то: countRoom[floorGlobal]++; roomGlobal=countRoom[floorGlobal];
+                if (countRoom[floorGlobal] == -1)
                 {
-                    kolvo[EtazT]++;
-                    PomeshenieT = kolvo[EtazT];
+                    countRoom[floorGlobal]++;
+                    roomGlobal = countRoom[floorGlobal];
                 }
                 else
                 {
-                    PomeshenieT = FindPom(comboBox5.Text, comboBox6.Text);
-                    if (PomeshenieT < 0)
+                    roomGlobal = FindPom(comboBox5.Text, comboBox6.Text);
+                    if (roomGlobal < 0)
                     {
-                        kolvo[EtazT]++;
-                        PomeshenieT = kolvo[EtazT];
+                        countRoom[floorGlobal]++;
+                        roomGlobal = countRoom[floorGlobal];
                     }
                     else
                     {
                         //вписать остальные данные по этому помещению?
                     }
                 }//шпора data шпаргалка                
-                if (!(data[EtazT, 0, PomeshenieT] ==null&& comboBox5.Text=="")&&(data[EtazT, 0, PomeshenieT] != comboBox5.Text.Replace(";", ","))) 
+                if (!(data[floorGlobal, 0, roomGlobal] ==null&& comboBox5.Text=="")&&(data[floorGlobal, 0, roomGlobal] != comboBox5.Text.Replace(";", ","))) 
                 {
-                    izmMass[0] = comboBox5.Text.Replace(";", ",");//корпус
+                    modData[0] = comboBox5.Text.Replace(";", ",");//корпус
                 }                
-                if (!(data[EtazT, 1, PomeshenieT] ==null&& comboBox6.Text=="")&&(data[EtazT, 1, PomeshenieT] != comboBox6.Text.Replace(";", ",")))
+                if (!(data[floorGlobal, 1, roomGlobal] ==null&& comboBox6.Text=="")&&(data[floorGlobal, 1, roomGlobal] != comboBox6.Text.Replace(";", ",")))
                 {
-                    izmMass[1] = comboBox6.Text.Replace(";", ",");//помещение
+                    modData[1] = comboBox6.Text.Replace(";", ",");//помещение
                 }
-                if (!(data[EtazT, 2, PomeshenieT] == null&&comboBox7.Text=="")&&(data[EtazT, 2, PomeshenieT] != comboBox7.Text.Replace(";", ",")))
+                if (!(data[floorGlobal, 2, roomGlobal] == null&&comboBox7.Text=="")&&(data[floorGlobal, 2, roomGlobal] != comboBox7.Text.Replace(";", ",")))
                 {
-                    izmMass[2] = comboBox7.Text.Replace(";", ",");//запитка от тп
+                    modData[2] = comboBox7.Text.Replace(";", ",");//запитка от тп
                 }
-                if (!(data[EtazT, 3, PomeshenieT] ==null&& comboBox8.Text=="")&&(data[EtazT, 3, PomeshenieT] != comboBox8.Text.Replace(";", ",")))
+                if (!(data[floorGlobal, 3, roomGlobal] ==null&& comboBox8.Text=="")&&(data[floorGlobal, 3, roomGlobal] != comboBox8.Text.Replace(";", ",")))
                 {
-                    izmMass[3]= comboBox8.Text.Replace(";", ",");//запитка от сп
+                    modData[3]= comboBox8.Text.Replace(";", ",");//запитка от сп
                 }
-                if (!(data[EtazT, 4, PomeshenieT] ==null&& comboBox9.Text=="")&&(data[EtazT, 4, PomeshenieT] != comboBox9.Text.Replace(";", ",")))
+                if (!(data[floorGlobal, 4, roomGlobal] ==null&& comboBox9.Text=="")&&(data[floorGlobal, 4, roomGlobal] != comboBox9.Text.Replace(";", ",")))
                 {
-                    izmMass[4] = comboBox9.Text.Replace(";", ",");//марка кабеля
+                    modData[4] = comboBox9.Text.Replace(";", ",");//марка кабеля
                 }
-                if (!(data[EtazT, 5, PomeshenieT] ==null&& comboBox10.Text=="")&&(data[EtazT, 5, PomeshenieT] != comboBox10.Text.Replace(";", ",")))
+                if (!(data[floorGlobal, 5, roomGlobal] ==null&& comboBox10.Text=="")&&(data[floorGlobal, 5, roomGlobal] != comboBox10.Text.Replace(";", ",")))
                 {
-                    izmMass[5] = comboBox10.Text.Replace(";", ",");//длина кабеля (м)
+                    modData[5] = comboBox10.Text.Replace(";", ",");//длина кабеля (м)
                 }
-                if (!(data[EtazT, 6, PomeshenieT] ==null&& comboBox11.Text=="")&&(data[EtazT, 6, PomeshenieT] != comboBox11.Text.Replace(";", ",")))
+                if (!(data[floorGlobal, 6, roomGlobal] ==null&& comboBox11.Text=="")&&(data[floorGlobal, 6, roomGlobal] != comboBox11.Text.Replace(";", ",")))
                 {
-                    izmMass[6] = comboBox11.Text.Replace(";", ",");//мощность кВт
+                    modData[6] = comboBox11.Text.Replace(";", ",");//мощность кВт
                 }
-                if (!(data[EtazT, 7, PomeshenieT] ==null&& comboBox12.Text=="")&&(data[EtazT, 7, PomeshenieT] != comboBox12.Text.Replace(";", ",")))
+                if (!(data[floorGlobal, 7, roomGlobal] ==null&& comboBox12.Text=="")&&(data[floorGlobal, 7, roomGlobal] != comboBox12.Text.Replace(";", ",")))
                 {
-                    izmMass[7] = comboBox12.Text.Replace(";", ",");//тип отключающего устройства
+                    modData[7] = comboBox12.Text.Replace(";", ",");//тип отключающего устройства
                 }
-                if (!(data[EtazT, 8, PomeshenieT] ==null&& comboBox13.Text=="")&&(data[EtazT, 8, PomeshenieT] != comboBox13.Text.Replace(";", ",")))
+                if (!(data[floorGlobal, 8, roomGlobal] ==null&& comboBox13.Text=="")&&(data[floorGlobal, 8, roomGlobal] != comboBox13.Text.Replace(";", ",")))
                 {
-                    izmMass[8] = comboBox13.Text.Replace(";", ",");//Уставка (А) In
+                    modData[8] = comboBox13.Text.Replace(";", ",");//Уставка (А) In
                 }
-                if (!(data[EtazT, 9, PomeshenieT] ==null&& comboBox14.Text=="")&&(data[EtazT, 9, PomeshenieT] != comboBox14.Text.Replace(";", ",")))
+                if (!(data[floorGlobal, 9, roomGlobal] ==null&& comboBox14.Text=="")&&(data[floorGlobal, 9, roomGlobal] != comboBox14.Text.Replace(";", ",")))
                 {
-                    izmMass[9] = comboBox14.Text.Replace(";", ",");//Номер электросчетчика
+                    modData[9] = comboBox14.Text.Replace(";", ",");//Номер электросчетчика
                 }
-                if (!(data[EtazT, 10, PomeshenieT] ==null&& comboBox15.Text=="")&&(data[EtazT, 10, PomeshenieT] != comboBox15.Text.Replace(";", ",")))
+                if (!(data[floorGlobal, 10, roomGlobal] ==null&& comboBox15.Text=="")&&(data[floorGlobal, 10, roomGlobal] != comboBox15.Text.Replace(";", ",")))
                 {
-                    izmMass[10] = comboBox15.Text.Replace(";", ",");//марка электросчетчика
+                    modData[10] = comboBox15.Text.Replace(";", ",");//марка электросчетчика
                 }
-                if (!(data[EtazT, 11, PomeshenieT] ==null&& textBox4.Text=="")&&(data[EtazT, 11, PomeshenieT] != textBox4.Text.Replace(";", ",")))
+                if (!(data[floorGlobal, 11, roomGlobal] ==null&& textBox4.Text=="")&&(data[floorGlobal, 11, roomGlobal] != textBox4.Text.Replace(";", ",")))
                 {
-                    izmMass[11] = textBox4.Text.Replace(";", ",");//год в/поверки эл.счетчика
+                    modData[11] = textBox4.Text.Replace(";", ",");//год в/поверки эл.счетчика
                 }
-                if (!(data[EtazT, 12, PomeshenieT] ==null&& comboBox16.Text=="")&&(data[EtazT, 12, PomeshenieT] != comboBox16.Text.Replace(";", ",")))
+                if (!(data[floorGlobal, 12, roomGlobal] ==null&& comboBox16.Text=="")&&(data[floorGlobal, 12, roomGlobal] != comboBox16.Text.Replace(";", ",")))
                 {
-                    izmMass[12] = comboBox16.Text.Replace(";", ",");//номер водомера
+                    modData[12] = comboBox16.Text.Replace(";", ",");//номер водомера
                 }
-                if (!(data[EtazT, 13, PomeshenieT] ==null&& comboBox17.Text=="")&&(data[EtazT, 13, PomeshenieT] != comboBox17.Text.Replace(";", ",")))
+                if (!(data[floorGlobal, 13, roomGlobal] ==null&& comboBox17.Text=="")&&(data[floorGlobal, 13, roomGlobal] != comboBox17.Text.Replace(";", ",")))
                 {
-                    izmMass[13] = comboBox17.Text.Replace(";", ",");//марка водомера
+                    modData[13] = comboBox17.Text.Replace(";", ",");//марка водомера
                 }
-                if (!(data[EtazT, 14, PomeshenieT] ==null&& textBox5.Text=="")&&(data[EtazT, 14, PomeshenieT] != textBox5.Text.Replace(";", ",")))
+                if (!(data[floorGlobal, 14, roomGlobal] ==null&& textBox5.Text=="")&&(data[floorGlobal, 14, roomGlobal] != textBox5.Text.Replace(";", ",")))
                 {
-                    izmMass[14] = textBox5.Text.Replace(";", ",");//год в/поверки водомера
+                    modData[14] = textBox5.Text.Replace(";", ",");//год в/поверки водомера
                 }
-                if (!(data[EtazT, 15, PomeshenieT] ==null&& comboBox18.Text=="")&&(data[EtazT, 15, PomeshenieT] != comboBox18.Text.Replace(";", ",")))
+                if (!(data[floorGlobal, 15, roomGlobal] ==null&& comboBox18.Text=="")&&(data[floorGlobal, 15, roomGlobal] != comboBox18.Text.Replace(";", ",")))
                 {
-                    izmMass[15] = comboBox18.Text.Replace(";", ",");//коэффициент ТТ
+                    modData[15] = comboBox18.Text.Replace(";", ",");//коэффициент ТТ
                 }
-                if (!(data[EtazT, 16, PomeshenieT] ==null&& textBox6.Text=="")&&(data[EtazT, 16, PomeshenieT] != textBox6.Text.Replace(";", ",")))
+                if (!(data[floorGlobal, 16, roomGlobal] ==null&& textBox6.Text=="")&&(data[floorGlobal, 16, roomGlobal] != textBox6.Text.Replace(";", ",")))
                 {
-                    izmMass[16] = textBox6.Text.Replace(";", ",");//номер фазы А
+                    modData[16] = textBox6.Text.Replace(";", ",");//номер фазы А
                 }
-                if (!(data[EtazT, 17, PomeshenieT] ==null&&textBox7.Text=="")&&(data[EtazT, 17, PomeshenieT] != textBox7.Text.Replace(";", ",")))
+                if (!(data[floorGlobal, 17, roomGlobal] ==null&&textBox7.Text=="")&&(data[floorGlobal, 17, roomGlobal] != textBox7.Text.Replace(";", ",")))
                 {
-                    izmMass[17] = textBox7.Text.Replace(";", ",");//номер фазы В
+                    modData[17] = textBox7.Text.Replace(";", ",");//номер фазы В
                 }
-                if (!(data[EtazT, 18, PomeshenieT] ==null&& textBox8.Text=="")&&(data[EtazT, 18, PomeshenieT] != textBox8.Text.Replace(";", ",")))
+                if (!(data[floorGlobal, 18, roomGlobal] ==null&& textBox8.Text=="")&&(data[floorGlobal, 18, roomGlobal] != textBox8.Text.Replace(";", ",")))
                 {
-                    izmMass[18] = textBox8.Text.Replace(";", ",");//номер фазы С
+                    modData[18] = textBox8.Text.Replace(";", ",");//номер фазы С
                 }
-                if (!(data[EtazT, 19, PomeshenieT]==null&& textBox9.Text=="")&&(data[EtazT, 19, PomeshenieT] != textBox9.Text.Replace(";", ",")))
+                if (!(data[floorGlobal, 19, roomGlobal]==null&& textBox9.Text=="")&&(data[floorGlobal, 19, roomGlobal] != textBox9.Text.Replace(";", ",")))
                 {
-                    izmMass[19] = textBox9.Text.Replace(";", ",");//год в/поверки
+                    modData[19] = textBox9.Text.Replace(";", ",");//год в/поверки
                 }
-                if (!(data[EtazT, 20, PomeshenieT] ==null&& dateTimePicker3.Value.ToShortDateString()=="")&&(data[EtazT, 20, PomeshenieT] != dateTimePicker3.Value.ToShortDateString().Replace(";", ",")))
+                if (!(data[floorGlobal, 20, roomGlobal] ==null&& dateTimePicker3.Value.ToShortDateString()=="")&&(data[floorGlobal, 20, roomGlobal] != dateTimePicker3.Value.ToShortDateString().Replace(";", ",")))
                 {
-                    izmMass[20] = dateTimePicker3.Value.ToShortDateString().Replace(";", ",");//дата опломбировки эл.счетчика
+                    modData[20] = dateTimePicker3.Value.ToShortDateString().Replace(";", ",");//дата опломбировки эл.счетчика
                 }
-                if (!(data[EtazT, 21, PomeshenieT] ==null&& textBox12.Text=="")&&(data[EtazT, 21, PomeshenieT] != textBox12.Text.Replace(";", ",")))
+                if (!(data[floorGlobal, 21, roomGlobal] ==null&& textBox12.Text=="")&&(data[floorGlobal, 21, roomGlobal] != textBox12.Text.Replace(";", ",")))
                 {
-                    izmMass[21] = textBox12.Text.Replace(";", ",");//№ пломбы эл.счетчика
+                    modData[21] = textBox12.Text.Replace(";", ",");//№ пломбы эл.счетчика
                 }
-                if (!(data[EtazT, 22, PomeshenieT] ==null&& textBox14.Text=="")&&(data[EtazT, 22, PomeshenieT] != textBox14.Text.Replace(";", ",")))
+                if (!(data[floorGlobal, 22, roomGlobal] ==null&& textBox14.Text=="")&&(data[floorGlobal, 22, roomGlobal] != textBox14.Text.Replace(";", ",")))
                 {
-                    izmMass[22] = textBox14.Text.Replace(";", ",");//№ пломбы ТТ "А"
+                    modData[22] = textBox14.Text.Replace(";", ",");//№ пломбы ТТ "А"
                 }
-                if (!(data[EtazT, 23, PomeshenieT] ==null&& textBox15.Text=="")&&(data[EtazT, 23, PomeshenieT] != textBox15.Text.Replace(";", ",")))
+                if (!(data[floorGlobal, 23, roomGlobal] ==null&& textBox15.Text=="")&&(data[floorGlobal, 23, roomGlobal] != textBox15.Text.Replace(";", ",")))
                 {
-                    izmMass[23] = textBox15.Text.Replace(";", ",");//№ пломбы ТТ "В"
+                    modData[23] = textBox15.Text.Replace(";", ",");//№ пломбы ТТ "В"
                 }
-                if (!(data[EtazT, 24, PomeshenieT] ==null&& textBox16.Text=="")&&(data[EtazT, 24, PomeshenieT] != textBox16.Text.Replace(";", ",")))
+                if (!(data[floorGlobal, 24, roomGlobal] ==null&& textBox16.Text=="")&&(data[floorGlobal, 24, roomGlobal] != textBox16.Text.Replace(";", ",")))
                 {
-                    izmMass[24]= textBox16.Text.Replace(";", ",");//№ пломбы ТТ "С"
+                    modData[24]= textBox16.Text.Replace(";", ",");//№ пломбы ТТ "С"
                 }
-                if (!(data[EtazT, 25, PomeshenieT] ==null&& dateTimePicker4.Value.ToShortDateString()=="")&&(data[EtazT, 25, PomeshenieT] != dateTimePicker4.Value.ToShortDateString().Replace(";", ",")))
+                if (!(data[floorGlobal, 25, roomGlobal] ==null&& dateTimePicker4.Value.ToShortDateString()=="")&&(data[floorGlobal, 25, roomGlobal] != dateTimePicker4.Value.ToShortDateString().Replace(";", ",")))
                 {
-                    izmMass[25] = dateTimePicker4.Value.ToShortDateString().Replace(";", ",");//дата опломбировки водомера
+                    modData[25] = dateTimePicker4.Value.ToShortDateString().Replace(";", ",");//дата опломбировки водомера
                 }
-                if (!(data[EtazT, 26, PomeshenieT] ==null&& textBox13.Text=="")&&(data[EtazT, 26, PomeshenieT] != textBox13.Text.Replace(";", ",")))
+                if (!(data[floorGlobal, 26, roomGlobal] ==null&& textBox13.Text=="")&&(data[floorGlobal, 26, roomGlobal] != textBox13.Text.Replace(";", ",")))
                 {
-                    izmMass[26] = textBox13.Text.Replace(";", ",");//№ пломбы водомера
+                    modData[26] = textBox13.Text.Replace(";", ",");//№ пломбы водомера
                 }                
-                if(!(data[EtazT, 27, PomeshenieT] ==null&& textBox19.Text=="")&&(data[EtazT, 27, PomeshenieT] != textBox19.Text.Replace(";", ",")))
+                if(!(data[floorGlobal, 27, roomGlobal] ==null&& textBox19.Text=="")&&(data[floorGlobal, 27, roomGlobal] != textBox19.Text.Replace(";", ",")))
                 {
-                    izmMass[27] = textBox19.Text.Replace(";", ",");//кв.м.               
+                    modData[27] = textBox19.Text.Replace(";", ",");//кв.м.               
                 }                
-                if( !(data[EtazT, 28, PomeshenieT] ==null&& textBox22.Text=="")&&(data[EtazT, 28, PomeshenieT] != textBox22.Text.Replace(";", ",")))
+                if( !(data[floorGlobal, 28, roomGlobal] ==null&& textBox22.Text=="")&&(data[floorGlobal, 28, roomGlobal] != textBox22.Text.Replace(";", ",")))
                 { 
-                    izmMass[28] = textBox22.Text.Replace(";", ",");//Планировка
+                    modData[28] = textBox22.Text.Replace(";", ",");//Планировка
                 }               
-                if(!(data[EtazT, 29, PomeshenieT] ==null&& textBox23.Text=="")&&(data[EtazT, 29, PomeshenieT] != textBox23.Text.Replace(";", ",")))
+                if(!(data[floorGlobal, 29, roomGlobal] ==null&& textBox23.Text=="")&&(data[floorGlobal, 29, roomGlobal] != textBox23.Text.Replace(";", ",")))
                 {
-                    izmMass[29] = textBox23.Text.Replace(";", ",");//Однолинейная схема
+                    modData[29] = textBox23.Text.Replace(";", ",");//Однолинейная схема
                 }
-                if(!(data[EtazT, 30, PomeshenieT] ==null&& textBox24.Text=="")&&(data[EtazT, 30, PomeshenieT] != textBox24.Text.Replace(";", ",")))
+                if(!(data[floorGlobal, 30, roomGlobal] ==null&& textBox24.Text=="")&&(data[floorGlobal, 30, roomGlobal] != textBox24.Text.Replace(";", ",")))
                 {
-                    izmMass[30] = textBox24.Text.Replace(";", ",");//План электросети
+                    modData[30] = textBox24.Text.Replace(";", ",");//План электросети
                 }
-                if (!(data[EtazT, 31, PomeshenieT] ==null&& textBox25.Text=="")&&(data[EtazT, 31, PomeshenieT] != textBox25.Text.Replace(";", ",")))
+                if (!(data[floorGlobal, 31, roomGlobal] ==null&& textBox25.Text=="")&&(data[floorGlobal, 31, roomGlobal] != textBox25.Text.Replace(";", ",")))
                 {
-                    izmMass[31] = textBox25.Text.Replace(";", ",");//План водоснабжения
+                    modData[31] = textBox25.Text.Replace(";", ",");//План водоснабжения
                 }                
-                //data[EtazT, 32, PomeshenieT] = textBox26.Text.Replace(";", ",");//Папка арендатора
+                //data[floorGlobal, 32, roomGlobal] = textBox26.Text.Replace(";", ",");//Папка арендатора
                 int k = 0;
                 //SdvigCHtoOne(arenda, 10, dateTimePicker1.Value.ToShortDateString().Replace(";", ","),5); //в скобочках длина массива, котрый сдвигается на 1.
 
                 //ЕСЛИ арендатор не меняется, не нужно записывать новую строку. в остальных случаях новая запись.
-                if (arenda[k, EtazT, 0, PomeshenieT] != dateTimePicker1.Value.ToShortDateString().Replace(";", ","))
+                if (arenda[k, floorGlobal, 0, roomGlobal] != dateTimePicker1.Value.ToShortDateString().Replace(";", ","))
                 {
-                    izmMassA[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");//дата начала аренды
+                    modArenda[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");//дата начала аренды
                 }
-                if (!(arenda[k, EtazT, 1, PomeshenieT] == null && comboBox1.Text == "") && (arenda[k, EtazT, 1, PomeshenieT] != comboBox1.Text.Replace(";", ",")))
+                if (!(arenda[k, floorGlobal, 1, roomGlobal] == null && comboBox1.Text == "") && (arenda[k, floorGlobal, 1, roomGlobal] != comboBox1.Text.Replace(";", ",")))
                 {
-                    izmMassA[1] = comboBox1.Text.Replace(";", ",");//арендатор
-                    if (izmMassA[0] == null) izmMassA[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
+                    modArenda[1] = comboBox1.Text.Replace(";", ",");//арендатор
+                    if (modArenda[0] == null) modArenda[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
                 }
-                if (!(arenda[k, EtazT, 2, PomeshenieT] == null && comboBox2.Text == "") && (arenda[k, EtazT, 2, PomeshenieT] != comboBox2.Text.Replace(";", ",")))
+                if (!(arenda[k, floorGlobal, 2, roomGlobal] == null && comboBox2.Text == "") && (arenda[k, floorGlobal, 2, roomGlobal] != comboBox2.Text.Replace(";", ",")))
                 {
-                    izmMassA[2] = comboBox2.Text.Replace(";", ",");//ФИО
-                    if (izmMassA[0] == null) izmMassA[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
+                    modArenda[2] = comboBox2.Text.Replace(";", ",");//ФИО
+                    if (modArenda[0] == null) modArenda[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
                 }
-                if (!(arenda[k, EtazT, 3, PomeshenieT] == null && comboBox3.Text == "") && (arenda[k, EtazT, 3, PomeshenieT] != comboBox3.Text.Replace(";", ",")))
+                if (!(arenda[k, floorGlobal, 3, roomGlobal] == null && comboBox3.Text == "") && (arenda[k, floorGlobal, 3, roomGlobal] != comboBox3.Text.Replace(";", ",")))
                 {
-                    izmMassA[3] = comboBox3.Text.Replace(";", ",");//должность
-                    if (izmMassA[0] == null) izmMassA[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
+                    modArenda[3] = comboBox3.Text.Replace(";", ",");//должность
+                    if (modArenda[0] == null) modArenda[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
                 }
-                if (!(arenda[k, EtazT, 4, PomeshenieT] == null && comboBox4.Text == "") && (arenda[k, EtazT, 4, PomeshenieT] != comboBox4.Text.Replace(";", ",")))
+                if (!(arenda[k, floorGlobal, 4, roomGlobal] == null && comboBox4.Text == "") && (arenda[k, floorGlobal, 4, roomGlobal] != comboBox4.Text.Replace(";", ",")))
                 {
-                    izmMassA[4] = comboBox4.Text.Replace(";", ",");//кол-во сотрудников
-                    if (izmMassA[0] == null) izmMassA[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
+                    modArenda[4] = comboBox4.Text.Replace(";", ",");//кол-во сотрудников
+                    if (modArenda[0] == null) modArenda[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
                 }
-                if (!(arenda[k, EtazT, 5, PomeshenieT] == null && textBox17.Text == "") && (arenda[k, EtazT, 5, PomeshenieT] != textBox17.Text.Replace(";", ",")))
+                if (!(arenda[k, floorGlobal, 5, roomGlobal] == null && textBox17.Text == "") && (arenda[k, floorGlobal, 5, roomGlobal] != textBox17.Text.Replace(";", ",")))
                 {
-                    izmMassA[5] = textBox17.Text.Replace(";", ",");//e-mail
-                    if (izmMassA[0] == null) izmMassA[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
+                    modArenda[5] = textBox17.Text.Replace(";", ",");//e-mail
+                    if (modArenda[0] == null) modArenda[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
                 }
-                if (!(arenda[k, EtazT, 6, PomeshenieT] == null && richTextBox3.Text == "") && (arenda[k, EtazT, 6, PomeshenieT] != richTextBox3.Text.Replace(";", ",").Replace("\n", "&rn")))
+                if (!(arenda[k, floorGlobal, 6, roomGlobal] == null && richTextBox3.Text == "") && (arenda[k, floorGlobal, 6, roomGlobal] != richTextBox3.Text.Replace(";", ",").Replace("\n", "&rn")))
                 {
-                    izmMassA[6] = richTextBox3.Text.Replace(";", ",").Replace("\n", "&rn");//прочее и телефоны
-                    if (izmMassA[0] == null) izmMassA[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
+                    modArenda[6] = richTextBox3.Text.Replace(";", ",").Replace("\n", "&rn");//прочее и телефоны
+                    if (modArenda[0] == null) modArenda[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
                 }
-                if (!(arenda[k, EtazT, 7, PomeshenieT] == null && textBox26.Text == "") && (arenda[k, EtazT, 7, PomeshenieT] != textBox26.Text.Replace(";", ",")))
+                if (!(arenda[k, floorGlobal, 7, roomGlobal] == null && textBox26.Text == "") && (arenda[k, floorGlobal, 7, roomGlobal] != textBox26.Text.Replace(";", ",")))
                 {
-                    izmMassA[7] = textBox26.Text.Replace(";", ",");//Папка арендатора
-                    if (izmMassA[0] == null) izmMassA[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
+                    modArenda[7] = textBox26.Text.Replace(";", ",");//Папка арендатора
+                    if (modArenda[0] == null) modArenda[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
                 }
-                if (izmMassA[0] != null) dataModA = arenda[k, EtazT, 0, PomeshenieT];//изменение имеет место, запишем в dataModA значение даты до изменения
+                if (modArenda[0] != null) dataModA = arenda[k, floorGlobal, 0, roomGlobal];//изменение имеет место, запишем в dataModA значение даты до изменения
 
                // if (!(textBox10.Text == "" && textBox11.Text == ""))
                // {//сюда функцию запишем счетчики
-               //     WriteSchet(EtazT, PomeshenieT, dateTimePicker2.Value, textBox10.Text, textBox11.Text, comboBox14.Text, comboBox18.Text, comboBox16.Text, comboBox4.Text);
+               //     WriteSchet(floorGlobal, roomGlobal, dateTimePicker2.Value, textBox10.Text, textBox11.Text, comboBox14.Text, comboBox18.Text, comboBox16.Text, comboBox4.Text);
               //  }
 
-                if (chetchiki[0, EtazT, 0, PomeshenieT] != dateTimePicker2.Value.ToShortDateString().Replace(";", ","))
+                if (counters[0, floorGlobal, 0, roomGlobal] != dateTimePicker2.Value.ToShortDateString().Replace(";", ","))
                 {
-                    izmMassSCH[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
+                    modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
                 }
-                if (!(chetchiki[0, EtazT, 1, PomeshenieT] == null && textBox10.Text == "") && (chetchiki[0, EtazT, 1, PomeshenieT] != textBox10.Text.Replace(";", ",")))
+                if (!(counters[0, floorGlobal, 1, roomGlobal] == null && textBox10.Text == "") && (counters[0, floorGlobal, 1, roomGlobal] != textBox10.Text.Replace(";", ",")))
                 {
-                    izmMassSCH[1] = textBox10.Text.Replace(";", ",");//показания электроэнергии
-                    if (izmMassSCH[0] == null) izmMassSCH[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
+                    modCounters[1] = textBox10.Text.Replace(";", ",");//показания электроэнергии
+                    if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
                 }
-                if (!(chetchiki[0, EtazT, 2, PomeshenieT] == null && textBox11.Text == "") && (chetchiki[0, EtazT, 2, PomeshenieT] != textBox11.Text.Replace(";", ",")))
+                if (!(counters[0, floorGlobal, 2, roomGlobal] == null && textBox11.Text == "") && (counters[0, floorGlobal, 2, roomGlobal] != textBox11.Text.Replace(";", ",")))
                 {
-                    izmMassSCH[2] = textBox11.Text.Replace(";", ",");//показания водомера
-                    if (izmMassSCH[0] == null) izmMassSCH[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
+                    modCounters[2] = textBox11.Text.Replace(";", ",");//показания водомера
+                    if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
                 }
-                if (!(chetchiki[0, EtazT, 3, PomeshenieT] == null && comboBox14.Text == "") && (chetchiki[0, EtazT, 3, PomeshenieT] != comboBox14.Text.Replace(";", ",")))
+                if (!(counters[0, floorGlobal, 3, roomGlobal] == null && comboBox14.Text == "") && (counters[0, floorGlobal, 3, roomGlobal] != comboBox14.Text.Replace(";", ",")))
                 {
-                    izmMassSCH[3] = comboBox14.Text.Replace(";", ",");//номер электросчетчика
-                    if (izmMassSCH[0] == null) izmMassSCH[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
+                    modCounters[3] = comboBox14.Text.Replace(";", ",");//номер электросчетчика
+                    if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
                 }
-                if (!(chetchiki[0, EtazT, 4, PomeshenieT] == null && comboBox18.Text == "") && (chetchiki[0, EtazT, 4, PomeshenieT] != comboBox18.Text.Replace(";", ",")))
+                if (!(counters[0, floorGlobal, 4, roomGlobal] == null && comboBox18.Text == "") && (counters[0, floorGlobal, 4, roomGlobal] != comboBox18.Text.Replace(";", ",")))
                 {
-                    izmMassSCH[4] = comboBox18.Text.Replace(";", ",");//коэффициент трансформации
-                    if (izmMassSCH[0] == null) izmMassSCH[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
+                    modCounters[4] = comboBox18.Text.Replace(";", ",");//коэффициент трансформации
+                    if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
                 }
-                if (!(chetchiki[0, EtazT, 5, PomeshenieT] == null && comboBox16.Text == "") && (chetchiki[0, EtazT, 5, PomeshenieT] != comboBox16.Text.Replace(";", ",")))
+                if (!(counters[0, floorGlobal, 5, roomGlobal] == null && comboBox16.Text == "") && (counters[0, floorGlobal, 5, roomGlobal] != comboBox16.Text.Replace(";", ",")))
                 {
-                    izmMassSCH[5] = comboBox16.Text.Replace(";", ",");//номер водомера
-                    if (izmMassSCH[0] == null) izmMassSCH[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
+                    modCounters[5] = comboBox16.Text.Replace(";", ",");//номер водомера
+                    if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
                 }
                 //расчет
-                if (!(chetchiki[0, EtazT, 7, PomeshenieT] == null && comboBox4.Text == "") && (chetchiki[0, EtazT, 7, PomeshenieT] != comboBox4.Text.Replace(";", ",")))
+                if (!(counters[0, floorGlobal, 7, roomGlobal] == null && comboBox4.Text == "") && (counters[0, floorGlobal, 7, roomGlobal] != comboBox4.Text.Replace(";", ",")))
                 {
-                    izmMassSCH[7] = comboBox4.Text.Replace(";", ",");//количество сотрудников (для воды) 
-                    if (izmMassSCH[0] == null) izmMassSCH[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
+                    modCounters[7] = comboBox4.Text.Replace(";", ",");//количество сотрудников (для воды) 
+                    if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
                 }
 
                 if (checkBox5.Checked)
                 {
-                    if (!(chetchiki[k, EtazT, 8, PomeshenieT] == null && comboBox21.Text == "") && (chetchiki[k, EtazT, 8, PomeshenieT] != comboBox21.Text.Replace(";", ",")))
+                    if (!(counters[k, floorGlobal, 8, roomGlobal] == null && comboBox21.Text == "") && (counters[k, floorGlobal, 8, roomGlobal] != comboBox21.Text.Replace(";", ",")))
                     {
-                        izmMassSCH[8] = comboBox21.Text.Replace(";", ",");//корпус
-                        if (izmMassSCH[0] == null) izmMassSCH[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
+                        modCounters[8] = comboBox21.Text.Replace(";", ",");//корпус
+                        if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
                     }
-                    if (!(chetchiki[k, EtazT, 9, PomeshenieT] == null && comboBox21.Text == "") && (chetchiki[k, EtazT, 9, PomeshenieT] != comboBox21.Text.Replace(";", ",")))
+                    if (!(counters[k, floorGlobal, 9, roomGlobal] == null && comboBox21.Text == "") && (counters[k, floorGlobal, 9, roomGlobal] != comboBox21.Text.Replace(";", ",")))
                     {
-                        izmMassSCH[9] = comboBox21.Text.Replace(";", ",");//помещение
-                        if (izmMassSCH[0] == null) izmMassSCH[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
+                        modCounters[9] = comboBox21.Text.Replace(";", ",");//помещение
+                        if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
                     }
-                    if (!(chetchiki[k, EtazT, 10, PomeshenieT] == null && ToEt(chetchiki[k, EtazT, 8, PomeshenieT], chetchiki[k, EtazT, 9, PomeshenieT]) == "") && (chetchiki[k, EtazT, 10, PomeshenieT] != ToEt(chetchiki[k, EtazT, 8, PomeshenieT], chetchiki[k, EtazT, 9, PomeshenieT])))
+                    if (!(counters[k, floorGlobal, 10, roomGlobal] == null && ToEt(counters[k, floorGlobal, 8, roomGlobal], counters[k, floorGlobal, 9, roomGlobal]) == "") && (counters[k, floorGlobal, 10, roomGlobal] != ToEt(counters[k, floorGlobal, 8, roomGlobal], counters[k, floorGlobal, 9, roomGlobal])))
                     {
-                        izmMassSCH[10] = ToEt(chetchiki[k, EtazT, 8, PomeshenieT], chetchiki[k, EtazT, 9, PomeshenieT]);//этаж
-                        if (izmMassSCH[0] == null) izmMassSCH[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
+                        modCounters[10] = ToEt(counters[k, floorGlobal, 8, roomGlobal], counters[k, floorGlobal, 9, roomGlobal]);//этаж
+                        if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
                     }
-                    if (!(chetchiki[k, EtazT, 11, PomeshenieT] == null && comboBox22.Text == "") && (chetchiki[k, EtazT, 11, PomeshenieT] != comboBox22.Text.Replace(";", ",")))
+                    if (!(counters[k, floorGlobal, 11, roomGlobal] == null && comboBox22.Text == "") && (counters[k, floorGlobal, 11, roomGlobal] != comboBox22.Text.Replace(";", ",")))
                     {
-                        izmMassSCH[11] = comboBox22.Text.Replace(";", ",");//% кВт
-                        if (izmMassSCH[0] == null) izmMassSCH[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
+                        modCounters[11] = comboBox22.Text.Replace(";", ",");//% кВт
+                        if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
                     }
-                    if (!(chetchiki[k, EtazT, 12, PomeshenieT] == null && textBox21.Text == "") && (chetchiki[k, EtazT, 12, PomeshenieT] != textBox21.Text.Replace(";", ",")))
+                    if (!(counters[k, floorGlobal, 12, roomGlobal] == null && textBox21.Text == "") && (counters[k, floorGlobal, 12, roomGlobal] != textBox21.Text.Replace(";", ",")))
                     {
-                        izmMassSCH[12] = textBox21.Text.Replace(";", ",");//С постоянная величина кВт
-                        if (izmMassSCH[0] == null) izmMassSCH[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
+                        modCounters[12] = textBox21.Text.Replace(";", ",");//С постоянная величина кВт
+                        if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
                     }
                 }
             }
@@ -1947,138 +1852,11 @@ namespace PictureBox
             timer3.Interval = 100;
             timer3.Enabled = true;
         }
-        void WriteSchet(int etT, int pomesT, DateTime DTP2v, string pokE,string pokV,string NchE,string Ktr,string NchV,string KolSotr)
-        {
-            int k = 0;
-            if (chetchiki[0, etT, 0, pomesT] != DTP2v.ToShortDateString().Replace(";", ",") && chetchiki[0, etT, 0, pomesT] != null)
-            {
-                for (int i = 0; i < 60; i++)
-                {
-                    if (chetchiki[i, etT, 0, pomesT] == null) break;
-                    if (chetchiki[i, etT, 0, pomesT] == DTP2v.ToShortDateString().Replace(";", ","))//в записях по счетчику встретили существующие показания на указанную дату
-                    {
-                        k = i;
-                        break;
-                    }
-                }
-                if (chetchiki[k, etT, 0, pomesT] != DTP2v.ToShortDateString().Replace(";", ","))//7-207-15 17-00
-                {
-                    for (int i = 59; i > 0; i--)
-                    {
-                        if (DateTime.Parse(chetchiki[0, etT, 0, pomesT]) < DTP2v)
-                        {
-                            if (chetchiki[i - 1, etT, 0, pomesT] != null)
-                            {
-                                for (int Rmass = RMS - 1; Rmass > -1; Rmass--)
-                                {                                    
-                                    if(!(chetchiki[i, etT, Rmass, pomesT] ==null&& chetchiki[i - 1, etT, Rmass, pomesT]==null)&&(chetchiki[i, etT, Rmass, pomesT] != chetchiki[i - 1, etT, Rmass, pomesT]))
-                                    {
-                                        chetchiki[i, etT, Rmass, pomesT] = chetchiki[i - 1, etT, Rmass, pomesT];
-                                    }
-                                } 
-                            }
-                        }
-                        else
-                        {
-                            if (chetchiki[i - 1, etT, 0, pomesT] != null)
-                            {
-                                if (DateTime.Parse(chetchiki[i - 1, etT, 0, pomesT]) > DTP2v)
-                                {
-                                    k = i;
-                                    break;
-                                }
-                                else for (int Rmass = RMS - 1; Rmass > -1; Rmass--)
-                                    {
-                                        if (!(chetchiki[i, etT, Rmass, pomesT] ==null&& chetchiki[i - 1, etT, Rmass, pomesT]==null)&&(chetchiki[i, etT, Rmass, pomesT] != chetchiki[i - 1, etT, Rmass, pomesT]))
-                                        {
-                                            chetchiki[i, etT, Rmass, pomesT] = chetchiki[i - 1, etT, Rmass, pomesT];
-                                        }                                        
-                                    } 
-                            }
-                        }
-                    }
-                }
-            }
-            if (!(chetchiki[k, etT, 0, pomesT] ==null&& DTP2v.ToShortDateString()=="")&&(chetchiki[k, etT, 0, pomesT] != DTP2v.ToShortDateString().Replace(";", ",")))
-            {
-                chetchiki[k, etT, 0, pomesT] = DTP2v.ToShortDateString().Replace(";", ",");//дата съема показаний
-            }            
-            //"+" означает параметр, который не будет перезаписан. Использовать именованные параметры здесь не стану (неудобно, считаю)
-            if (pokE != "+")
-            {
-                if (!(chetchiki[k, etT, 1, pomesT] == null && pokE == "") && (chetchiki[k, etT, 1, pomesT] != pokE.Replace(";", ",").Replace(".", ",")))
-                {
-                    chetchiki[k, etT, 1, pomesT] = pokE.Replace(";", ",").Replace(".", ",");//показание электросчетчика+
-                }
-            }
-            if (pokV != "+")
-            {
-                if (!(chetchiki[k, etT, 2, pomesT] == null && pokV == "") && (chetchiki[k, etT, 2, pomesT] != pokV.Replace(";", ",")))
-                {
-                    chetchiki[k, etT, 2, pomesT] = pokV.Replace(";", ",");//показание водомера 
-                }                
-            }
-            if (NchE != "+")
-            {
-                if (!(chetchiki[k, etT, 3, pomesT] ==null&& NchE=="")&&(chetchiki[k, etT, 3, pomesT] != NchE.Replace(";", ",")))
-                {
-                    chetchiki[k, etT, 3, pomesT] = NchE.Replace(";", ",");//номер электросчетчика+
-                }                
-            }
-            if (Ktr != "+")
-            {
-                if (!(chetchiki[k, etT, 4, pomesT] ==null&& Ktr=="")&&(chetchiki[k, etT, 4, pomesT] != Ktr.Replace(";", ",")))
-                {
-                    chetchiki[k, etT, 4, pomesT] = Ktr.Replace(";", ",");//коэфф. трансформации+
-                }                
-            }
-            if (NchV != "+")
-            {
-                if (!(chetchiki[k, etT, 5, pomesT] ==null&& NchV=="")&&(chetchiki[k, etT, 5, pomesT] != NchV.Replace(";", ",")))
-                {
-                    chetchiki[k, etT, 5, pomesT] = NchV.Replace(";", ",");//номер водомера
-                }                
-            }
-            //расход, если в начале месяца (до 7-го числа), то за предыдущий период, иначе за текущий.
-            //Rasxod3(etT, pomesT, dateTimePicker2.Value.Day<7?new DateTime(dateTimePicker2.Value.Year,dateTimePicker2.Value.Month-1,dateTimePicker2.Value.Day):dateTimePicker2.Value);
-            if (Ktr != "+" && pokE != "+") RasxodFull(etT, pomesT, DTP2v);
-            if (KolSotr != "+")
-            {
-                if (!(chetchiki[k, etT, 7, pomesT] ==null&& KolSotr=="")&&(chetchiki[k, etT, 7, pomesT] != KolSotr.Replace(";", ",")))
-                {
-                    chetchiki[k, etT, 7, pomesT] = KolSotr.Replace(";", ",");//количество сотрудников (для воды) 
-                }                
-            }
-            if (checkBox5.Checked)
-            {
-                if (!(chetchiki[k, etT, 8, pomesT] == null && comboBox21.Text == "") && (chetchiki[k, etT, 8, pomesT] != comboBox21.Text.Replace(";", ",")))
-                {
-                    chetchiki[k, etT, 8, pomesT] = comboBox21.Text.Replace(";", ",");//корпус
-                }
-                if (!(chetchiki[k, etT, 9, pomesT] == null && comboBox21.Text == "") && (chetchiki[k, etT, 9, pomesT] != comboBox21.Text.Replace(";", ",")))
-                {
-                    chetchiki[k, etT, 9, pomesT] = comboBox21.Text.Replace(";", ",");//помещение
-                }
-                if (!(chetchiki[k, etT, 10, pomesT] == null && ToEt(chetchiki[k, etT, 8, pomesT], chetchiki[k, etT, 9, pomesT]) == "") && (chetchiki[k, etT, 10, pomesT] != ToEt(chetchiki[k, etT, 8, pomesT], chetchiki[k, etT, 9, pomesT])))
-                {
-                    chetchiki[k, etT, 10, pomesT] = ToEt(chetchiki[k, etT, 8, pomesT], chetchiki[k, etT, 9, pomesT]);//этаж
-                }
-                if (!(chetchiki[k, etT, 11, pomesT] == null && comboBox22.Text == "") && (chetchiki[k, etT, 11, pomesT] != comboBox22.Text.Replace(";", ",")))
-                {
-                    chetchiki[k, etT, 11, pomesT] = comboBox22.Text.Replace(";", ",");//% кВт
-                }
-                if (!(chetchiki[k, etT, 12, pomesT] == null && textBox21.Text == "") && (chetchiki[k, etT, 12, pomesT] != textBox21.Text.Replace(";", ",")))
-                {
-                    chetchiki[k, etT, 12, pomesT] = textBox21.Text.Replace(";", ",");//С постоянная величина кВт
-                }
-            }
-        }
-
         string ToEt(string korpus, string pomeshenie)
         {
             for (int et = 0; et < 4; et++)
             {
-                for (int pomesh = 0; pomesh < max1; pomesh++)
+                for (int pomesh = 0; pomesh < maxRoom; pomesh++)
                 {
                     if (data[et, pomesh, 0] != "" && data[et, pomesh, 1] != "")
                     {
@@ -2093,9 +1871,9 @@ namespace PictureBox
         private int FindPom(string korp, string pomesh)
         {
             int rezult = -1;
-            for (int i = 0; i <= kolvo[EtazT]; i++)
+            for (int i = 0; i <= countRoom[floorGlobal]; i++)
             {
-                if (data[EtazT, 0, i] == korp && data[EtazT, 1, i] == pomesh)
+                if (data[floorGlobal, 0, i] == korp && data[floorGlobal, 1, i] == pomesh)
                 {
                     rezult = i;
                     break;
@@ -2103,100 +1881,66 @@ namespace PictureBox
             }
             return rezult;
         }
-        void SdvigCHtoOne(string[, , ,] chetch1, int i, string data1, int Rmass)
-        {//массив, который нужно сдвинуть, чтобы записать в первую ячейку нужные данные
-            //i=количество элементов массива "Х" string[Х, , ,] chetch1 (первый столбик)
-            //data1 - проверка текущей даты. Если дата текущая в первой строке элементов, то двигать ничего не нужно
-            //количество элементов массива "Х" string[, ,Х ,] chetch1 (третий столбик)
-            if (chetch1[0, EtazT, 0, PomeshenieT] != data1 && chetch1[0, EtazT, 0, PomeshenieT] != null)
-            {
-                i--;
-                Rmass--;
-                for (; i > 0; i--)
-                {
-                    if (DateTime.Parse(chetch1[0, EtazT, 0, PomeshenieT]) < DateTime.Parse(data1))
-                    {
-                        if (chetch1[i - 1, EtazT, 0, PomeshenieT] != null)
-                        {
-                            for (; Rmass > -1; Rmass--) chetch1[i, EtazT, Rmass, PomeshenieT] = chetch1[i - 1, EtazT, Rmass, PomeshenieT];
-                        }
-                    }
-                    else
-                    {
-
-                        if (chetch1[i - 1, EtazT, 0, PomeshenieT] != null)
-                        {
-                            if (DateTime.Parse(chetch1[i - 1, EtazT, 0, PomeshenieT]) > DateTime.Parse(data1))
-                            {
-                                for (; Rmass > -1; Rmass--) chetch1[i, EtazT, Rmass, PomeshenieT] = chetch1[i - 1, EtazT, Rmass, PomeshenieT];
-                            }
-                            else for (; Rmass > -1; Rmass--) chetch1[i, EtazT, Rmass, PomeshenieT] = chetch1[i - 1, EtazT, Rmass, PomeshenieT];
-
-                        }
-                    }
-                }
-            }
-        }
 
         private void button20_Click(object sender, EventArgs e)
         {
-            kontur(PomeshenieT);
+            kontur(roomGlobal);
         }
         private void comboBox6_TextChanged(object sender, EventArgs e)
         {
             if (comboBox5.Text != "" && comboBox6.Text != "")
             {
                 if (GlobalP == 21 && UserKey == "admin") button9.Enabled = true;
-                PomeshenieT = FindPom(comboBox5.Text.Replace(";", ","), comboBox6.Text.Replace(";", ","));
-                if (PomeshenieT != -1)
+                roomGlobal = FindPom(comboBox5.Text.Replace(";", ","), comboBox6.Text.Replace(";", ","));
+                if (roomGlobal != -1)
                 {
                     ClearCB2();
-                    comboBox7.Text = data[EtazT, 2, PomeshenieT];
-                    comboBox8.Text = data[EtazT, 3, PomeshenieT];
-                    comboBox9.Text = data[EtazT, 4, PomeshenieT];
-                    comboBox10.Text = data[EtazT, 5, PomeshenieT];
-                    comboBox11.Text = data[EtazT, 6, PomeshenieT];
-                    comboBox12.Text = data[EtazT, 7, PomeshenieT];
-                    comboBox13.Text = data[EtazT, 8, PomeshenieT];
-                    comboBox14.Text = data[EtazT, 9, PomeshenieT];
-                    comboBox15.Text = data[EtazT, 10, PomeshenieT];
-                    textBox4.Text = data[EtazT, 11, PomeshenieT];
-                    comboBox16.Text = data[EtazT, 12, PomeshenieT];
-                    comboBox17.Text = data[EtazT, 13, PomeshenieT];
-                    textBox5.Text = data[EtazT, 14, PomeshenieT];
-                    if (data[EtazT, 15, PomeshenieT] != "1") checkBox1.Checked = true;
+                    comboBox7.Text = data[floorGlobal, 2, roomGlobal];
+                    comboBox8.Text = data[floorGlobal, 3, roomGlobal];
+                    comboBox9.Text = data[floorGlobal, 4, roomGlobal];
+                    comboBox10.Text = data[floorGlobal, 5, roomGlobal];
+                    comboBox11.Text = data[floorGlobal, 6, roomGlobal];
+                    comboBox12.Text = data[floorGlobal, 7, roomGlobal];
+                    comboBox13.Text = data[floorGlobal, 8, roomGlobal];
+                    comboBox14.Text = data[floorGlobal, 9, roomGlobal];
+                    comboBox15.Text = data[floorGlobal, 10, roomGlobal];
+                    textBox4.Text = data[floorGlobal, 11, roomGlobal];
+                    comboBox16.Text = data[floorGlobal, 12, roomGlobal];
+                    comboBox17.Text = data[floorGlobal, 13, roomGlobal];
+                    textBox5.Text = data[floorGlobal, 14, roomGlobal];
+                    if (data[floorGlobal, 15, roomGlobal] != "1") checkBox1.Checked = true;
                     else checkBox1.Checked = false;
-                    comboBox18.Text = data[EtazT, 15, PomeshenieT];
-                    textBox6.Text = data[EtazT, 16, PomeshenieT];
-                    textBox7.Text = data[EtazT, 17, PomeshenieT];
-                    textBox8.Text = data[EtazT, 18, PomeshenieT];
-                    textBox9.Text = data[EtazT, 19, PomeshenieT];
-                    if (data[EtazT, 20, PomeshenieT] != null) dateTimePicker3.Value = DateTime.Parse(data[EtazT, 20, PomeshenieT]);
-                    textBox12.Text = data[EtazT, 21, PomeshenieT];
-                    textBox14.Text = data[EtazT, 22, PomeshenieT];
-                    textBox15.Text = data[EtazT, 23, PomeshenieT];
-                    textBox16.Text = data[EtazT, 24, PomeshenieT];
-                    if (data[EtazT, 25, PomeshenieT] != null) dateTimePicker4.Value = DateTime.Parse(data[EtazT, 25, PomeshenieT]);
-                    textBox13.Text = data[EtazT, 26, PomeshenieT];
-                    if (data[EtazT, 27, PomeshenieT] != null) textBox19.Text = data[EtazT, 27, PomeshenieT];//кв.м.
-                    if (data[EtazT, 28, PomeshenieT] != null) textBox22.Text = data[EtazT, 28, PomeshenieT];//Планировка
+                    comboBox18.Text = data[floorGlobal, 15, roomGlobal];
+                    textBox6.Text = data[floorGlobal, 16, roomGlobal];
+                    textBox7.Text = data[floorGlobal, 17, roomGlobal];
+                    textBox8.Text = data[floorGlobal, 18, roomGlobal];
+                    textBox9.Text = data[floorGlobal, 19, roomGlobal];
+                    if (data[floorGlobal, 20, roomGlobal] != null) dateTimePicker3.Value = DateTime.Parse(data[floorGlobal, 20, roomGlobal]);
+                    textBox12.Text = data[floorGlobal, 21, roomGlobal];
+                    textBox14.Text = data[floorGlobal, 22, roomGlobal];
+                    textBox15.Text = data[floorGlobal, 23, roomGlobal];
+                    textBox16.Text = data[floorGlobal, 24, roomGlobal];
+                    if (data[floorGlobal, 25, roomGlobal] != null) dateTimePicker4.Value = DateTime.Parse(data[floorGlobal, 25, roomGlobal]);
+                    textBox13.Text = data[floorGlobal, 26, roomGlobal];
+                    if (data[floorGlobal, 27, roomGlobal] != null) textBox19.Text = data[floorGlobal, 27, roomGlobal];//кв.м.
+                    if (data[floorGlobal, 28, roomGlobal] != null) textBox22.Text = data[floorGlobal, 28, roomGlobal];//Планировка
                     
-                    if (data[EtazT, 29, PomeshenieT] != null) textBox23.Text = data[EtazT, 29, PomeshenieT];//Однолинейная схема
-                    if (data[EtazT, 30, PomeshenieT] != null) textBox24.Text = data[EtazT, 30, PomeshenieT];//План электросети
-                    if (data[EtazT, 31, PomeshenieT] != null) textBox25.Text = data[EtazT, 31, PomeshenieT];//План водоснабжения
-                    if (arenda[0, EtazT, 0, PomeshenieT] != null) dateTimePicker1.Value = DateTime.Parse(arenda[0, EtazT, 0, PomeshenieT]);
-                    if (arenda[0, EtazT, 7, PomeshenieT] != null) textBox26.Text = arenda[0, EtazT, 7, PomeshenieT];
-                    comboBox1.Text = arenda[0, EtazT, 1, PomeshenieT];
-                    comboBox2.Text = arenda[0, EtazT, 2, PomeshenieT];
-                    comboBox3.Text = arenda[0, EtazT, 3, PomeshenieT];
-                    comboBox4.Text = arenda[0, EtazT, 4, PomeshenieT];
-                    textBox17.Text = arenda[0, EtazT, 5, PomeshenieT];
-                    if (arenda[0, EtazT, 6, PomeshenieT] != null) richTextBox3.Text = arenda[0, EtazT, 6, PomeshenieT].Replace("&rn", "\n");
-                    if (chetchiki[0, EtazT, 0, PomeshenieT] != null) dateTimePicker2.Value = DateTime.Parse(chetchiki[0, EtazT, 0, PomeshenieT]);
-                    textBox10.Text = chetchiki[0, EtazT, 1, PomeshenieT];
-                    textBox11.Text = chetchiki[0, EtazT, 2, PomeshenieT];
+                    if (data[floorGlobal, 29, roomGlobal] != null) textBox23.Text = data[floorGlobal, 29, roomGlobal];//Однолинейная схема
+                    if (data[floorGlobal, 30, roomGlobal] != null) textBox24.Text = data[floorGlobal, 30, roomGlobal];//План электросети
+                    if (data[floorGlobal, 31, roomGlobal] != null) textBox25.Text = data[floorGlobal, 31, roomGlobal];//План водоснабжения
+                    if (arenda[0, floorGlobal, 0, roomGlobal] != null) dateTimePicker1.Value = DateTime.Parse(arenda[0, floorGlobal, 0, roomGlobal]);
+                    if (arenda[0, floorGlobal, 7, roomGlobal] != null) textBox26.Text = arenda[0, floorGlobal, 7, roomGlobal];
+                    comboBox1.Text = arenda[0, floorGlobal, 1, roomGlobal];
+                    comboBox2.Text = arenda[0, floorGlobal, 2, roomGlobal];
+                    comboBox3.Text = arenda[0, floorGlobal, 3, roomGlobal];
+                    comboBox4.Text = arenda[0, floorGlobal, 4, roomGlobal];
+                    textBox17.Text = arenda[0, floorGlobal, 5, roomGlobal];
+                    if (arenda[0, floorGlobal, 6, roomGlobal] != null) richTextBox3.Text = arenda[0, floorGlobal, 6, roomGlobal].Replace("&rn", "\n");
+                    if (counters[0, floorGlobal, 0, roomGlobal] != null) dateTimePicker2.Value = DateTime.Parse(counters[0, floorGlobal, 0, roomGlobal]);
+                    textBox10.Text = counters[0, floorGlobal, 1, roomGlobal];
+                    textBox11.Text = counters[0, floorGlobal, 2, roomGlobal];
                 }
-                //найти индекс помещения. Если совпадений нет, то: kolvo[EtazT]++; PomeshenieT=kolvo[EtazT];
+                //найти индекс помещения. Если совпадений нет, то: countRoom[floorGlobal]++; roomGlobal=countRoom[floorGlobal];
                 Unlock(true);
             }
             else
@@ -2236,21 +1980,21 @@ namespace PictureBox
             List<string> data3 = new List<string>();//запитка от ТП
             List<string> data4 = new List<string>();//запитка от СП
             int break1 = 0;
-            for (int i = 0; i < max1; i++)
+            for (int i = 0; i < maxRoom; i++)
             {
                 if (break1 == 6) break;
                 else break1 = 0;
-                if (arenda[0, EtazT, 1, i] != null) Arend1.Add(arenda[0, EtazT, 1, i]);
+                if (arenda[0, floorGlobal, 1, i] != null) Arend1.Add(arenda[0, floorGlobal, 1, i]);
                 else break1++;
-                if (arenda[0, EtazT, 3, i] != null) Arend2.Add(arenda[0, EtazT, 3, i]);
+                if (arenda[0, floorGlobal, 3, i] != null) Arend2.Add(arenda[0, floorGlobal, 3, i]);
                 else break1++;
-                if (data[EtazT, 0, i] != null) data1.Add(data[EtazT, 0, i]);
+                if (data[floorGlobal, 0, i] != null) data1.Add(data[floorGlobal, 0, i]);
                 else break1++;
-                if (data[EtazT, 1, i] != null) if (data[EtazT, 0, i] == comboBox5.Text) data2.Add(data[EtazT, 1, i]);
+                if (data[floorGlobal, 1, i] != null) if (data[floorGlobal, 0, i] == comboBox5.Text) data2.Add(data[floorGlobal, 1, i]);
                     else break1++;
-                if (data[EtazT, 2, i] != null) data3.Add(data[EtazT, 2, i]);
+                if (data[floorGlobal, 2, i] != null) data3.Add(data[floorGlobal, 2, i]);
                 else break1++;
-                if (data[EtazT, 3, i] != null) data4.Add(data[EtazT, 3, i]);
+                if (data[floorGlobal, 3, i] != null) data4.Add(data[floorGlobal, 3, i]);
                 else break1++;
             }
             comboBox1.Items.Clear();
@@ -2267,10 +2011,6 @@ namespace PictureBox
             comboBox8.Items.AddRange(data4.Distinct().ToArray());
         }
 
-        private void comboBox5_TextChanged(object sender, EventArgs e)
-        {
-
-        }
         void ClearCB()
         {
             comboBox5.Text = "";
@@ -2332,9 +2072,9 @@ namespace PictureBox
             int j = 0;
             for (int i = 0; i < 200; i++)
             {
-                if (arenda[0, EtazT, 1, i] == comboBox1.Text.Replace(";", ","))
+                if (arenda[0, floorGlobal, 1, i] == comboBox1.Text.Replace(";", ","))
                 {
-                    if (koord[EtazT, 0, i] != 0)
+                    if (koord[floorGlobal, 0, i] != 0)
                     {
                         massivA[j] = i;
                         j++;
@@ -2347,10 +2087,10 @@ namespace PictureBox
             {
                 for (int i1 = 0; i1 < 40; i1++)
                 {
-                    if (koord[EtazT, 2 * i1, massivA[i]] != 0)
+                    if (koord[floorGlobal, 2 * i1, massivA[i]] != 0)
                     {
-                        OutP[i, i1].X = koord[EtazT, 2 * i1, massivA[i]];//0.2.4.6.8...38
-                        OutP[i, i1].Y = koord[EtazT, 2 * i1 + 1, massivA[i]];//1.3.5.7.9...39
+                        OutP[i, i1].X = koord[floorGlobal, 2 * i1, massivA[i]];//0.2.4.6.8...38
+                        OutP[i, i1].Y = koord[floorGlobal, 2 * i1 + 1, massivA[i]];//1.3.5.7.9...39
                     }
                     else break;
                 }
@@ -2373,12 +2113,12 @@ namespace PictureBox
                 {
                     if (s.IndexOf(";") > -1)
                     {
-                        koord[etaz, j, schetchik] = int.Parse(s.Substring(0, s.IndexOf(";")));
+                        koord[floor, j, room] = int.Parse(s.Substring(0, s.IndexOf(";")));
                         s = s.Substring(s.IndexOf(";") + 1);
                     }
                     else
                     {
-                        koord[etaz, j, schetchik] = int.Parse(s);
+                        koord[floor, j, room] = int.Parse(s);
                         break;
                     }
                 }*/
@@ -2389,13 +2129,13 @@ namespace PictureBox
         {
             for (int i = 0; i < 200; i++)
             {
-                if (koord[EtazT, 0, i] != 0)
+                if (koord[floorGlobal, 0, i] != 0)
                 {
                     for (int i1 = 0; i1 < 40; i1++)
                     {
-                        if (koord[EtazT, 2 * i1, i] != 0)
+                        if (koord[floorGlobal, 2 * i1, i] != 0)
                         {
-                            richTextBox1.Text += koord[EtazT, 2 * i1, i].ToString() + " " + koord[EtazT, 2 * i1 + 1, i] + "\r\n";
+                            richTextBox1.Text += koord[floorGlobal, 2 * i1, i].ToString() + " " + koord[floorGlobal, 2 * i1 + 1, i] + "\r\n";
                         }
                         else break;
                     }
@@ -2413,7 +2153,7 @@ namespace PictureBox
                 int j = 0;
                 for (; j < 40; j++)
                 {
-                    if (koord[EtazT, j, i] == 0) break;
+                    if (koord[floorGlobal, j, i] == 0) break;
                 }
                 j = j / 2;
                 if (j > 0)
@@ -2421,11 +2161,11 @@ namespace PictureBox
                     Point[] figura = new Point[j + 1];
                     for (int i1 = 0; i1 < j; i1++)
                     {
-                        figura[i1].X = koord[EtazT, 2 * i1, i];
-                        figura[i1].Y = koord[EtazT, 2 * i1 + 1, i];
+                        figura[i1].X = koord[floorGlobal, 2 * i1, i];
+                        figura[i1].Y = koord[floorGlobal, 2 * i1 + 1, i];
                     }
-                    figura[j].X = koord[EtazT, 0, i];
-                    figura[j].Y = koord[EtazT, 1, i];
+                    figura[j].X = koord[floorGlobal, 0, i];
+                    figura[j].Y = koord[floorGlobal, 1, i];
                     g.DrawPolygon(new Pen(Color.Green, 4), figura);
                 }
             }
@@ -2433,10 +2173,7 @@ namespace PictureBox
             pictureBox1.Image = bitmap;
             g.Dispose();
         }
-        void Block()
-        { 
-        
-        }
+
         private void timer3_Tick(object sender, EventArgs e)//таймер записи инфы в файл
         {
             File = System.IO.File.ReadAllLines(@"Data.txt", Encoding.Default).ToList();
@@ -2567,8 +2304,8 @@ namespace PictureBox
             {
                 if (File[i].IndexOf("[etaz_") > -1)
                 {
-                    kolvo[etaz] = int.Parse(File[i].Substring(8, File[i].Length - 8)) - 1;//количество помещений на этаже
-                    //if (kolvo[etaz] > max1) max1 = kolvo[etaz];
+                    countRoom[etaz] = int.Parse(File[i].Substring(8, File[i].Length - 8)) - 1;//количество помещений на этаже
+                    //if (countRoom[floor] > maxRoom) maxRoom = countRoom[floor];
                     etaz++;
                 }
             }
@@ -2584,7 +2321,7 @@ namespace PictureBox
                 listBox1.Sorted = true;
                 for (int et = 0; et < 4; et++)
                 {
-                    for (int i = 0; i < max1; i++)
+                    for (int i = 0; i < maxRoom; i++)
                     {
                         if (arenda[0, et, 1, i] != null)
                         {
@@ -2599,7 +2336,7 @@ namespace PictureBox
 
                               //  if (selectArenda)
                               //  {
-                                    for (int p1 = 0; p1 < max1; p1++)//запишем в listbox все помещения этого арендатора
+                                    for (int p1 = 0; p1 < maxRoom; p1++)//запишем в listbox все помещения этого арендатора
                                     {
                                         for (int et1 = 0; et1 < 4; et1++)
                                         {
@@ -2624,11 +2361,11 @@ namespace PictureBox
         {
             //comboBox6.Text = "";//раскомментить по окончании
             List<string> data2 = new List<string>();//помещение
-            for (int i = 0; i < max1; i++)
+            for (int i = 0; i < maxRoom; i++)
             {
-                if (data[EtazT, 1, i] != null)
+                if (data[floorGlobal, 1, i] != null)
                 {
-                    if (data[EtazT, 0, i] == comboBox5.Text) data2.Add(data[EtazT, 1, i]);
+                    if (data[floorGlobal, 0, i] == comboBox5.Text) data2.Add(data[floorGlobal, 1, i]);
                 }
                 //else break;
             }
@@ -2655,7 +2392,7 @@ namespace PictureBox
             List<string> Arendator = new List<string>();
             for (int et1 = 0; et1 < 4; et1++)
             {
-                for (int pomesh = 0; pomesh < max1; pomesh++)
+                for (int pomesh = 0; pomesh < maxRoom; pomesh++)
                 {
                     if(arenda[0,et1, 1, pomesh]!=null) Arendator.Add(arenda[0,et1, 1, pomesh].ToString());
                 }
@@ -2701,7 +2438,7 @@ namespace PictureBox
             List<string> ArendatorLong = new List<string>();
           /*  for (int j = 0; j < 4; j++)//этаж
             {
-                for (int i = 0; i < max1; i++)//помещение
+                for (int i = 0; i < maxRoom; i++)//помещение
                 {
                     if (arenda[0, j, 1, i] != null)
                     {
@@ -2758,7 +2495,7 @@ namespace PictureBox
             {
                for (int j = 0; j < 4; j++)//этаж
                 {
-                    for (int i = 0; i < max1; i++)//помещение
+                    for (int i = 0; i < maxRoom; i++)//помещение
                     {
                         if (arenda[0, j, 1, i] != null)
                         {
@@ -2776,7 +2513,7 @@ namespace PictureBox
             string s = "";
             for (int j = 0; j < 4; j++)//этаж
             {
-                for (int i = 0; i < max1; i++)//помещение
+                for (int i = 0; i < maxRoom; i++)//помещение
                 {
                     if (arenda[0, j, 1, i] != null)
                     {
@@ -2795,7 +2532,7 @@ namespace PictureBox
             string s = "";
             for (int j = 0; j < 4; j++)//этаж
             {
-                for (int i = 0; i < max1; i++)//помещение
+                for (int i = 0; i < maxRoom; i++)//помещение
                 {
                     if (arenda[0, j, 1, i] != null)
                     {
@@ -2823,7 +2560,7 @@ namespace PictureBox
             List<string> ArendatorPomesh = new List<string>();
             for (int j = 0; j < 4; j++)//этаж
             {
-                for (int i = 0; i < max1; i++)//помещение
+                for (int i = 0; i < maxRoom; i++)//помещение
                 {
                     if (arenda[0, j, 1, i] != null)
                     {
@@ -2839,7 +2576,7 @@ namespace PictureBox
                 string s = ArendatorS[i1].ToString();
                 for (int j = 0; j < 4; j++)//этаж
                 {
-                    for (int i = 0; i < max1; i++)//помещение
+                    for (int i = 0; i < maxRoom; i++)//помещение
                     {
                         if (arenda[0, j, 1, i] == ArendatorS[i1])//j-этаж, i-номер помещения
                         {
@@ -2868,7 +2605,7 @@ namespace PictureBox
             List<string> ArendatorPomesh = new List<string>();
             for (int j = 0; j < 4; j++)//этаж
             {
-                for (int i = 0; i < max1; i++)//помещение
+                for (int i = 0; i < maxRoom; i++)//помещение
                 {
                     if (arenda[0, j, 1, i] != null)
                     {
@@ -2886,7 +2623,7 @@ namespace PictureBox
                 ArendatorPomesh.Add(ArendatorS[i1].ToString());
                 for (int j = 0; j < 4; j++)//этаж
                 {
-                    for (int i = 0; i < max1; i++)//помещение
+                    for (int i = 0; i < maxRoom; i++)//помещение
                     {
                         if (arenda[0, j, 1, i] == ArendatorS[i1])//j-этаж, i-номер помещения
                         {
@@ -2921,16 +2658,16 @@ namespace PictureBox
             double sbros = 0;
             for (int k = 0; k < 60; k++)
             {
-                if (chetchiki[k, EtazR, 1, PomesR] != null)
+                if (counters[k, EtazR, 1, PomesR] != null)
                 {
-                    if (DateTime.Parse(chetchiki[k, EtazR, 0, PomesR]) > dataPred && DateTime.Parse(chetchiki[k, EtazR, 0, PomesR]) < dataTekus)
+                    if (DateTime.Parse(counters[k, EtazR, 0, PomesR]) > dataPred && DateTime.Parse(counters[k, EtazR, 0, PomesR]) < dataTekus)
                     {
                         if (rezult != 0)
                         {
-                            if (double.Parse(chetchiki[k, EtazR, 1, PomesR]) != 10000 || double.Parse(chetchiki[k, EtazR, 1, PomesR]) != 100000 || double.Parse(chetchiki[k, EtazR, 1, PomesR]) != 1000000 || double.Parse(chetchiki[k, EtazR, 1, PomesR]) != 10000000) rezult -= double.Parse(chetchiki[k, EtazR, 1, PomesR]) * int.Parse(chetchiki[k, EtazR, 4, PomesR]);
-                            else sbros = double.Parse(chetchiki[k, EtazR, 1, PomesR]) * int.Parse(chetchiki[k, EtazR, 4, PomesR]);
+                            if (double.Parse(counters[k, EtazR, 1, PomesR]) != 10000 || double.Parse(counters[k, EtazR, 1, PomesR]) != 100000 || double.Parse(counters[k, EtazR, 1, PomesR]) != 1000000 || double.Parse(counters[k, EtazR, 1, PomesR]) != 10000000) rezult -= double.Parse(counters[k, EtazR, 1, PomesR]) * int.Parse(counters[k, EtazR, 4, PomesR]);
+                            else sbros = double.Parse(counters[k, EtazR, 1, PomesR]) * int.Parse(counters[k, EtazR, 4, PomesR]);
                         }
-                        else rezult = double.Parse(chetchiki[k, EtazR, 1, PomesR]) * int.Parse(chetchiki[k, EtazR, 4, PomesR]);//умножим на коэффициент
+                        else rezult = double.Parse(counters[k, EtazR, 1, PomesR]) * int.Parse(counters[k, EtazR, 4, PomesR]);//умножим на коэффициент
                     }
                 }
                 else break;
@@ -2953,13 +2690,13 @@ namespace PictureBox
                 string DataS = "";
                 for (int k = 59; k > -1; k--)
                 {
-                    if (chetchiki[k, EtazR, 1, PomesR] != null)//если показания по ЭЭ существуют, то в лист запишем оригинальную дату (01 число расчетного месяца)
+                    if (counters[k, EtazR, 1, PomesR] != null)//если показания по ЭЭ существуют, то в лист запишем оригинальную дату (01 число расчетного месяца)
                     {
-                        if (ToDateRaschet(DateTime.Parse(chetchiki[k, EtazR, 0, PomesR])).ToShortDateString() != DataS)
+                        if (ToDateRaschet(DateTime.Parse(counters[k, EtazR, 0, PomesR])).ToShortDateString() != DataS)
                         {
-                            if (DateTime.Parse(chetchiki[k, EtazR, 0, PomesR]) >= dataMes.Date)//ошибка >= ?
+                            if (DateTime.Parse(counters[k, EtazR, 0, PomesR]) >= dataMes.Date)//ошибка >= ?
                             {
-                                DataS = ToDateRaschet(DateTime.Parse(chetchiki[k, EtazR, 0, PomesR])).ToShortDateString();
+                                DataS = ToDateRaschet(DateTime.Parse(counters[k, EtazR, 0, PomesR])).ToShortDateString();
                                 DateList.Add(DataS);
                             }
                         }
@@ -2987,43 +2724,43 @@ namespace PictureBox
             int DataK = -1;//индекс расчетной даты (куда запишется значение отчетного расхода)
             for (int k = 59; k > -1; k--)
             {
-                if (chetchiki[k, EtazR, 1, PomesR] != null)
+                if (counters[k, EtazR, 1, PomesR] != null)
                 {
-                    if (DateTime.Parse(chetchiki[k, EtazR, 0, PomesR]) > dataPred1 && DateTime.Parse(chetchiki[k, EtazR, 0, PomesR]) <= dataPred2)
+                    if (DateTime.Parse(counters[k, EtazR, 0, PomesR]) > dataPred1 && DateTime.Parse(counters[k, EtazR, 0, PomesR]) <= dataPred2)
                     {
-                        znachenie1 = double.Parse(chetchiki[k, EtazR, 1, PomesR]);//начальные показания
-                        Nschet = chetchiki[k, EtazR, 3, PomesR];
-                        if (chetchiki[k, EtazR, 6, PomesR] == null) chetchiki[k, EtazR, 6, PomesR] = "0";//вручную пропишем нулевой расход на начало периода в БД
+                        znachenie1 = double.Parse(counters[k, EtazR, 1, PomesR]);//начальные показания
+                        Nschet = counters[k, EtazR, 3, PomesR];
+                        if (counters[k, EtazR, 6, PomesR] == null) counters[k, EtazR, 6, PomesR] = "0";//вручную пропишем нулевой расход на начало периода в БД
                         else
                         {
-                            if (chetchiki[k, EtazR, 6, PomesR]!="-") if (double.Parse(chetchiki[k, EtazR, 6, PomesR]) < 0) predRasxodMinus = double.Parse(chetchiki[k, EtazR, 6, PomesR]);
+                            if (counters[k, EtazR, 6, PomesR]!="-") if (double.Parse(counters[k, EtazR, 6, PomesR]) < 0) predRasxodMinus = double.Parse(counters[k, EtazR, 6, PomesR]);
                         }
                     }
-                    if (DateTime.Parse(chetchiki[k, EtazR, 0, PomesR]) > dataTekus1 && DateTime.Parse(chetchiki[k, EtazR, 0, PomesR]) <= dataTekus2)// && znachenie2==0)
+                    if (DateTime.Parse(counters[k, EtazR, 0, PomesR]) > dataTekus1 && DateTime.Parse(counters[k, EtazR, 0, PomesR]) <= dataTekus2)// && znachenie2==0)
                     {
-                        znachenie2 = double.Parse(chetchiki[k, EtazR, 1, PomesR]);//конечные показания
-                        koeff = int.Parse(chetchiki[k, EtazR, 4, PomesR]);
+                        znachenie2 = double.Parse(counters[k, EtazR, 1, PomesR]);//конечные показания
+                        koeff = int.Parse(counters[k, EtazR, 4, PomesR]);
                         DataK = k;
                     }
-                    if (DateTime.Parse(chetchiki[k, EtazR, 0, PomesR]) > dataPred2 && DateTime.Parse(chetchiki[k, EtazR, 0, PomesR]) < dataTekus2)
+                    if (DateTime.Parse(counters[k, EtazR, 0, PomesR]) > dataPred2 && DateTime.Parse(counters[k, EtazR, 0, PomesR]) < dataTekus2)
                     {//промежуточные показания (между основными) Проверим на замену счетчика и переход через ноль
-                        chetchiki[k, EtazR, 6, PomesR] = "-";//запишем отсутствие расхода в БД
-                        if (chetchiki[k, EtazR, 3, PomesR] != Nschet)
+                        counters[k, EtazR, 6, PomesR] = "-";//запишем отсутствие расхода в БД
+                        if (counters[k, EtazR, 3, PomesR] != Nschet)
                         {//сменился номер счетчика 
-                            znachenie1 = double.Parse(chetchiki[k, EtazR, 1, PomesR]);
-                            Nschet = chetchiki[k, EtazR, 3, PomesR];
+                            znachenie1 = double.Parse(counters[k, EtazR, 1, PomesR]);
+                            Nschet = counters[k, EtazR, 3, PomesR];
                             summa += rezult;//расход запишем к сумме
                             rezult = 0;
                         }
                         else
                         {//если счетчик не сменился, 
-                            //rezult = (double.Parse(chetchiki[k, EtazR, 1, PomesR]) - znachenie1) * int.Parse(chetchiki[k, EtazR, 4, PomesR]);     //посчитаем расход на всякий случай
-                            if (double.Parse(chetchiki[k, EtazR, 1, PomesR]) == 10000 || double.Parse(chetchiki[k, EtazR, 1, PomesR]) == 100000 || double.Parse(chetchiki[k, EtazR, 1, PomesR]) == 1000000 || double.Parse(chetchiki[k, EtazR, 1, PomesR]) == 10000000)
+                            //rezult = (double.Parse(counters[k, EtazR, 1, PomesR]) - znachenie1) * int.Parse(counters[k, EtazR, 4, PomesR]);     //посчитаем расход на всякий случай
+                            if (double.Parse(counters[k, EtazR, 1, PomesR]) == 10000 || double.Parse(counters[k, EtazR, 1, PomesR]) == 100000 || double.Parse(counters[k, EtazR, 1, PomesR]) == 1000000 || double.Parse(counters[k, EtazR, 1, PomesR]) == 10000000)
                             {//если произошел переход через ноль (показание кратно 10к, а следуюшее (если существует, меньше текущего)
-                                if (k + 1 < 60) if (chetchiki[k + 1, EtazR, 1, PomesR] != null) if (double.Parse(chetchiki[k + 1, EtazR, 1, PomesR]) < double.Parse(chetchiki[k, EtazR, 1, PomesR]))
+                                if (k + 1 < 60) if (counters[k + 1, EtazR, 1, PomesR] != null) if (double.Parse(counters[k + 1, EtazR, 1, PomesR]) < double.Parse(counters[k, EtazR, 1, PomesR]))
                                 {
-                                    rezult += double.Parse(chetchiki[k, EtazR, 1, PomesR]) * int.Parse(chetchiki[k, EtazR, 4, PomesR]);
-                                    znachenie1 = double.Parse(chetchiki[k+1, EtazR, 1, PomesR]);
+                                    rezult += double.Parse(counters[k, EtazR, 1, PomesR]) * int.Parse(counters[k, EtazR, 4, PomesR]);
+                                    znachenie1 = double.Parse(counters[k+1, EtazR, 1, PomesR]);
                                 }  
                             } 
                         }
@@ -3038,40 +2775,40 @@ namespace PictureBox
             }
             if (znachenie2 == 0 && summa == 0)
             {
-                //chetchiki[DataK1, EtazR, 6, PomesR] = "0";//начальное нулевое показание в БД
+                //counters[DataK1, EtazR, 6, PomesR] = "0";//начальное нулевое показание в БД
                 return 0;//если k=1; или в этом месяце только одно начальное показание
             }
             summa += (znachenie2 - znachenie1)*koeff;
-            chetchiki[DataK, EtazR, 6, PomesR] = Math.Round(summa, 1).ToString();//запишет в БД
+            counters[DataK, EtazR, 6, PomesR] = Math.Round(summa, 1).ToString();//запишет в БД
             return Math.Round(summa, 1);
         }
         private void button35_Click(object sender, EventArgs e)//скорректировать ДБ (добавить электросчетчики)
         {            
             for (int et = 0; et < 4; et++)
             {
-                for (int pomesh = 0; pomesh < max1; pomesh++)
+                for (int pomesh = 0; pomesh < maxRoom; pomesh++)
                 {
                     int MonthTemp = -1;
                     for (int k = 0; k < 60; k++)
                     {
-                        if (chetchiki[k, et, 0, pomesh] != null)//если показания записаны (хотябы по воде?)
+                        if (counters[k, et, 0, pomesh] != null)//если показания записаны (хотябы по воде?)
                         {
-                            if (chetchiki[k, et, 3, pomesh] == null)
+                            if (counters[k, et, 3, pomesh] == null)
                             {
-                                chetchiki[k, et, 3, pomesh] = data[et, 9, pomesh];//добавить номер счетчика
-                                chetchiki[k, et, 4, pomesh] = data[et, 15, pomesh];//добавить расчетный коэффициент
+                                counters[k, et, 3, pomesh] = data[et, 9, pomesh];//добавить номер счетчика
+                                counters[k, et, 4, pomesh] = data[et, 15, pomesh];//добавить расчетный коэффициент
                             }
-                            if (chetchiki[k, et, 6, pomesh] == null)//если расход не посчитан
+                            if (counters[k, et, 6, pomesh] == null)//если расход не посчитан
                             {
                                 //только в том случае, если дата является расчетной, записывается расход
                                 // в противном случае нужно записать что-то, чтобы было понятно, что расход указан в другой строке (м.б. дата?) и желательно не оставлять null
                                 //если указан расход, значит он официально используется для отчета. Но может быть и отрицательный расход
                                 //например, когда расчетный расход обогнал фактичесие показания, тогда отрицательный расход указывает
                                 // на нулевой расход в отчете, и разница должна учитываться при пересчете показаний в следующем расчетном периоде! (добавить в Rasxod3)
-                                if (DateTime.Parse(chetchiki[k, et, 0, pomesh]).Month != MonthTemp)
+                                if (DateTime.Parse(counters[k, et, 0, pomesh]).Month != MonthTemp)
                                 {
-                                    MonthTemp = DateTime.Parse(chetchiki[k, et, 0, pomesh]).Month;
-                                    Rasxod3(et, pomesh, DateTime.Parse(chetchiki[k, et, 0, pomesh]));
+                                    MonthTemp = DateTime.Parse(counters[k, et, 0, pomesh]).Month;
+                                    Rasxod3(et, pomesh, DateTime.Parse(counters[k, et, 0, pomesh]));
                                 }
                             }
                         }
@@ -3085,11 +2822,11 @@ namespace PictureBox
 
         private void button36_Click(object sender, EventArgs e)
         {
-            dataRedact[1] = "electro";//переключимся на счетчик электроэнергии
+            dataMod[1] = "electro";//переключимся на счетчик электроэнергии
             dataGridView1.Visible = true;
             listBox2.Visible = true;
             richTextBox2.Visible = false;
-            for (int row = 0; row < chetchiki.GetLength(0); row++) //строки
+            for (int row = 0; row < counters.GetLength(0); row++) //строки
             {
                 for (int column = 0; column < 60; column++)//столбцы (не более 60 дат на счетчик)
                 { 
@@ -3121,7 +2858,7 @@ namespace PictureBox
             listBox2.Items.Clear();
             for (int et1 = 0; et1 < 4; et1++)
             {
-                for (int pomesh = 0; pomesh < max1; pomesh++)
+                for (int pomesh = 0; pomesh < maxRoom; pomesh++)
                 {
                     if (!(data[et1,9,pomesh]==null||data[et1, 9, pomesh] ==""))
                     {
@@ -3131,11 +2868,11 @@ namespace PictureBox
                             if (sovpadenie.IndexOf(textBox18.Text) > -1) listBox2.Items.Add(sovpadenie);
                             for (int k = 0; k < 60; k++)
                             {
-                                if (chetchiki[k, et1, 0, pomesh] != null)
+                                if (counters[k, et1, 0, pomesh] != null)
                                 {
-                                    if (chetchiki[k, et1, 3, pomesh] != sovpadenie && chetchiki[k, et1, 3, pomesh]!=null)
+                                    if (counters[k, et1, 3, pomesh] != sovpadenie && counters[k, et1, 3, pomesh]!=null)
                                     {
-                                        sovpadenie = chetchiki[k, et1, 3, pomesh];
+                                        sovpadenie = counters[k, et1, 3, pomesh];
                                         if (sovpadenie.IndexOf(textBox18.Text) > -1) listBox2.Items.Add(sovpadenie);
                                     }
                                 }
@@ -3167,7 +2904,7 @@ namespace PictureBox
                         //} пом.{0xxx}
                         comboBox6.Text = selectItem.ToString().Substring(selectItem.ToString().LastIndexOf("{") + 1, selectItem.ToString().Length - selectItem.ToString().LastIndexOf("{") - 2);
                         timer1.Enabled = false;
-                        kontur(PomeshenieT);
+                        kontur(roomGlobal);
                     }
                     else
                     {
@@ -3186,18 +2923,18 @@ namespace PictureBox
         }
         void kontur(int pomesh1)//на входе помещение, на выходе мигающее помещение...
         {//сперва заполнить координатами фигуру, затем найти точку внутри этого полигона, третье: отцентрироваться на этом помещении, четвертое изменить масштаб, пятое "моргнуть" 
-            if (koord[EtazT, 0, pomesh1] != 0)
+            if (koord[floorGlobal, 0, pomesh1] != 0)
             {
                 int i1 = 0;
                 int i2 = 0;
                 double[,] mass = new double[2, 20];
                 for (; i1 < 40; i1++, i2++)//пройти по координатам
                 {
-                    if (koord[EtazT, i1, pomesh1] != 0)
+                    if (koord[floorGlobal, i1, pomesh1] != 0)
                     {
-                        mass[0, i2] = koord[EtazT, i1, pomesh1];
+                        mass[0, i2] = koord[floorGlobal, i1, pomesh1];
                         i1++;
-                        mass[1, i2] = koord[EtazT, i1, pomesh1];
+                        mass[1, i2] = koord[floorGlobal, i1, pomesh1];
                     }
                     else break;
                 }
@@ -3222,49 +2959,6 @@ namespace PictureBox
             }
         }
 
-        Point InPolygon(Point centrZ,double[,] mass,int i2)//центр полигона, mass-координаты вершин, i2-длина массива
-        {
-            //находим центр, переходим на 0 по игреку, с нуля пускаем луч, он должен порезать фигуру. после последнего пересечения
-            //делим отрезок между двумя пересеченными гранями пополам, это и есть точка внутри полигона.
-            centrZ.Y = 0;
-            Point PrePoint = centrZ;
-            Point PostPoint = centrZ;
-            bool otvetB = false;
-            for (int i = 1; i <= i2; i++)
-            {
-                double y11 = (((double)centrZ.X - mass[0, i - 1]) / (mass[0, i] - mass[0, i - 1])) * (mass[1, i] - mass[1, i - 1]) + mass[1, i - 1];
-                //добавим ограничение по иксу:
-                double max = 0;
-                double min = 0;
-
-                if (mass[0, i] - mass[0, i - 1] > 0)//(движение слева на право)
-                {
-                    min = mass[0, i - 1];
-                    max = mass[0, i];
-                }
-                else//(движение справа на лево)
-                {
-                    min = mass[0, i];
-                    max = mass[0, i - 1];
-                }
-                if ((double)centrZ.X < max && (double)centrZ.X >= min && y11 > centrZ.Y)//ограничиваем по иксу //трассировка вниз (игрек больше точки) >= - исправил наконец-то ошибку точки
-                {
-                    if (otvetB == false) otvetB = true;
-                    else otvetB = false;
-                    PrePoint = PostPoint;//предыдущая точка становится точкой бывшей текущей, а текущая точка определена существующим пересечением
-                    PostPoint.Y = (int)y11;
-                }
-            }
-            if (!otvetB)
-            {
-                //однако все еще остается вариант, когда центр помещения находится вне полигона и луч ни разу не пересек фигуру. 
-                /* if (PrePoint != PostPoint)
-                 {                 
-                 }*/
-                centrZ.Y = (int)((PostPoint.Y - PrePoint.Y) / 2);                
-            }
-            return centrZ;
-        }
         private void button39_Click(object sender, EventArgs e)
         {
             textBox18.Clear();
@@ -3289,13 +2983,13 @@ namespace PictureBox
             dataGridClear = false;
             for (int et1 = 0; et1 < 4; et1++)
             {
-                for (int pomes = 0; pomes < max1; pomes++)
+                for (int pomes = 0; pomes < maxRoom; pomes++)
                 {
                     for (int k = 0; k < 60; k++)
                     {
-                        if (chetchiki[k, et1, 0, pomes] != null) //если дата равна нулю, то дальше можно не искать.
+                        if (counters[k, et1, 0, pomes] != null) //если дата равна нулю, то дальше можно не искать.
                         {
-                            if (chetchiki[k, et1, 3, pomes] == selItem)
+                            if (counters[k, et1, 3, pomes] == selItem)
                             {
                                 dataGridAdd(et1, pomes);//а внутри тоже самое (такой же выход из циклов)
                                 outInt[0] = et1;
@@ -3328,14 +3022,14 @@ namespace PictureBox
             column4.HeaderText = "Коэфф.";
             column4.Width = 60;
             dataGridView1.Columns.Add(column4);
-            if (chetchiki[0, et, 1, pomes] != null)
+            if (counters[0, et, 1, pomes] != null)
             {
                 for (int i = 59; i > -1; i--)
                 {
-                    if (chetchiki[i, et, 1, pomes] != null) dataGridView1.Rows.Add(DateTime.Parse(chetchiki[i, et, 0, pomes]), chetchiki[i, et, 1, pomes], chetchiki[i, et, 6, pomes], chetchiki[i, et, 4, pomes]);//Rasxod3(et, pomes, DateTime.Parse(chetchiki[i, et, 0, pomes])) - убрали параметр
+                    if (counters[i, et, 1, pomes] != null) dataGridView1.Rows.Add(DateTime.Parse(counters[i, et, 0, pomes]), counters[i, et, 1, pomes], counters[i, et, 6, pomes], counters[i, et, 4, pomes]);//Rasxod3(et, pomes, DateTime.Parse(counters[i, et, 0, pomes])) - убрали параметр
                 }
             }            
-            dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[3].Value = chetchiki[0, et, 4, pomes];//в конец добавим расчетный коэффициент (который был при предыдущих показаниях)
+            dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[3].Value = counters[0, et, 4, pomes];//в конец добавим расчетный коэффициент (который был при предыдущих показаниях)
         }
         bool dgCellEdit = false;
         private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
@@ -3406,16 +3100,16 @@ namespace PictureBox
                 redact = true;
                 if (e.ColumnIndex == 0)//выбрана дата
                 {
-                    izmMassSCH[0] = DateTime.Parse(dataGridView1[e.ColumnIndex, e.RowIndex].Value.ToString()).ToShortDateString();
+                    modCounters[0] = DateTime.Parse(dataGridView1[e.ColumnIndex, e.RowIndex].Value.ToString()).ToShortDateString();
                 }
                 else 
                 {
-                    izmMassSCH[0] = DateTime.Parse(dataGridView1[0, e.RowIndex].Value.ToString()).ToShortDateString();//дата
-                    izmMassSCH[1] = dataGridView1[1, e.RowIndex].Value.ToString();//показания ээ
-                    izmMassSCH[3] = listBox2.SelectedItem.ToString();//номер сч.
-                    izmMassSCH[4] = dataGridView1[3, e.RowIndex].Value.ToString();//коэффициент
-                    if (dataRedact[0] == null || dataRedact[0] == "") dataRedact[0] = izmMassSCH[0];
-                    //dataRedact
+                    modCounters[0] = DateTime.Parse(dataGridView1[0, e.RowIndex].Value.ToString()).ToShortDateString();//дата
+                    modCounters[1] = dataGridView1[1, e.RowIndex].Value.ToString();//показания ээ
+                    modCounters[3] = listBox2.SelectedItem.ToString();//номер сч.
+                    modCounters[4] = dataGridView1[3, e.RowIndex].Value.ToString();//коэффициент
+                    if (dataMod[0] == null || dataMod[0] == "") dataMod[0] = modCounters[0];
+                    //dataMod
                    // WriteSchet(outL2et_pom[0], outL2et_pom[1], DateTime.Parse(dataGridView1[0, e.RowIndex].Value.ToString()), dataGridView1[1, e.RowIndex].Value.ToString(), "+", listBox2.SelectedItem.ToString(), dataGridView1[3, e.RowIndex].Value.ToString(), "+", "+");
                 }
                 timer3.Interval = 100;
@@ -3433,7 +3127,7 @@ namespace PictureBox
                     {
                         if (k != selectedRow && DateTime.Parse(dataGridView1[0, k].Value.ToString()).ToShortDateString() == DateTime.Parse(dataGridView1[0, selectedRow].Value.ToString()).ToShortDateString())
                         {
-                            //chetchiki[k, outL2et_pom[0], 0, outL2et_pom[1]] = DateTime.Parse(dataGridView1[e.ColumnIndex, e.RowIndex].Value.ToString()).ToShortDateString();
+                            //counters[k, outL2et_pom[0], 0, outL2et_pom[1]] = DateTime.Parse(dataGridView1[e.ColumnIndex, e.RowIndex].Value.ToString()).ToShortDateString();
                             //dataGridView1.Rows.Remove(dataGridView1.Rows[k]);
                             dataGridView1[0, k].Selected = true;
                             dgCellEdit = true;
@@ -3451,7 +3145,7 @@ namespace PictureBox
         {
             if (e.ColumnIndex == 0)//выбрана дата
             {
-                dataRedact[0] = DateTime.Parse(dataGridView1[e.ColumnIndex, e.RowIndex].Value.ToString()).ToShortDateString();
+                dataMod[0] = DateTime.Parse(dataGridView1[e.ColumnIndex, e.RowIndex].Value.ToString()).ToShortDateString();
             }
         }
         bool dataGridClear=false;
@@ -3462,24 +3156,24 @@ namespace PictureBox
                 int row1 = -1;
                 for (int k = 59; k > -1; k--)
                 {
-                    if (chetchiki[k, outL2et_pom[0], 0, outL2et_pom[1]] != null)
+                    if (counters[k, outL2et_pom[0], 0, outL2et_pom[1]] != null)
                     {
                         if (row1 < dataGridView1.RowCount )
                         {
                             row1++;
                             richTextBox1.Text +=
-    chetchiki[k, outL2et_pom[0], 0, outL2et_pom[1]] + " " + k.ToString() + " " +
+    counters[k, outL2et_pom[0], 0, outL2et_pom[1]] + " " + k.ToString() + " " +
     DateTime.Parse(dataGridView1[0, row1].Value.ToString()).ToShortDateString() + " " + row1.ToString() + "\r\n";
-                            if (chetchiki[k, outL2et_pom[0], 0, outL2et_pom[1]] != DateTime.Parse(dataGridView1[0, row1].Value.ToString()).ToShortDateString())
+                            if (counters[k, outL2et_pom[0], 0, outL2et_pom[1]] != DateTime.Parse(dataGridView1[0, row1].Value.ToString()).ToShortDateString())
                             {
                                 row1--;
-                                richTextBox1.Text += chetchiki[k, outL2et_pom[0], 0, outL2et_pom[1]] + "\r\n";
+                                richTextBox1.Text += counters[k, outL2et_pom[0], 0, outL2et_pom[1]] + "\r\n";
                                 //функция удаления строки массива
                                 // DelChE(outL2et_pom[0], outL2et_pom[1], k);
-                                EtazT = outL2et_pom[0];
-                                PomeshenieT = outL2et_pom[1];
-                                dataRedact[0] = chetchiki[k, outL2et_pom[0], 0, outL2et_pom[1]];
-                                izmMassSCH[0] = "";
+                                floorGlobal = outL2et_pom[0];
+                                roomGlobal = outL2et_pom[1];
+                                dataMod[0] = counters[k, outL2et_pom[0], 0, outL2et_pom[1]];
+                                modCounters[0] = "";
                                 //LoadDB(); здесь не нужно, таймер сам прогрузит базу и удалит нужную строку
                                 timer3.Interval = 100;
                                 timer3.Enabled = true;
@@ -3491,33 +3185,6 @@ namespace PictureBox
                 //SelectL2(listBox2.SelectedItem.ToString());
             }
         }
-        void DelChE(int et1, int pomes1, int k)//удаление данных по ээ
-        {
-            if (chetchiki[k, et1, 0, pomes1] != null)
-            {
-                if (chetchiki[k, et1, 2, pomes1] != null)//показание водомера не пустое
-                {//очистим данные по электросчетчику только, оставим дату и данные по водомерам
-                    chetchiki[k, et1, 1, pomes1] = null;
-                    chetchiki[k, et1, 3, pomes1] = null;
-                    chetchiki[k, et1, 4, pomes1] = null;
-                    chetchiki[k, et1, 6, pomes1] = null;
-                }
-                else //удаляем строку целиком
-                {
-                    for (; k < 59; k++)
-                    {
-                        if (chetchiki[k, et1, 0, pomes1] != null)
-                        {
-                            for (int i = 0; i < RMS; i++)
-                            {
-                                chetchiki[k, et1, i, pomes1] = chetchiki[k+1, et1, i, pomes1];
-                            }
-                        }
-                        else break;//наверное нужно
-                    }
-                }
-            }
-        }
 
         private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
         {
@@ -3527,21 +3194,21 @@ namespace PictureBox
             {
                 if (nomerE)
                 {
-                    if (chetchiki[k, EtazT, 3, PomeshenieT] != null) comboBox14.Text = chetchiki[k, EtazT, 3, PomeshenieT];
-                    if (chetchiki[k, EtazT, 4, PomeshenieT] != null) comboBox14.Text = chetchiki[k, EtazT, 4, PomeshenieT];
+                    if (counters[k, floorGlobal, 3, roomGlobal] != null) comboBox14.Text = counters[k, floorGlobal, 3, roomGlobal];
+                    if (counters[k, floorGlobal, 4, roomGlobal] != null) comboBox14.Text = counters[k, floorGlobal, 4, roomGlobal];
                 }
                 if (nomerV)
                 {
-                    if (chetchiki[k, EtazT, 5, PomeshenieT] != null) comboBox16.Text = chetchiki[k, EtazT, 5, PomeshenieT];
+                    if (counters[k, floorGlobal, 5, roomGlobal] != null) comboBox16.Text = counters[k, floorGlobal, 5, roomGlobal];
                 }
-                if (chetchiki[k, EtazT, 0, PomeshenieT] == dateTimePicker2.Value.ToShortDateString())
+                if (counters[k, floorGlobal, 0, roomGlobal] == dateTimePicker2.Value.ToShortDateString())
                 {
                     
-                    if (chetchiki[k, EtazT, 1, PomeshenieT] != null && chetchiki[k, EtazT, 3, PomeshenieT] != null && chetchiki[k, EtazT, 4, PomeshenieT] != null)
+                    if (counters[k, floorGlobal, 1, roomGlobal] != null && counters[k, floorGlobal, 3, roomGlobal] != null && counters[k, floorGlobal, 4, roomGlobal] != null)
                     {
-                        textBox10.Text = chetchiki[k, EtazT, 1, PomeshenieT];//показание электросчетчика 3.
-                        comboBox14.Text = chetchiki[k, EtazT, 3, PomeshenieT];//номер электросчетчика 2.
-                        comboBox18.Text = chetchiki[k, EtazT, 4, PomeshenieT];//коэфф. трансформации 3.
+                        textBox10.Text = counters[k, floorGlobal, 1, roomGlobal];//показание электросчетчика 3.
+                        comboBox14.Text = counters[k, floorGlobal, 3, roomGlobal];//номер электросчетчика 2.
+                        comboBox18.Text = counters[k, floorGlobal, 4, roomGlobal];//коэфф. трансформации 3.
                     }
                     else
                     {
@@ -3550,15 +3217,15 @@ namespace PictureBox
                         comboBox18.Text = "";
                         nomerE = true;
                     }
-                    if (chetchiki[k, EtazT, 2, PomeshenieT] != null && chetchiki[k, EtazT, 5, PomeshenieT] != null && chetchiki[k, EtazT, 7, PomeshenieT] != null)//добавить остальное, когда займемся водой
+                    if (counters[k, floorGlobal, 2, roomGlobal] != null && counters[k, floorGlobal, 5, roomGlobal] != null && counters[k, floorGlobal, 7, roomGlobal] != null)//добавить остальное, когда займемся водой
                     {
                         /*
-                             chetchiki[k, EtazT, 8, PomeshenieT]//для воды счетчик-расчет-или счетчик/расчет в data? 3.
-                             chetchiki[k, EtazT, 9, PomeshenieT]//для воды на технологич./хозпитнужды в data? 3.
+                             counters[k, floorGlobal, 8, roomGlobal]//для воды счетчик-расчет-или счетчик/расчет в data? 3.
+                             counters[k, floorGlobal, 9, roomGlobal]//для воды на технологич./хозпитнужды в data? 3.
                          */
-                        textBox11.Text = chetchiki[k, EtazT, 2, PomeshenieT];//показание водомера        3.  
-                        comboBox16.Text = chetchiki[k, EtazT, 5, PomeshenieT];//номер водомера 2.
-                        comboBox4.Text = chetchiki[k, EtazT, 7, PomeshenieT];//для воды количество сотрудников 3.
+                        textBox11.Text = counters[k, floorGlobal, 2, roomGlobal];//показание водомера        3.  
+                        comboBox16.Text = counters[k, floorGlobal, 5, roomGlobal];//номер водомера 2.
+                        comboBox4.Text = counters[k, floorGlobal, 7, roomGlobal];//для воды количество сотрудников 3.
                     }
                     else 
                     {
@@ -3577,9 +3244,9 @@ namespace PictureBox
         {
             for (int k = 59; k > -1; k--)
             {
-                if (chetchiki[k, outL2et_pom[0], 0, outL2et_pom[1]] != null)
+                if (counters[k, outL2et_pom[0], 0, outL2et_pom[1]] != null)
                 {
-                    for (int i = 0; i < RMS; i++) richTextBox1.Text += chetchiki[k, outL2et_pom[0], i, outL2et_pom[1]] + ";";
+                    for (int i = 0; i < RMC; i++) richTextBox1.Text += counters[k, outL2et_pom[0], i, outL2et_pom[1]] + ";";
                     richTextBox1.Text += "\r\n";
                 }
             }
@@ -3705,7 +3372,7 @@ namespace PictureBox
         {
             for (int et = 0; et < 4; et++)
             {
-                for (int pomesh = 0; pomesh < max1; pomesh++)
+                for (int pomesh = 0; pomesh < maxRoom; pomesh++)
                 {
                     if (data[et, 0, pomesh] != "" && data[et, 1, pomesh] != "")
                     {
@@ -3713,10 +3380,10 @@ namespace PictureBox
                         for (int i = 0; i < 60; i++)
                         {
 
-                            if (chetchiki[i, et, 0, pomesh] != null)
+                            if (counters[i, et, 0, pomesh] != null)
                             {
-                                if (temp == chetchiki[i, et, 0, pomesh]) richTextBox1.Text += chetchiki[i, et, 3, pomesh] + "\r\n";
-                                else temp = chetchiki[i, et, 0, pomesh];
+                                if (temp == counters[i, et, 0, pomesh]) richTextBox1.Text += counters[i, et, 3, pomesh] + "\r\n";
+                                else temp = counters[i, et, 0, pomesh];
                             }
                             else break;
                         }
@@ -3737,11 +3404,6 @@ namespace PictureBox
                 else temp = File[i].ToString();
             }
             System.IO.File.WriteAllLines(@"Data.txt", File, Encoding.Default);
-        }
-
-        private void button50_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void button50_Click_1(object sender, EventArgs e)
@@ -3818,7 +3480,7 @@ namespace PictureBox
                 for (; k < (Temp.Count) / 6; k++)
                 {
                     sheet.Cells[12 + k, 1] = (k + 1).ToString() + ".";
-                    sheet.Cells[12 + k, 2] = Temp[k * 6];       //помещение   из data, остальное из chetchiki
+                    sheet.Cells[12 + k, 2] = Temp[k * 6];       //помещение   из data, остальное из counters
                     sheet.Cells[12 + k, 3] = Temp[k * 6 + 1];   //№счетчика
                     sheet.Cells[12 + k, 4] = Temp[k * 6 + 2].Replace(',', '.');   //показания начало
                     sheet.Cells[12 + k, 5] = Temp[k * 6 + 3].Replace(',', '.');   //показания конец
@@ -3874,7 +3536,7 @@ namespace PictureBox
             List<string> ToOtchet = new List<string>();
             for (int et1=0; et1 < 4; et1++)
             {
-                for (int pomesh = 0; pomesh < max1; pomesh++)
+                for (int pomesh = 0; pomesh < maxRoom; pomesh++)
                 {
                     if (arenda[0, et1, 1, pomesh] == arendator)
                     {
@@ -3892,33 +3554,33 @@ namespace PictureBox
                         bool Period=false;
                         for (int k = 0; k < 60; k++)
                         {
-                            if (chetchiki[k, et1, 6, pomesh] != null)//расход ЭЭ имеет запись
+                            if (counters[k, et1, 6, pomesh] != null)//расход ЭЭ имеет запись
                             {
-                                if (chetchiki[k, et1, 6, pomesh] != "" && chetchiki[k, et1, 6, pomesh] != "-")
+                                if (counters[k, et1, 6, pomesh] != "" && counters[k, et1, 6, pomesh] != "-")
                                 {
                                     if (!Period)
                                     {
-                                        if (DateTime.Parse(chetchiki[k, et1, 0, pomesh]) > dataTekus1 && DateTime.Parse(chetchiki[k, et1, 0, pomesh]) < dataTekus2)
+                                        if (DateTime.Parse(counters[k, et1, 0, pomesh]) > dataTekus1 && DateTime.Parse(counters[k, et1, 0, pomesh]) < dataTekus2)
                                         {
                                             Period = true;
-                                            rasxodZaPeriod += double.Parse(chetchiki[k, et1, 6, pomesh]);
+                                            rasxodZaPeriod += double.Parse(counters[k, et1, 6, pomesh]);
                                             richTextBox1.Text += "1:"+rasxodZaPeriod.ToString() + "\r\n";//лог
-                                            ToOtchet.Add(chetchiki[k, et1, 1, pomesh]);
+                                            ToOtchet.Add(counters[k, et1, 1, pomesh]);
                                             if (DataOtMes.Month == DataDoMes.Month) flag = false;//если период больше одного месяца и false - если период один месяц.
                                             else flag = true;
                                         }
                                     }
                                     else
                                     {
-                                        if (DateTime.Parse(chetchiki[k, et1, 0, pomesh]) > dataPred1 && DateTime.Parse(chetchiki[k, et1, 0, pomesh]) < dataPred2)
+                                        if (DateTime.Parse(counters[k, et1, 0, pomesh]) > dataPred1 && DateTime.Parse(counters[k, et1, 0, pomesh]) < dataPred2)
                                         {
-                                            ToOtchet.Insert(ToOtchet.Count - 1, chetchiki[k, et1, 1, pomesh]);
-                                            ToOtchet.Add(chetchiki[k, et1, 4, pomesh]);
+                                            ToOtchet.Insert(ToOtchet.Count - 1, counters[k, et1, 1, pomesh]);
+                                            ToOtchet.Add(counters[k, et1, 4, pomesh]);
                                             break;
                                         }
                                         if (flag)
                                         {
-                                            rasxodZaPeriod += double.Parse(chetchiki[k, et1, 6, pomesh]);
+                                            rasxodZaPeriod += double.Parse(counters[k, et1, 6, pomesh]);
                                             richTextBox1.Text += "2:" + rasxodZaPeriod.ToString() + "\r\n";//лог
                                         }
                                         else flag = true;
@@ -4056,7 +3718,7 @@ namespace PictureBox
         {
             for (int et = 0; et < 4; et++)
             {
-                for (int pomesh = 0; pomesh < max1; pomesh++)
+                for (int pomesh = 0; pomesh < maxRoom; pomesh++)
                 {
                     for (int i= 0; i < 10; i++)
                     {
@@ -4204,25 +3866,25 @@ namespace PictureBox
 
         private void button58_Click(object sender, EventArgs e)//тестовая, изменить счетчик
         {
-            EtazT = 0;
-            PomeshenieT = 0;
-            //izmPomes(EtazT, PomeshenieT);
-            izmMassSCH[0] = "";//"29.08.2020";//"29.07.2020";//textBox1.Text;//
-            dataRedact[0] = "01.05.2020";
-            dataRedact[1] = "electro";
-            izmMassSCH[1] = "6069,1";
-            //  izmMassSCH[3] = "014105";
+            floorGlobal = 0;
+            roomGlobal = 0;
+            //izmPomes(floorGlobal, roomGlobal);
+            modCounters[0] = "";//"29.08.2020";//"29.07.2020";//textBox1.Text;//
+            dataMod[0] = "01.05.2020";
+            dataMod[1] = "electro";
+            modCounters[1] = "6069,1";
+            //  modCounters[3] = "014105";
         }
 
         private void button59_Click(object sender, EventArgs e)//вывести изменения на экран
         {
             File.Clear();
-            File.Add((kolvo[0] + kolvo[1] + kolvo[2] + kolvo[3] + 4).ToString());//записали общее количество помещений в начало
+            File.Add((countRoom[0] + countRoom[1] + countRoom[2] + countRoom[3] + 4).ToString());//записали общее количество помещений в начало
             for (int etaz = 0; etaz < 4; etaz++)
             {
-                File.Add("[etaz_" + (etaz + 1).ToString() + "]" + (kolvo[etaz] + 1).ToString());//запись номера этажа
+                File.Add("[etaz_" + (etaz + 1).ToString() + "]" + (countRoom[etaz] + 1).ToString());//запись номера этажа
 
-                for (int pomeshenie = 0; pomeshenie <= kolvo[etaz]; pomeshenie++)
+                for (int pomeshenie = 0; pomeshenie <= countRoom[etaz]; pomeshenie++)
                 {
                     File.Add("[" + pomeshenie + "]");//запись номера помещения
                     string s = "";
@@ -4251,11 +3913,11 @@ namespace PictureBox
                     s = "";
                     for (int k = 0; k < 60; k++)
                     {
-                        if (chetchiki[k, etaz, 0, pomeshenie] == null) break;
+                        if (counters[k, etaz, 0, pomeshenie] == null) break;
                         s = "";
-                        for (int i = 0; i < RMS; i++)
+                        for (int i = 0; i < RMC; i++)
                         {
-                            s += chetchiki[k, etaz, i, pomeshenie] + ";";
+                            s += counters[k, etaz, i, pomeshenie] + ";";
                         }
                         File.Add(s.Substring(0, s.Length - 1));//записали строку счетчиков
                     }
@@ -4270,28 +3932,28 @@ namespace PictureBox
 
         private void button60_Click(object sender, EventArgs e)//тестовая, изменить Арендатора
         {
-            EtazT = 0;
-            PomeshenieT = 0;
-            //izmPomes(EtazT, PomeshenieT);
-            izmMassA[0] = "";//"01.05.2020";
+            floorGlobal = 0;
+            roomGlobal = 0;
+            //izmPomes(floorGlobal, roomGlobal);
+            modArenda[0] = "";//"01.05.2020";
             dataModA = "22.04.2020";
-            izmMassA[1] = null;//"ООО \"АбраКадабра\"";
-            //  izmMassSCH[3] = "014105";
+            modArenda[1] = null;//"ООО \"АбраКадабра\"";
+            //  modCounters[3] = "014105";
         }
         /*
-    chetchiki[k, EtazT, 0, PomeshenieT] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//дата съема показаний 1.
-    chetchiki[k, EtazT, 1, PomeshenieT] = textBox10.Text.Replace(";", ",");//показание электросчетчика 3.
-    chetchiki[k, EtazT, 2, PomeshenieT] = textBox11.Text.Replace(";", ",");//показание водомера        3.  
-    chetchiki[k, EtazT, 3, PomeshenieT] = comboBox14.Text.Replace(";", ",");//номер электросчетчика 2.
-    chetchiki[k, EtazT, 4, PomeshenieT] = comboBox18.Text.Replace(";", ",");//коэфф. трансформации 3.
-    chetchiki[k, EtazT, 5, PomeshenieT] = comboBox16.Text.Replace(";", ",");//номер водомера 2.
-* chetchiki[k, EtazT, 6, PomeshenieT]//расход ЭЭ (текущее минус предыдущее т.е. расход за предыдущий период) 4.
-* chetchiki[k, EtazT, 7, PomeshenieT]//для воды количество сотрудников 3.
-* chetchiki[k, EtazT, 8, PomeshenieT]//для воды счетчик-расчет-или счетчик/расчет в data? 3.
-* chetchiki[k, EtazT, 9, PomeshenieT]//для воды на технологич./хозпитнужды в data? 3.
-* chetchiki[k, EtazT, 10, PomeshenieT]//для воды расход 4.
-* chetchiki[k, EtazT, 11, PomeshenieT]//резерв? приоритет.
-* chetchiki[k, EtazT, 12, PomeshenieT]//резерв? приоритет.
+    counters[k, floorGlobal, 0, roomGlobal] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//дата съема показаний 1.
+    counters[k, floorGlobal, 1, roomGlobal] = textBox10.Text.Replace(";", ",");//показание электросчетчика 3.
+    counters[k, floorGlobal, 2, roomGlobal] = textBox11.Text.Replace(";", ",");//показание водомера        3.  
+    counters[k, floorGlobal, 3, roomGlobal] = comboBox14.Text.Replace(";", ",");//номер электросчетчика 2.
+    counters[k, floorGlobal, 4, roomGlobal] = comboBox18.Text.Replace(";", ",");//коэфф. трансформации 3.
+    counters[k, floorGlobal, 5, roomGlobal] = comboBox16.Text.Replace(";", ",");//номер водомера 2.
+* counters[k, floorGlobal, 6, roomGlobal]//расход ЭЭ (текущее минус предыдущее т.е. расход за предыдущий период) 4.
+* counters[k, floorGlobal, 7, roomGlobal]//для воды количество сотрудников 3.
+* counters[k, floorGlobal, 8, roomGlobal]//для воды счетчик-расчет-или счетчик/расчет в data? 3.
+* counters[k, floorGlobal, 9, roomGlobal]//для воды на технологич./хозпитнужды в data? 3.
+* counters[k, floorGlobal, 10, roomGlobal]//для воды расход 4.
+* counters[k, floorGlobal, 11, roomGlobal]//резерв? приоритет.
+* counters[k, floorGlobal, 12, roomGlobal]//резерв? приоритет.
 */
     }
 }

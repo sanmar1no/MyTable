@@ -1,4 +1,4 @@
-﻿namespace PictureBox
+﻿namespace MyTable
 {
     partial class Form1
     {
@@ -460,7 +460,7 @@
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(71, 39);
             this.button4.TabIndex = 10;
-            this.button4.Text = "Centr";
+            this.button4.Text = "Center";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
@@ -2162,7 +2162,7 @@
             this.button48.Name = "button48";
             this.button48.Size = new System.Drawing.Size(148, 42);
             this.button48.TabIndex = 44;
-            this.button48.Text = "DB chetchiki (dublicate)";
+            this.button48.Text = "DB counters (dublicate)";
             this.button48.UseVisualStyleBackColor = true;
             this.button48.Click += new System.EventHandler(this.button48_Click);
             // 
