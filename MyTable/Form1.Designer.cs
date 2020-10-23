@@ -31,6 +31,12 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button15 = new System.Windows.Forms.Button();
+            this.button18 = new System.Windows.Forms.Button();
+            this.button16 = new System.Windows.Forms.Button();
+            this.button17 = new System.Windows.Forms.Button();
             this.button47 = new System.Windows.Forms.Button();
             this.button46 = new System.Windows.Forms.Button();
             this.button45 = new System.Windows.Forms.Button();
@@ -41,27 +47,6 @@
             this.button9 = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.axAcCtrl1 = new AxACCTRLLib.AxAcCtrl();
-            this.label1 = new System.Windows.Forms.Label();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.label2 = new System.Windows.Forms.Label();
-            this.timer2 = new System.Windows.Forms.Timer(this.components);
-            this.label3 = new System.Windows.Forms.Label();
-            this.button3 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
-            this.button11 = new System.Windows.Forms.Button();
-            this.button12 = new System.Windows.Forms.Button();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.button13 = new System.Windows.Forms.Button();
-            this.button14 = new System.Windows.Forms.Button();
-            this.button15 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.label41 = new System.Windows.Forms.Label();
@@ -176,26 +161,6 @@
             this.label28 = new System.Windows.Forms.Label();
             this.textBox10 = new System.Windows.Forms.TextBox();
             this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.button51 = new System.Windows.Forms.Button();
-            this.comboBox23 = new System.Windows.Forms.ComboBox();
-            this.label58 = new System.Windows.Forms.Label();
-            this.dateTimePicker6 = new System.Windows.Forms.DateTimePicker();
-            this.label57 = new System.Windows.Forms.Label();
-            this.label56 = new System.Windows.Forms.Label();
-            this.label55 = new System.Windows.Forms.Label();
-            this.button40 = new System.Windows.Forms.Button();
-            this.label38 = new System.Windows.Forms.Label();
-            this.button39 = new System.Windows.Forms.Button();
-            this.textBox18 = new System.Windows.Forms.TextBox();
-            this.listBox2 = new System.Windows.Forms.ListBox();
-            this.button36 = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.button34 = new System.Windows.Forms.Button();
-            this.dateTimePicker5 = new System.Windows.Forms.DateTimePicker();
-            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
-            this.button32 = new System.Windows.Forms.Button();
-            this.button31 = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.button60 = new System.Windows.Forms.Button();
             this.button59 = new System.Windows.Forms.Button();
@@ -228,15 +193,52 @@
             this.button21 = new System.Windows.Forms.Button();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.button20 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button16 = new System.Windows.Forms.Button();
-            this.button17 = new System.Windows.Forms.Button();
-            this.button18 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.button14 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button13 = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button12 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button11 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.button8 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.button51 = new System.Windows.Forms.Button();
+            this.comboBox23 = new System.Windows.Forms.ComboBox();
+            this.label58 = new System.Windows.Forms.Label();
+            this.dateTimePicker6 = new System.Windows.Forms.DateTimePicker();
+            this.label57 = new System.Windows.Forms.Label();
+            this.label56 = new System.Windows.Forms.Label();
+            this.label55 = new System.Windows.Forms.Label();
+            this.button40 = new System.Windows.Forms.Button();
+            this.label38 = new System.Windows.Forms.Label();
+            this.button39 = new System.Windows.Forms.Button();
+            this.textBox18 = new System.Windows.Forms.TextBox();
+            this.listBox2 = new System.Windows.Forms.ListBox();
+            this.button36 = new System.Windows.Forms.Button();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.button34 = new System.Windows.Forms.Button();
+            this.dateTimePicker5 = new System.Windows.Forms.DateTimePicker();
+            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
+            this.button32 = new System.Windows.Forms.Button();
+            this.button31 = new System.Windows.Forms.Button();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.timer3 = new System.Windows.Forms.Timer(this.components);
             this.Hint = new System.Windows.Forms.ToolTip(this.components);
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axAcCtrl1)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -246,9 +248,9 @@
             this.tabPage5.SuspendLayout();
             this.tabPage6.SuspendLayout();
             this.tabPage7.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -262,14 +264,89 @@
             this.panel1.Controls.Add(this.button42);
             this.panel1.Controls.Add(this.button10);
             this.panel1.Controls.Add(this.button9);
+            this.panel1.Controls.Add(this.panel2);
+            this.panel1.Controls.Add(this.tabControl1);
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Controls.Add(this.axAcCtrl1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1168, 809);
+            this.panel1.Size = new System.Drawing.Size(1837, 809);
             this.panel1.TabIndex = 1;
             this.panel1.Resize += new System.EventHandler(this.panel1_Resize);
+            // 
+            // panel2
+            // 
+            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel2.Controls.Add(this.button2);
+            this.panel2.Controls.Add(this.button15);
+            this.panel2.Controls.Add(this.button18);
+            this.panel2.Controls.Add(this.button16);
+            this.panel2.Controls.Add(this.button17);
+            this.panel2.Location = new System.Drawing.Point(1407, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(430, 33);
+            this.panel2.TabIndex = 26;
+            // 
+            // button2
+            // 
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2.BackColor = System.Drawing.SystemColors.Control;
+            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button2.Location = new System.Drawing.Point(5, 4);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 28);
+            this.button2.TabIndex = 25;
+            this.button2.Text = "Этаж 1";
+            this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // button15
+            // 
+            this.button15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button15.Location = new System.Drawing.Point(311, 3);
+            this.button15.Name = "button15";
+            this.button15.Size = new System.Drawing.Size(113, 29);
+            this.button15.TabIndex = 24;
+            this.button15.Text = "Hide";
+            this.button15.UseVisualStyleBackColor = true;
+            this.button15.Click += new System.EventHandler(this.button15_Click);
+            // 
+            // button18
+            // 
+            this.button18.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button18.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button18.Location = new System.Drawing.Point(230, 4);
+            this.button18.Name = "button18";
+            this.button18.Size = new System.Drawing.Size(75, 28);
+            this.button18.TabIndex = 28;
+            this.button18.Text = "Этаж 4";
+            this.button18.UseVisualStyleBackColor = true;
+            this.button18.Click += new System.EventHandler(this.button18_Click);
+            // 
+            // button16
+            // 
+            this.button16.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button16.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button16.Location = new System.Drawing.Point(80, 4);
+            this.button16.Name = "button16";
+            this.button16.Size = new System.Drawing.Size(75, 28);
+            this.button16.TabIndex = 26;
+            this.button16.Text = "Этаж 2";
+            this.button16.UseVisualStyleBackColor = true;
+            this.button16.Click += new System.EventHandler(this.button16_Click);
+            // 
+            // button17
+            // 
+            this.button17.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button17.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button17.Location = new System.Drawing.Point(155, 4);
+            this.button17.Name = "button17";
+            this.button17.Size = new System.Drawing.Size(75, 28);
+            this.button17.TabIndex = 27;
+            this.button17.Text = "Этаж 3";
+            this.button17.UseVisualStyleBackColor = true;
+            this.button17.Click += new System.EventHandler(this.button17_Click);
             // 
             // button47
             // 
@@ -277,7 +354,7 @@
             this.button47.Enabled = false;
             this.button47.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
             this.button47.Image = ((System.Drawing.Image)(resources.GetObject("button47.Image")));
-            this.button47.Location = new System.Drawing.Point(1102, 352);
+            this.button47.Location = new System.Drawing.Point(1106, 393);
             this.button47.Name = "button47";
             this.button47.Size = new System.Drawing.Size(60, 55);
             this.button47.TabIndex = 24;
@@ -289,7 +366,7 @@
             this.button46.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button46.Enabled = false;
             this.button46.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
-            this.button46.Location = new System.Drawing.Point(1049, 304);
+            this.button46.Location = new System.Drawing.Point(1053, 345);
             this.button46.Name = "button46";
             this.button46.Size = new System.Drawing.Size(113, 42);
             this.button46.TabIndex = 23;
@@ -301,7 +378,7 @@
             // 
             this.button45.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button45.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
-            this.button45.Location = new System.Drawing.Point(1049, 134);
+            this.button45.Location = new System.Drawing.Point(1053, 175);
             this.button45.Name = "button45";
             this.button45.Size = new System.Drawing.Size(113, 33);
             this.button45.TabIndex = 22;
@@ -314,7 +391,7 @@
             this.button44.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button44.Enabled = false;
             this.button44.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button44.Location = new System.Drawing.Point(1049, 256);
+            this.button44.Location = new System.Drawing.Point(1053, 297);
             this.button44.Name = "button44";
             this.button44.Size = new System.Drawing.Size(113, 42);
             this.button44.TabIndex = 21;
@@ -327,7 +404,7 @@
             this.button43.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button43.Enabled = false;
             this.button43.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button43.Location = new System.Drawing.Point(1049, 208);
+            this.button43.Location = new System.Drawing.Point(1053, 249);
             this.button43.Name = "button43";
             this.button43.Size = new System.Drawing.Size(113, 42);
             this.button43.TabIndex = 20;
@@ -340,7 +417,7 @@
             this.button42.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button42.Enabled = false;
             this.button42.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button42.Location = new System.Drawing.Point(1049, 173);
+            this.button42.Location = new System.Drawing.Point(1053, 214);
             this.button42.Name = "button42";
             this.button42.Size = new System.Drawing.Size(113, 29);
             this.button42.TabIndex = 19;
@@ -352,7 +429,7 @@
             // 
             this.button10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button10.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button10.Location = new System.Drawing.Point(1049, 78);
+            this.button10.Location = new System.Drawing.Point(1053, 123);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(113, 42);
             this.button10.TabIndex = 18;
@@ -365,7 +442,7 @@
             this.button9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button9.Enabled = false;
             this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button9.Location = new System.Drawing.Point(1049, 30);
+            this.button9.Location = new System.Drawing.Point(1053, 77);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(113, 42);
             this.button9.TabIndex = 17;
@@ -377,7 +454,7 @@
             // 
             this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Default;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(0, 3);
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(1162, 858);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -396,204 +473,9 @@
             this.axAcCtrl1.Location = new System.Drawing.Point(0, 0);
             this.axAcCtrl1.Name = "axAcCtrl1";
             this.axAcCtrl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axAcCtrl1.OcxState")));
-            this.axAcCtrl1.Size = new System.Drawing.Size(1168, 809);
+            this.axAcCtrl1.Size = new System.Drawing.Size(1837, 809);
             this.axAcCtrl1.TabIndex = 25;
             this.axAcCtrl1.Visible = false;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(34, 3);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(46, 17);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "label1";
-            // 
-            // timer1
-            // 
-            this.timer1.Interval = 1000;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(34, 30);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(46, 17);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "label2";
-            // 
-            // timer2
-            // 
-            this.timer2.Interval = 300;
-            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(34, 47);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(46, 17);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "label3";
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(224, 80);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(148, 39);
-            this.button3.TabIndex = 8;
-            this.button3.Text = "Отцентрироваться";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(224, 6);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(388, 22);
-            this.textBox1.TabIndex = 9;
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(224, 35);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(71, 39);
-            this.button4.TabIndex = 10;
-            this.button4.Text = "Center";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(301, 35);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(71, 39);
-            this.button5.TabIndex = 11;
-            this.button5.Text = "MastaB";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
-            // 
-            // button6
-            // 
-            this.button6.Location = new System.Drawing.Point(378, 35);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(71, 39);
-            this.button6.TabIndex = 12;
-            this.button6.Text = "MastaB2";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(411, 107);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(56, 22);
-            this.textBox2.TabIndex = 13;
-            this.textBox2.Text = "50";
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(473, 107);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(56, 22);
-            this.textBox3.TabIndex = 14;
-            this.textBox3.Text = "100";
-            // 
-            // button7
-            // 
-            this.button7.Location = new System.Drawing.Point(541, 107);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(71, 22);
-            this.button7.TabIndex = 15;
-            this.button7.Text = "4";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
-            // 
-            // button8
-            // 
-            this.button8.Location = new System.Drawing.Point(515, 64);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(71, 22);
-            this.button8.TabIndex = 16;
-            this.button8.Text = "test";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
-            // 
-            // button11
-            // 
-            this.button11.Location = new System.Drawing.Point(102, 97);
-            this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(71, 22);
-            this.button11.TabIndex = 19;
-            this.button11.Text = "in/out";
-            this.button11.UseVisualStyleBackColor = true;
-            this.button11.Click += new System.EventHandler(this.button11_Click);
-            // 
-            // button12
-            // 
-            this.button12.Location = new System.Drawing.Point(9, 97);
-            this.button12.Name = "button12";
-            this.button12.Size = new System.Drawing.Size(71, 42);
-            this.button12.TabIndex = 20;
-            this.button12.Text = "Poligon Point3";
-            this.button12.UseVisualStyleBackColor = true;
-            this.button12.Click += new System.EventHandler(this.button12_Click);
-            // 
-            // richTextBox1
-            // 
-            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.richTextBox1.BackColor = System.Drawing.SystemColors.MenuText;
-            this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.richTextBox1.ForeColor = System.Drawing.Color.ForestGreen;
-            this.richTextBox1.Location = new System.Drawing.Point(25, 420);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(587, 321);
-            this.richTextBox1.TabIndex = 21;
-            this.richTextBox1.Text = "";
-            // 
-            // button13
-            // 
-            this.button13.Location = new System.Drawing.Point(301, 180);
-            this.button13.Name = "button13";
-            this.button13.Size = new System.Drawing.Size(71, 27);
-            this.button13.TabIndex = 22;
-            this.button13.Text = "ClearImg";
-            this.button13.UseVisualStyleBackColor = true;
-            this.button13.Click += new System.EventHandler(this.button13_Click);
-            // 
-            // button14
-            // 
-            this.button14.Location = new System.Drawing.Point(224, 152);
-            this.button14.Name = "button14";
-            this.button14.Size = new System.Drawing.Size(71, 22);
-            this.button14.TabIndex = 23;
-            this.button14.Text = "Save";
-            this.button14.UseVisualStyleBackColor = true;
-            this.button14.Click += new System.EventHandler(this.button14_Click);
-            // 
-            // button15
-            // 
-            this.button15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button15.Location = new System.Drawing.Point(1718, 3);
-            this.button15.Name = "button15";
-            this.button15.Size = new System.Drawing.Size(113, 28);
-            this.button15.TabIndex = 24;
-            this.button15.Text = "Hide";
-            this.button15.UseVisualStyleBackColor = true;
-            this.button15.Click += new System.EventHandler(this.button15_Click);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(301, 152);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(71, 22);
-            this.button1.TabIndex = 25;
-            this.button1.Text = "SaveDB";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // tabControl1
             // 
@@ -1770,225 +1652,6 @@
             this.dateTimePicker2.TabIndex = 55;
             this.dateTimePicker2.ValueChanged += new System.EventHandler(this.dateTimePicker2_ValueChanged);
             // 
-            // tabPage3
-            // 
-            this.tabPage3.BackColor = System.Drawing.Color.Transparent;
-            this.tabPage3.Controls.Add(this.button51);
-            this.tabPage3.Controls.Add(this.comboBox23);
-            this.tabPage3.Controls.Add(this.label58);
-            this.tabPage3.Controls.Add(this.dateTimePicker6);
-            this.tabPage3.Controls.Add(this.label57);
-            this.tabPage3.Controls.Add(this.label56);
-            this.tabPage3.Controls.Add(this.label55);
-            this.tabPage3.Controls.Add(this.button40);
-            this.tabPage3.Controls.Add(this.label38);
-            this.tabPage3.Controls.Add(this.button39);
-            this.tabPage3.Controls.Add(this.textBox18);
-            this.tabPage3.Controls.Add(this.listBox2);
-            this.tabPage3.Controls.Add(this.button36);
-            this.tabPage3.Controls.Add(this.dataGridView1);
-            this.tabPage3.Controls.Add(this.button34);
-            this.tabPage3.Controls.Add(this.dateTimePicker5);
-            this.tabPage3.Controls.Add(this.richTextBox2);
-            this.tabPage3.Controls.Add(this.button32);
-            this.tabPage3.Controls.Add(this.button31);
-            this.tabPage3.Location = new System.Drawing.Point(4, 34);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(661, 771);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Отчеты";
-            // 
-            // button51
-            // 
-            this.button51.Location = new System.Drawing.Point(468, 140);
-            this.button51.Name = "button51";
-            this.button51.Size = new System.Drawing.Size(174, 39);
-            this.button51.TabIndex = 46;
-            this.button51.Text = "Отчет за период";
-            this.button51.UseVisualStyleBackColor = true;
-            this.button51.Click += new System.EventHandler(this.button51_Click);
-            // 
-            // comboBox23
-            // 
-            this.comboBox23.FormattingEnabled = true;
-            this.comboBox23.Location = new System.Drawing.Point(445, 32);
-            this.comboBox23.Name = "comboBox23";
-            this.comboBox23.Size = new System.Drawing.Size(197, 24);
-            this.comboBox23.TabIndex = 68;
-            // 
-            // label58
-            // 
-            this.label58.AutoSize = true;
-            this.label58.Location = new System.Drawing.Point(355, 31);
-            this.label58.Name = "label58";
-            this.label58.Size = new System.Drawing.Size(84, 17);
-            this.label58.TabIndex = 67;
-            this.label58.Text = "Арендатор:";
-            // 
-            // dateTimePicker6
-            // 
-            this.dateTimePicker6.Location = new System.Drawing.Point(469, 109);
-            this.dateTimePicker6.Name = "dateTimePicker6";
-            this.dateTimePicker6.Size = new System.Drawing.Size(165, 22);
-            this.dateTimePicker6.TabIndex = 66;
-            // 
-            // label57
-            // 
-            this.label57.AutoSize = true;
-            this.label57.Location = new System.Drawing.Point(355, 109);
-            this.label57.Name = "label57";
-            this.label57.Size = new System.Drawing.Size(82, 17);
-            this.label57.TabIndex = 65;
-            this.label57.Text = "Период до:";
-            // 
-            // label56
-            // 
-            this.label56.AutoSize = true;
-            this.label56.Location = new System.Drawing.Point(355, 74);
-            this.label56.Name = "label56";
-            this.label56.Size = new System.Drawing.Size(81, 17);
-            this.label56.TabIndex = 64;
-            this.label56.Text = "Период от:";
-            // 
-            // label55
-            // 
-            this.label55.AutoSize = true;
-            this.label55.Location = new System.Drawing.Point(355, 6);
-            this.label55.Name = "label55";
-            this.label55.Size = new System.Drawing.Size(279, 17);
-            this.label55.TabIndex = 63;
-            this.label55.Text = "Расход по арендатору (электроэнергия):";
-            // 
-            // button40
-            // 
-            this.button40.Location = new System.Drawing.Point(6, 102);
-            this.button40.Name = "button40";
-            this.button40.Size = new System.Drawing.Size(165, 42);
-            this.button40.TabIndex = 62;
-            this.button40.Text = "Арендаторы и счетчики";
-            this.button40.UseVisualStyleBackColor = true;
-            this.button40.Click += new System.EventHandler(this.button40_Click);
-            // 
-            // label38
-            // 
-            this.label38.AutoSize = true;
-            this.label38.Location = new System.Drawing.Point(264, 180);
-            this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(54, 17);
-            this.label38.TabIndex = 61;
-            this.label38.Text = "label38";
-            // 
-            // button39
-            // 
-            this.button39.Location = new System.Drawing.Point(156, 180);
-            this.button39.Name = "button39";
-            this.button39.Size = new System.Drawing.Size(75, 32);
-            this.button39.TabIndex = 60;
-            this.button39.Text = "Del";
-            this.button39.UseVisualStyleBackColor = true;
-            this.button39.Click += new System.EventHandler(this.button39_Click);
-            // 
-            // textBox18
-            // 
-            this.textBox18.Location = new System.Drawing.Point(6, 190);
-            this.textBox18.Name = "textBox18";
-            this.textBox18.Size = new System.Drawing.Size(143, 22);
-            this.textBox18.TabIndex = 59;
-            this.textBox18.TextChanged += new System.EventHandler(this.textBox18_TextChanged);
-            // 
-            // listBox2
-            // 
-            this.listBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.listBox2.FormattingEnabled = true;
-            this.listBox2.ItemHeight = 16;
-            this.listBox2.Location = new System.Drawing.Point(6, 218);
-            this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(225, 532);
-            this.listBox2.TabIndex = 58;
-            this.listBox2.SelectedIndexChanged += new System.EventHandler(this.listBox2_SelectedIndexChanged);
-            // 
-            // button36
-            // 
-            this.button36.Location = new System.Drawing.Point(177, 102);
-            this.button36.Name = "button36";
-            this.button36.Size = new System.Drawing.Size(165, 42);
-            this.button36.TabIndex = 57;
-            this.button36.Text = "Показания эл.эн.";
-            this.button36.UseVisualStyleBackColor = true;
-            this.button36.Click += new System.EventHandler(this.button36_Click);
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(237, 218);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersWidth = 25;
-            this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(416, 532);
-            this.dataGridView1.TabIndex = 56;
-            this.dataGridView1.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridView1_CellBeginEdit);
-            this.dataGridView1.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellEndEdit);
-            this.dataGridView1.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellValueChanged);
-            this.dataGridView1.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.dataGridView1_RowsRemoved);
-            // 
-            // button34
-            // 
-            this.button34.Location = new System.Drawing.Point(177, 34);
-            this.button34.Name = "button34";
-            this.button34.Size = new System.Drawing.Size(165, 42);
-            this.button34.TabIndex = 55;
-            this.button34.Text = "Арендаторы и расход";
-            this.button34.UseVisualStyleBackColor = true;
-            this.button34.Click += new System.EventHandler(this.button34_Click);
-            // 
-            // dateTimePicker5
-            // 
-            this.dateTimePicker5.Location = new System.Drawing.Point(468, 74);
-            this.dateTimePicker5.Name = "dateTimePicker5";
-            this.dateTimePicker5.Size = new System.Drawing.Size(165, 22);
-            this.dateTimePicker5.TabIndex = 54;
-            this.dateTimePicker5.ValueChanged += new System.EventHandler(this.dateTimePicker5_ValueChanged);
-            // 
-            // richTextBox2
-            // 
-            this.richTextBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.richTextBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.richTextBox2.ForeColor = System.Drawing.Color.ForestGreen;
-            this.richTextBox2.Location = new System.Drawing.Point(6, 218);
-            this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(647, 532);
-            this.richTextBox2.TabIndex = 40;
-            this.richTextBox2.Text = "";
-            this.richTextBox2.Visible = false;
-            // 
-            // button32
-            // 
-            this.button32.Location = new System.Drawing.Point(6, 54);
-            this.button32.Name = "button32";
-            this.button32.Size = new System.Drawing.Size(165, 42);
-            this.button32.TabIndex = 39;
-            this.button32.Text = "Вывести ар.+помещ.";
-            this.button32.UseVisualStyleBackColor = true;
-            this.button32.Click += new System.EventHandler(this.button32_Click);
-            // 
-            // button31
-            // 
-            this.button31.Location = new System.Drawing.Point(6, 6);
-            this.button31.Name = "button31";
-            this.button31.Size = new System.Drawing.Size(165, 42);
-            this.button31.TabIndex = 38;
-            this.button31.Text = "Вывести арендаторов";
-            this.button31.UseVisualStyleBackColor = true;
-            this.button31.Click += new System.EventHandler(this.button31_Click);
-            // 
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.Transparent;
@@ -2360,54 +2023,408 @@
             this.button20.UseVisualStyleBackColor = true;
             this.button20.Click += new System.EventHandler(this.button20_Click);
             // 
-            // button2
+            // button1
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.BackColor = System.Drawing.SystemColors.Control;
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button2.Location = new System.Drawing.Point(1415, 3);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 28);
-            this.button2.TabIndex = 25;
-            this.button2.Text = "Этаж 1";
-            this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button1.Location = new System.Drawing.Point(301, 152);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(71, 22);
+            this.button1.TabIndex = 25;
+            this.button1.Text = "SaveDB";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // button16
+            // label3
             // 
-            this.button16.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button16.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button16.Location = new System.Drawing.Point(1490, 3);
-            this.button16.Name = "button16";
-            this.button16.Size = new System.Drawing.Size(75, 28);
-            this.button16.TabIndex = 26;
-            this.button16.Text = "Этаж 2";
-            this.button16.UseVisualStyleBackColor = true;
-            this.button16.Click += new System.EventHandler(this.button16_Click);
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(34, 47);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(46, 17);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "label3";
             // 
-            // button17
+            // label1
             // 
-            this.button17.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button17.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button17.Location = new System.Drawing.Point(1565, 3);
-            this.button17.Name = "button17";
-            this.button17.Size = new System.Drawing.Size(75, 28);
-            this.button17.TabIndex = 27;
-            this.button17.Text = "Этаж 3";
-            this.button17.UseVisualStyleBackColor = true;
-            this.button17.Click += new System.EventHandler(this.button17_Click);
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(34, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(46, 17);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "label1";
             // 
-            // button18
+            // label2
             // 
-            this.button18.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button18.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button18.Location = new System.Drawing.Point(1640, 3);
-            this.button18.Name = "button18";
-            this.button18.Size = new System.Drawing.Size(75, 28);
-            this.button18.TabIndex = 28;
-            this.button18.Text = "Этаж 4";
-            this.button18.UseVisualStyleBackColor = true;
-            this.button18.Click += new System.EventHandler(this.button18_Click);
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(34, 30);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(46, 17);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "label2";
+            // 
+            // button14
+            // 
+            this.button14.Location = new System.Drawing.Point(224, 152);
+            this.button14.Name = "button14";
+            this.button14.Size = new System.Drawing.Size(71, 22);
+            this.button14.TabIndex = 23;
+            this.button14.Text = "Save";
+            this.button14.UseVisualStyleBackColor = true;
+            this.button14.Click += new System.EventHandler(this.button14_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(224, 80);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(148, 39);
+            this.button3.TabIndex = 8;
+            this.button3.Text = "Отцентрироваться";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // button13
+            // 
+            this.button13.Location = new System.Drawing.Point(301, 180);
+            this.button13.Name = "button13";
+            this.button13.Size = new System.Drawing.Size(71, 27);
+            this.button13.TabIndex = 22;
+            this.button13.Text = "ClearImg";
+            this.button13.UseVisualStyleBackColor = true;
+            this.button13.Click += new System.EventHandler(this.button13_Click);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(224, 6);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(388, 22);
+            this.textBox1.TabIndex = 9;
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.richTextBox1.BackColor = System.Drawing.SystemColors.MenuText;
+            this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.richTextBox1.ForeColor = System.Drawing.Color.ForestGreen;
+            this.richTextBox1.Location = new System.Drawing.Point(25, 420);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(587, 321);
+            this.richTextBox1.TabIndex = 21;
+            this.richTextBox1.Text = "";
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(224, 35);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(71, 39);
+            this.button4.TabIndex = 10;
+            this.button4.Text = "Center";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // button12
+            // 
+            this.button12.Location = new System.Drawing.Point(9, 97);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(71, 42);
+            this.button12.TabIndex = 20;
+            this.button12.Text = "Poligon Point3";
+            this.button12.UseVisualStyleBackColor = true;
+            this.button12.Click += new System.EventHandler(this.button12_Click);
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(301, 35);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(71, 39);
+            this.button5.TabIndex = 11;
+            this.button5.Text = "MastaB";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // button11
+            // 
+            this.button11.Location = new System.Drawing.Point(102, 97);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(71, 22);
+            this.button11.TabIndex = 19;
+            this.button11.Text = "in/out";
+            this.button11.UseVisualStyleBackColor = true;
+            this.button11.Click += new System.EventHandler(this.button11_Click);
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(378, 35);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(71, 39);
+            this.button6.TabIndex = 12;
+            this.button6.Text = "MastaB2";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(411, 107);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(56, 22);
+            this.textBox2.TabIndex = 13;
+            this.textBox2.Text = "50";
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(473, 107);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(56, 22);
+            this.textBox3.TabIndex = 14;
+            this.textBox3.Text = "100";
+            // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(515, 64);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(71, 22);
+            this.button8.TabIndex = 16;
+            this.button8.Text = "test";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(541, 107);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(71, 22);
+            this.button7.TabIndex = 15;
+            this.button7.Text = "4";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.BackColor = System.Drawing.Color.Transparent;
+            this.tabPage3.Controls.Add(this.button51);
+            this.tabPage3.Controls.Add(this.comboBox23);
+            this.tabPage3.Controls.Add(this.label58);
+            this.tabPage3.Controls.Add(this.dateTimePicker6);
+            this.tabPage3.Controls.Add(this.label57);
+            this.tabPage3.Controls.Add(this.label56);
+            this.tabPage3.Controls.Add(this.label55);
+            this.tabPage3.Controls.Add(this.button40);
+            this.tabPage3.Controls.Add(this.label38);
+            this.tabPage3.Controls.Add(this.button39);
+            this.tabPage3.Controls.Add(this.textBox18);
+            this.tabPage3.Controls.Add(this.listBox2);
+            this.tabPage3.Controls.Add(this.button36);
+            this.tabPage3.Controls.Add(this.dataGridView1);
+            this.tabPage3.Controls.Add(this.button34);
+            this.tabPage3.Controls.Add(this.dateTimePicker5);
+            this.tabPage3.Controls.Add(this.richTextBox2);
+            this.tabPage3.Controls.Add(this.button32);
+            this.tabPage3.Controls.Add(this.button31);
+            this.tabPage3.Location = new System.Drawing.Point(4, 34);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(661, 771);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Отчеты";
+            // 
+            // button51
+            // 
+            this.button51.Location = new System.Drawing.Point(468, 140);
+            this.button51.Name = "button51";
+            this.button51.Size = new System.Drawing.Size(174, 39);
+            this.button51.TabIndex = 46;
+            this.button51.Text = "Отчет за период";
+            this.button51.UseVisualStyleBackColor = true;
+            this.button51.Click += new System.EventHandler(this.button51_Click);
+            // 
+            // comboBox23
+            // 
+            this.comboBox23.FormattingEnabled = true;
+            this.comboBox23.Location = new System.Drawing.Point(445, 32);
+            this.comboBox23.Name = "comboBox23";
+            this.comboBox23.Size = new System.Drawing.Size(197, 24);
+            this.comboBox23.TabIndex = 68;
+            // 
+            // label58
+            // 
+            this.label58.AutoSize = true;
+            this.label58.Location = new System.Drawing.Point(355, 31);
+            this.label58.Name = "label58";
+            this.label58.Size = new System.Drawing.Size(84, 17);
+            this.label58.TabIndex = 67;
+            this.label58.Text = "Арендатор:";
+            // 
+            // dateTimePicker6
+            // 
+            this.dateTimePicker6.Location = new System.Drawing.Point(469, 109);
+            this.dateTimePicker6.Name = "dateTimePicker6";
+            this.dateTimePicker6.Size = new System.Drawing.Size(165, 22);
+            this.dateTimePicker6.TabIndex = 66;
+            // 
+            // label57
+            // 
+            this.label57.AutoSize = true;
+            this.label57.Location = new System.Drawing.Point(355, 109);
+            this.label57.Name = "label57";
+            this.label57.Size = new System.Drawing.Size(82, 17);
+            this.label57.TabIndex = 65;
+            this.label57.Text = "Период до:";
+            // 
+            // label56
+            // 
+            this.label56.AutoSize = true;
+            this.label56.Location = new System.Drawing.Point(355, 74);
+            this.label56.Name = "label56";
+            this.label56.Size = new System.Drawing.Size(81, 17);
+            this.label56.TabIndex = 64;
+            this.label56.Text = "Период от:";
+            // 
+            // label55
+            // 
+            this.label55.AutoSize = true;
+            this.label55.Location = new System.Drawing.Point(355, 6);
+            this.label55.Name = "label55";
+            this.label55.Size = new System.Drawing.Size(279, 17);
+            this.label55.TabIndex = 63;
+            this.label55.Text = "Расход по арендатору (электроэнергия):";
+            // 
+            // button40
+            // 
+            this.button40.Location = new System.Drawing.Point(6, 102);
+            this.button40.Name = "button40";
+            this.button40.Size = new System.Drawing.Size(165, 42);
+            this.button40.TabIndex = 62;
+            this.button40.Text = "Арендаторы и счетчики";
+            this.button40.UseVisualStyleBackColor = true;
+            this.button40.Click += new System.EventHandler(this.button40_Click);
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.Location = new System.Drawing.Point(264, 180);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(54, 17);
+            this.label38.TabIndex = 61;
+            this.label38.Text = "label38";
+            // 
+            // button39
+            // 
+            this.button39.Location = new System.Drawing.Point(156, 180);
+            this.button39.Name = "button39";
+            this.button39.Size = new System.Drawing.Size(75, 32);
+            this.button39.TabIndex = 60;
+            this.button39.Text = "Del";
+            this.button39.UseVisualStyleBackColor = true;
+            this.button39.Click += new System.EventHandler(this.button39_Click);
+            // 
+            // textBox18
+            // 
+            this.textBox18.Location = new System.Drawing.Point(6, 190);
+            this.textBox18.Name = "textBox18";
+            this.textBox18.Size = new System.Drawing.Size(143, 22);
+            this.textBox18.TabIndex = 59;
+            this.textBox18.TextChanged += new System.EventHandler(this.textBox18_TextChanged);
+            // 
+            // listBox2
+            // 
+            this.listBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listBox2.FormattingEnabled = true;
+            this.listBox2.ItemHeight = 16;
+            this.listBox2.Location = new System.Drawing.Point(6, 218);
+            this.listBox2.Name = "listBox2";
+            this.listBox2.Size = new System.Drawing.Size(225, 532);
+            this.listBox2.TabIndex = 58;
+            this.listBox2.SelectedIndexChanged += new System.EventHandler(this.listBox2_SelectedIndexChanged);
+            // 
+            // button36
+            // 
+            this.button36.Location = new System.Drawing.Point(177, 102);
+            this.button36.Name = "button36";
+            this.button36.Size = new System.Drawing.Size(165, 42);
+            this.button36.TabIndex = 57;
+            this.button36.Text = "Показания эл.эн.";
+            this.button36.UseVisualStyleBackColor = true;
+            this.button36.Click += new System.EventHandler(this.button36_Click);
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(237, 218);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.RowHeadersWidth = 25;
+            this.dataGridView1.RowTemplate.Height = 24;
+            this.dataGridView1.Size = new System.Drawing.Size(416, 532);
+            this.dataGridView1.TabIndex = 56;
+            this.dataGridView1.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridView1_CellBeginEdit);
+            this.dataGridView1.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellEndEdit);
+            this.dataGridView1.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellValueChanged);
+            this.dataGridView1.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.dataGridView1_RowsRemoved);
+            // 
+            // button34
+            // 
+            this.button34.Location = new System.Drawing.Point(177, 34);
+            this.button34.Name = "button34";
+            this.button34.Size = new System.Drawing.Size(165, 42);
+            this.button34.TabIndex = 55;
+            this.button34.Text = "Арендаторы и расход";
+            this.button34.UseVisualStyleBackColor = true;
+            this.button34.Click += new System.EventHandler(this.button34_Click);
+            // 
+            // dateTimePicker5
+            // 
+            this.dateTimePicker5.Location = new System.Drawing.Point(468, 74);
+            this.dateTimePicker5.Name = "dateTimePicker5";
+            this.dateTimePicker5.Size = new System.Drawing.Size(165, 22);
+            this.dateTimePicker5.TabIndex = 54;
+            this.dateTimePicker5.ValueChanged += new System.EventHandler(this.dateTimePicker5_ValueChanged);
+            // 
+            // richTextBox2
+            // 
+            this.richTextBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.richTextBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.richTextBox2.ForeColor = System.Drawing.Color.ForestGreen;
+            this.richTextBox2.Location = new System.Drawing.Point(6, 218);
+            this.richTextBox2.Name = "richTextBox2";
+            this.richTextBox2.Size = new System.Drawing.Size(647, 532);
+            this.richTextBox2.TabIndex = 40;
+            this.richTextBox2.Text = "";
+            this.richTextBox2.Visible = false;
+            // 
+            // button32
+            // 
+            this.button32.Location = new System.Drawing.Point(6, 54);
+            this.button32.Name = "button32";
+            this.button32.Size = new System.Drawing.Size(165, 42);
+            this.button32.TabIndex = 39;
+            this.button32.Text = "Вывести ар.+помещ.";
+            this.button32.UseVisualStyleBackColor = true;
+            this.button32.Click += new System.EventHandler(this.button32_Click);
+            // 
+            // button31
+            // 
+            this.button31.Location = new System.Drawing.Point(6, 6);
+            this.button31.Name = "button31";
+            this.button31.Size = new System.Drawing.Size(165, 42);
+            this.button31.TabIndex = 38;
+            this.button31.Text = "Вывести арендаторов";
+            this.button31.UseVisualStyleBackColor = true;
+            this.button31.Click += new System.EventHandler(this.button31_Click);
+            // 
+            // timer1
+            // 
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // timer2
+            // 
+            this.timer2.Interval = 300;
+            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
             // timer3
             // 
@@ -2432,18 +2449,13 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1837, 809);
-            this.Controls.Add(this.button15);
-            this.Controls.Add(this.button18);
-            this.Controls.Add(this.button17);
-            this.Controls.Add(this.button16);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "MyTable v1.0";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panel1.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axAcCtrl1)).EndInit();
             this.tabControl1.ResumeLayout(false);
@@ -2458,11 +2470,11 @@
             this.tabPage6.PerformLayout();
             this.tabPage7.ResumeLayout(false);
             this.tabPage7.PerformLayout();
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -2675,6 +2687,7 @@
         private System.Windows.Forms.Button button59;
         private System.Windows.Forms.Button button58;
         private System.Windows.Forms.Button button60;
+        private System.Windows.Forms.Panel panel2;
     }
 }
 

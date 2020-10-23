@@ -1414,13 +1414,33 @@ namespace MyTable
             if (panelHide == false)
             {
                 panel1.Dock = DockStyle.Fill;
-                tabControl1.Dock = DockStyle.None;
+                //tabControl1.Dock = DockStyle.None;
+                tabControl1.Visible = false;
+                int sizeX = panel1.Size.Width - 119;//113+6 60+6
+                button9.Location = new Point(sizeX, button9.Location.Y);
+                button10.Location = new Point(sizeX, button10.Location.Y);
+                button42.Location = new Point(sizeX, button42.Location.Y);
+                button43.Location = new Point(sizeX, button43.Location.Y);
+                button44.Location = new Point(sizeX, button44.Location.Y);
+                button45.Location = new Point(sizeX, button45.Location.Y);
+                button46.Location = new Point(sizeX, button46.Location.Y);
+                button47.Location = new Point(panel1.Size.Width -66, button47.Location.Y);
                 panelHide = true;
             }
             else
             {
                 panel1.Dock = DockStyle.Fill;
-                tabControl1.Dock = DockStyle.Right;
+               // tabControl1.Dock = DockStyle.Right;
+                tabControl1.Visible = true;
+                int sizeX = panel1.Size.Width - 116-tabControl1.Size.Width;
+                button9.Location = new Point(sizeX, button9.Location.Y);
+                button10.Location = new Point(sizeX, button10.Location.Y);
+                button42.Location = new Point(sizeX, button42.Location.Y);
+                button43.Location = new Point(sizeX, button43.Location.Y);
+                button44.Location = new Point(sizeX, button44.Location.Y);
+                button45.Location = new Point(sizeX, button45.Location.Y);
+                button46.Location = new Point(sizeX, button46.Location.Y);
+                button47.Location = new Point(panel1.Size.Width - tabControl1.Size.Width - 63, button47.Location.Y);
                 panelHide = false;
             }
 
