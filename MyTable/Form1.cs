@@ -116,6 +116,7 @@ namespace MyTable
                     int pom1 = equationSystem(new Point((int)X, (int)Y), out figa1);
                     if (pom1 > -1)
                     {
+                        if (tabControl1.SelectedIndex != 0) tabControl1.SelectedIndex = 0;
                         comboBox5.Text=data[floorGlobal, 0, pom1];//корпус
                         comboBox6.Text=data[floorGlobal, 1, pom1];//помещение
                         timer1.Enabled = true;
@@ -1904,7 +1905,7 @@ namespace MyTable
 
         private void button20_Click(object sender, EventArgs e)
         {
-            kontur(roomGlobal);
+           // RasxodFull
         }
         private void comboBox6_TextChanged(object sender, EventArgs e)
         {
@@ -2730,8 +2731,8 @@ namespace MyTable
         }
         private double Rasxod3(int EtazR, int PomesR, DateTime dataMes)//основной расход с записью в БД
         {
-            double znachenie1 = 0;
-            double znachenie2 = 0;
+            double value1 = 0;
+            double value2 = 0;
             double summa = 0;
             int koeff = 1;
             double predRasxodMinus = 0;
@@ -2748,7 +2749,7 @@ namespace MyTable
                 {
                     if (DateTime.Parse(counters[k, EtazR, 0, PomesR]) > dataPred1 && DateTime.Parse(counters[k, EtazR, 0, PomesR]) <= dataPred2)
                     {
-                        znachenie1 = double.Parse(counters[k, EtazR, 1, PomesR]);//начальные показания
+                        value1 = double.Parse(counters[k, EtazR, 1, PomesR]);//начальные показания
                         Nschet = counters[k, EtazR, 3, PomesR];
                         if (counters[k, EtazR, 6, PomesR] == null) counters[k, EtazR, 6, PomesR] = "0";//вручную пропишем нулевой расход на начало периода в БД
                         else
@@ -2756,9 +2757,9 @@ namespace MyTable
                             if (counters[k, EtazR, 6, PomesR]!="-") if (double.Parse(counters[k, EtazR, 6, PomesR]) < 0) predRasxodMinus = double.Parse(counters[k, EtazR, 6, PomesR]);
                         }
                     }
-                    if (DateTime.Parse(counters[k, EtazR, 0, PomesR]) > dataTekus1 && DateTime.Parse(counters[k, EtazR, 0, PomesR]) <= dataTekus2)// && znachenie2==0)
+                    if (DateTime.Parse(counters[k, EtazR, 0, PomesR]) > dataTekus1 && DateTime.Parse(counters[k, EtazR, 0, PomesR]) <= dataTekus2)// && value2==0)
                     {
-                        znachenie2 = double.Parse(counters[k, EtazR, 1, PomesR]);//конечные показания
+                        value2 = double.Parse(counters[k, EtazR, 1, PomesR]);//конечные показания
                         koeff = int.Parse(counters[k, EtazR, 4, PomesR]);
                         DataK = k;
                     }
@@ -2767,20 +2768,20 @@ namespace MyTable
                         counters[k, EtazR, 6, PomesR] = "-";//запишем отсутствие расхода в БД
                         if (counters[k, EtazR, 3, PomesR] != Nschet)
                         {//сменился номер счетчика 
-                            znachenie1 = double.Parse(counters[k, EtazR, 1, PomesR]);
+                            value1 = double.Parse(counters[k, EtazR, 1, PomesR]);
                             Nschet = counters[k, EtazR, 3, PomesR];
                             summa += rezult;//расход запишем к сумме
                             rezult = 0;
                         }
                         else
                         {//если счетчик не сменился, 
-                            //rezult = (double.Parse(counters[k, EtazR, 1, PomesR]) - znachenie1) * int.Parse(counters[k, EtazR, 4, PomesR]);     //посчитаем расход на всякий случай
+                            //rezult = (double.Parse(counters[k, EtazR, 1, PomesR]) - value1) * int.Parse(counters[k, EtazR, 4, PomesR]);     //посчитаем расход на всякий случай
                             if (double.Parse(counters[k, EtazR, 1, PomesR]) == 10000 || double.Parse(counters[k, EtazR, 1, PomesR]) == 100000 || double.Parse(counters[k, EtazR, 1, PomesR]) == 1000000 || double.Parse(counters[k, EtazR, 1, PomesR]) == 10000000)
                             {//если произошел переход через ноль (показание кратно 10к, а следуюшее (если существует, меньше текущего)
                                 if (k + 1 < 60) if (counters[k + 1, EtazR, 1, PomesR] != null) if (double.Parse(counters[k + 1, EtazR, 1, PomesR]) < double.Parse(counters[k, EtazR, 1, PomesR]))
                                 {
                                     rezult += double.Parse(counters[k, EtazR, 1, PomesR]) * int.Parse(counters[k, EtazR, 4, PomesR]);
-                                    znachenie1 = double.Parse(counters[k+1, EtazR, 1, PomesR]);
+                                    value1 = double.Parse(counters[k+1, EtazR, 1, PomesR]);
                                 }  
                             } 
                         }
@@ -2793,12 +2794,12 @@ namespace MyTable
                 }
                 // else break;может убрать? - что за вопрос? КОНЕЧНО! ведь если будут в другой день покзания по воде, то тут будет пусто, а последующие будут не пустыми.
             }
-            if (znachenie2 == 0 && summa == 0)
+            if (value2 == 0 && summa == 0)
             {
                 //counters[DataK1, EtazR, 6, PomesR] = "0";//начальное нулевое показание в БД
                 return 0;//если k=1; или в этом месяце только одно начальное показание
             }
-            summa += (znachenie2 - znachenie1)*koeff;
+            summa += (value2 - value1)*koeff;
             counters[DataK, EtazR, 6, PomesR] = Math.Round(summa, 1).ToString();//запишет в БД
             return Math.Round(summa, 1);
         }
@@ -2989,6 +2990,22 @@ namespace MyTable
             if (listBox2.Items.Count > -1)
             {
                 outL2et_pom = SelectL2(listBox2.SelectedItem.ToString());
+                floorGlobal=outL2et_pom[0];
+                roomGlobal=outL2et_pom[1];
+                switch (outL2et_pom[0])//выбран этаж, прогрузить этаж
+                {
+                    case 0: button2.PerformClick();
+                        break;
+                    case 1: button16.PerformClick();
+                        break;
+                    case 2: button17.PerformClick();
+                        break;
+                    case 3: button18.PerformClick();
+                        break;
+                    default: break;
+                }
+                comboBox5.Text = data[outL2et_pom[0], 0, outL2et_pom[1]];
+                comboBox6.Text = data[outL2et_pom[0], 1, outL2et_pom[1]];
                 RasxodFull(outL2et_pom[0], outL2et_pom[1], dateTimePicker5.Value);
             }
             redact = false;//обнуляем флаг редактирования ячеек
@@ -3078,7 +3095,7 @@ namespace MyTable
             {
                 if (outL2et_pom[0] != 7)
                 {
-                    switch (outL2et_pom[0])
+                    switch (outL2et_pom[0])//выбран этаж, прогрузить этаж
                     { 
                         case 0: button2.PerformClick();
                             break;
@@ -3437,7 +3454,7 @@ namespace MyTable
             } 
         }
 
-        private void button51_Click(object sender, EventArgs e)
+        private void button51_Click(object sender, EventArgs e)//Отчет за период
         {
             // Создаём экземпляр нашего приложения
             Excel1.Application excelApp = new Excel1.Application();
@@ -3959,6 +3976,93 @@ namespace MyTable
             dataModA = "22.04.2020";
             modArenda[1] = null;//"ООО \"АбраКадабра\"";
             //  modCounters[3] = "014105";
+        }
+
+        private void button61_Click(object sender, EventArgs e)//инвентаризация
+        {
+            // Создаём экземпляр нашего приложения
+            Excel1.Application excelApp = new Excel1.Application();
+            // Создаём экземпляр рабочий книги Excel
+            Excel1.Workbook workBook;
+            // Создаём экземпляр листа Excel
+            Excel1.Worksheet sheet = null;
+            // Создаём экземпляр области ячеек Excel
+            Excel1.Range range1 = null;
+            workBook = excelApp.Workbooks.Add();
+            sheet = (Excel1.Worksheet)workBook.Worksheets.get_Item(1);
+
+            //Заполняем
+
+
+            //заголовок
+            sheet.Cells.Font.Name = "ISOCPEUR";
+            sheet.Cells.Font.Size = 12;
+            sheet.Range[sheet.Cells[1, 1], sheet.Cells[1, 7]].Merge();
+            sheet.Cells[1, 1].Font.Size = 24;
+            sheet.Cells[1, 1].Font.Name = "Times New Roman";
+            sheet.Cells.Font.Bold = true;
+            sheet.Cells[1, 1] = "АО «Компания Импульс»";
+            sheet.Cells[1, 1].HorizontalAlignment = Excel1.Constants.xlCenter;
+            sheet.Cells[2, 1] = "Инвентаризация счетчиков";
+            sheet.Rows[2].RowHeight = 22;
+
+            //таблица
+            sheet.Columns[1].ColumnWidth = 5;
+            sheet.Columns[2].ColumnWidth = 22;
+            sheet.Columns[3].ColumnWidth = 10;
+            sheet.Columns[4].ColumnWidth = 12;
+            sheet.Columns[5].ColumnWidth = 9;
+            sheet.Columns[7].ColumnWidth = 12;
+            sheet.Cells[3, 1] = "№ п/п";
+            sheet.Cells[3, 2] = "№ Корпуса и помещения";
+            sheet.Cells[3, 3] = "№ счетчика";
+            sheet.Cells[3, 4] = "Марка счетчика";
+            sheet.Cells[3, 5] = "Год выпуска/поверки";
+            sheet.Cells[3, 6] = "Показания (последние), кВт*ч";
+            int k = 0;//0
+            //циклом заполним таблицу
+            for (int floor = 0; floor < 4; floor++)
+            {
+                for (int room = 0; room < maxRoom; room++)
+                {
+                    if (!(data[floor, 0, room] == null || data[floor, 1, room] == null))
+                    {
+                        if (!(counters[0, floor, 3, room] == null || counters[0, floor, 3, room] == "" || counters[0, floor, 3, room] == "расчет"))
+                        {
+                            sheet.Cells[4 + k, 1] = (k + 1).ToString() + ".";//№
+                            sheet.Cells[4 + k, 2] = "Корп. " + data[floor, 0, room].ToString() + ", Помещ. " + data[floor, 1, room].ToString();//№ Корпуса и помещения
+                            sheet.Cells[4 + k, 3] = counters[0, floor, 3, room];//№ счетчика
+                            if (data[floor, 10, room] != null) sheet.Cells[4 + k, 4] = data[floor, 10, room].ToString();//Марка счетчика
+                            if (data[floor, 11, room] != null) sheet.Cells[4 + k, 5] = data[floor, 11, room].ToString();//Год выпуска/поверки
+                            if (counters[0, floor, 1, room] != null) sheet.Cells[4 + k, 6] = counters[0, floor, 1, room];//Показания (последние), кВт*ч
+                            k++;
+                        }
+                    }
+                }
+            }
+
+            sheet.Cells[4 + k, 2] = "Всего счетчиков в базе: "+k.ToString();
+
+
+            range1 = sheet.Range[sheet.Cells[3, 1], sheet.Cells[4 + k, 6]]; //выделяем всю таблицу
+            range1.Cells.Font.Size = 10;
+            range1.Cells.Font.Italic = true;
+            range1.Cells.Font.Bold = false;
+            range1.Cells.WrapText = true;
+            range1.Borders.LineStyle = Excel1.XlLineStyle.xlContinuous; //границы выделенной области
+            range1.Borders.Weight = Excel1.XlBorderWeight.xlMedium;
+
+            sheet.Cells[4 + k, 2].Font.Bold = true;//всего жирное
+            //подпись
+            sheet.Cells[9 + k, 2] = "Главный энергетик";
+            sheet.Cells[9 + k, 2].Font.Italic = true;
+            sheet.Cells[9 + k, 5] = "Канавин А.А.";
+            sheet.Cells[9 + k, 5].Font.Italic = true;
+            sheet.Cells[11 + k, 4] = "М.П.";
+            sheet.Cells[11 + k, 4].HorizontalAlignment = Excel1.Constants.xlRight;
+            //покажем поьзователю отчет
+            excelApp.Visible = true;
+            excelApp.UserControl = false;
         }
         /*
     counters[k, floorGlobal, 0, roomGlobal] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//дата съема показаний 1.
