@@ -9,6 +9,16 @@ namespace MyTable
 {
     class ExcelPrinter
     {
+        //блок переменных
+        public Company company = new Company();
+        public Report report = new Report();
+        public DateTime dTP5 = new DateTime();
+        public DateTime dTP6 = new DateTime();
+        public string arendaCB23 = "";
+
+        int k = 0;//0
+        int row = 1;
+        int countColumn = 0;
         // Создаём экземпляр нашего приложения
         Excel1.Application excelApp = new Excel1.Application();
         // Создаём экземпляр рабочий книги Excel
@@ -17,59 +27,84 @@ namespace MyTable
         Excel1.Worksheet sheet = null;
         // Создаём экземпляр области ячеек Excel
         Excel1.Range range1 = null;
+
         public ExcelPrinter()
+            : this(new Company(), new Report(), DateTime.Now, new DateTime())
+        {
+        }
+        public ExcelPrinter(Company company)
+            : this(company, new Report(), DateTime.Now, new DateTime())
+        {
+        }
+        public ExcelPrinter(Company company, Report report)
+            : this(company, report, new DateTime(), new DateTime())
+        {
+        }
+        public ExcelPrinter(Company company, Report report, DateTime dTP5, DateTime dTP6)
+        {
+            this.company = company;
+            this.report = report;
+            this.dTP5 = dTP5;
+            this.dTP6 = dTP6;
+            startWrite();
+        }
+        private void startWrite()
         {
             workBook = excelApp.Workbooks.Add();
             sheet = (Excel1.Worksheet)workBook.Worksheets.get_Item(1);
-            write();
-        }
-        private void write()
-        {
             //Заполняем
             //покажем пользователю отчет
             excelApp.Visible = true;
             excelApp.UserControl = false;
+            head();
         }
         public enum Company
         {
             Impuls = 0,
             SKB
         }
-        public void head(Company company)
+        public enum Report
+        {
+            countersPeriod = 0,
+            countersInventory
+        }
+        public void head()
         {
             //заголовок
             sheet.Cells.Font.Name = "ISOCPEUR";
             sheet.Cells.Font.Size = 12;
-            sheet.Range[sheet.Cells[1, 1], sheet.Cells[1, 7]].Merge();
-            sheet.Cells[1, 1].Font.Size = 24;
-            sheet.Cells[1, 1].Font.Name = "Times New Roman";
+            sheet.Range[sheet.Cells[row, 1], sheet.Cells[row, 7]].Merge();
+            sheet.Cells[row, 1].Font.Size = 24;
+            sheet.Cells[row, 1].Font.Name = "Times New Roman";
             sheet.Cells.Font.Bold = true;
 
             switch (company)
             {
                 case Company.Impuls:
-                    sheet.Cells[1, 1] = "АО «Компания Импульс»";
+                    sheet.Cells[row, 1] = "АО «Компания Импульс»";
                     break;
                 case Company.SKB:
-                    sheet.Cells[1, 1] = "ООО «СКБ-Сбытсервис»";
+                    sheet.Cells[row, 1] = "ООО «СКБ-Сбытсервис»";
                     break;
             }
 
-            sheet.Cells[1, 1].HorizontalAlignment = Excel1.Constants.xlCenter;
-
-            sheet.Cells[3, 1] = "350072, Краснодарский  край, г.Краснодар,";
-            sheet.Cells[4, 1] = "Ул. Московская, 5.";
-            sheet.Rows[4].RowHeight = 18;
+            sheet.Cells[row, 1].HorizontalAlignment = Excel1.Constants.xlCenter;
+            row += 2;
+            sheet.Cells[row, 1] = "350072, Краснодарский  край, г.Краснодар,";
+            row++;
+            sheet.Cells[row, 1] = "Ул. Московская, 5.";
+            sheet.Rows[row].RowHeight = 18;
+            row++;
             switch (company)
             {
                 case Company.Impuls:
-                    sheet.Cells[5, 1] = "Тел. 8(861) 252-11-21";
+                    sheet.Cells[row, 1] = "Тел. 8(861) 252-11-21";
                     break;
                 case Company.SKB:
-                    sheet.Cells[5, 1] = "Тел. 8(861) 252-09-83";
+                    sheet.Cells[row, 1] = "Тел. 8(861) 252-09-83";
                     break;
             }
-            sheet.Rows[5].RowHeight = 18;
+            sheet.Rows[row].RowHeight = 18;
         }
         private string periodMY(DateTime dat1, DateTime dat2)
         {
@@ -115,66 +150,121 @@ namespace MyTable
             return retMonth;
         }
         //headUser - заголовок по Арендатору и выбранному периоду
-        public void headUser(string userCB23, DateTime dTP5, DateTime dTP6)
+        private void headArenda()
         {//userCB23 - Арендатор, dTP5 - начало периода, dTP6 - конец периода
-            sheet.Cells[7, 1] = "Потребитель: " + userCB23;
-            sheet.Cells[8, 1] = "Адрес объекта: г.Краснодар, ул. Московская, 5.";
-            sheet.Rows[8].RowHeight = 22;
-            sheet.Cells[10, 1] = "Расчет количества потребленной электроэнергии за " + periodMY(dTP5, dTP6);
-            sheet.Rows[10].RowHeight = 22;
+            row += 2;
+            sheet.Cells[row, 1] = "Потребитель: " + arendaCB23;
+            row++;
+            sheet.Cells[row, 1] = "Адрес объекта: г.Краснодар, ул. Московская, 5.";
+            sheet.Rows[row].RowHeight = 22;
+            row += 2;
         }
-
-        public void headTable(DateTime dTP5, DateTime nextDate)//nextDate = dTP6;
+        public void headName()
         {
+            switch (report)//добавить название таблицы
+            {
+                case Report.countersPeriod:
+                    headArenda();
+                    nameTable("Расчет количества потребленной электроэнергии за " + periodMY(dTP5, dTP6));
+                    break;
+                case Report.countersInventory:
+                    nameTable("Инвентаризация счетчиков");
+                    break;
+            }
+            headTable();
+        }
+        private void nameTable(string name)
+        {
+            row++;
+            sheet.Cells[row, 1] = name;
+            sheet.Rows[row].RowHeight = 22;
+        }
+        private void headTable()//разные отчеты, разные заголовки
+        {
+            switch (report)
+            {
+                case Report.countersPeriod:
+                    headTableCP();
+                    break;
+                case Report.countersInventory:
+                    headTableCI();
+                    break;
+            }
+        }
+        private void headTableCP()//nextDate = dTP6; CP-countersPeriod
+        {
+            row++;
             //заголовок таблицы
             sheet.Columns[2].ColumnWidth = 22;
             sheet.Columns[3].ColumnWidth = 10;
             sheet.Columns[4].ColumnWidth = 12;
             sheet.Columns[5].ColumnWidth = 12;
             sheet.Columns[7].ColumnWidth = 9;
-            sheet.Cells[11, 1] = "№";
-            sheet.Cells[11, 2] = "№ точки учета по договору";
-            sheet.Cells[11, 3] = "№ счетчика";
-            sheet.Cells[11, 4] = "Показания на  01." + dTP5.Month + "." + dTP5.Year;
-            nextDate = nextDate.AddMonths(1);
-            sheet.Cells[11, 5] = "Показания на 01." + nextDate.Month + "." + nextDate.Year;
-            sheet.Cells[11, 6] = "Расч. Коэфф.";
-            sheet.Cells[11, 7] = "Расход, кВт.ч";
+            sheet.Cells[row, 1] = "№";
+            sheet.Cells[row, 2] = "№ точки учета по договору";
+            sheet.Cells[row, 3] = "№ счетчика";
+            sheet.Cells[row, 4] = "Показания на  01." + dTP5.Month + "." + dTP5.Year;
+            DateTime data = dTP6.AddMonths(1);
+            sheet.Cells[row, 5] = "Показания на 01." + data.Month + "." + data.Year;
+            sheet.Cells[row, 6] = "Расч. Коэфф.";
+            sheet.Cells[row, 7] = "Расход, кВт.ч";
+            countColumn = 6;
         }
+        private void headTableCI()
+        {
+            row++;
+            sheet.Columns[1].ColumnWidth = 5;
+            sheet.Columns[2].ColumnWidth = 22;
+            sheet.Columns[3].ColumnWidth = 10;
+            sheet.Columns[4].ColumnWidth = 12;
+            sheet.Columns[5].ColumnWidth = 9;
+            sheet.Columns[7].ColumnWidth = 12;
+            sheet.Cells[row, 1] = "№ п/п";
+            sheet.Cells[row, 2] = "№ Корпуса и помещения";
+            sheet.Cells[row, 3] = "№ счетчика";
+            sheet.Cells[row, 4] = "Марка счетчика";
+            sheet.Cells[row, 5] = "Год выпуска/поверки";
+            sheet.Cells[row, 6] = "Показания (последние), кВт*ч";
+            countColumn = 5;
+        }
+
         //Temp.AddRange(ToReport(comboBox23.Text, dateTimePicker5.Value, dateTimePicker6.Value).ToArray());
-        int k = 0;//0
-        public void bodyTable(List<string> Temp)
+        
+        public void bodyTable(List<string> Temp)//заполнение таблицы из List
         {
             //циклом заполним таблицу
-
+            row++;
             if (Temp.Count > 0)
             {
-                for (; k < (Temp.Count) / 6; k++)
+                for (; k < (Temp.Count) / countColumn; k++)
                 {
-                    sheet.Cells[12 + k, 1] = (k + 1).ToString() + ".";
-                    sheet.Cells[12 + k, 2] = Temp[k * 6];       //помещение   из data, остальное из counters
-                    sheet.Cells[12 + k, 3] = Temp[k * 6 + 1];   //№счетчика
-                    sheet.Cells[12 + k, 4] = Temp[k * 6 + 2].Replace(',', '.');   //показания начало
-                    sheet.Cells[12 + k, 5] = Temp[k * 6 + 3].Replace(',', '.');   //показания конец
-                    sheet.Cells[12 + k, 6] = Temp[k * 6 + 4];   //расч. коэфф.                    
-                    sheet.Cells[12 + k, 7] = Temp[k * 6 + 5].Replace(',', '.');   //расход
+                    sheet.Cells[row + k, 1] = (k + 1).ToString() + ".";
+                    for (int i = 0; i < countColumn; i++)
+                    {
+                        sheet.Cells[row + k, i+2] = Temp[k * countColumn + i].Replace(',', '.');  
+                    }
                     // sheet.Cells[12 + k, 7].NumberFormat = "0,0";//формат ячейки числовой
                 }
             }
         }
 
-        public void footerTable()
+        public void footerTableSumm(string literColumn)//последняя строка Всего:
         {
-            sheet.Cells[12 + k, 2] = "Всего";
-            Excel1.Range formulaRange = sheet.Range[sheet.Cells[12, 7], sheet.Cells[11 + k, 7]];
+            sheet.Cells[row + k, 2] = "Всего";
+            Excel1.Range formulaRange = sheet.Range[sheet.Cells[row, countColumn + 1], sheet.Cells[row - 1 + k, countColumn + 1]];
             string ToAdresEx = formulaRange.get_Address(1, 1, Excel1.XlReferenceStyle.xlR1C1, Type.Missing, Type.Missing);
-            if (k > 0) sheet.Cells[12 + k, 7].Formula = "=SUM(G12:G" + (11 + k).ToString() + ")";//формула (сумма)
-            else sheet.Cells[12 + k, 7] = "0";
+            if (k > 0) sheet.Cells[row + k, countColumn+1].Formula = "=SUM("+literColumn+row.ToString()+":"+literColumn + (row-1 + k).ToString() + ")";//формула (сумма)
+            else sheet.Cells[row + k, 7] = "0";
+        }
+        public void footerTableCount()//последняя строка Всего:
+        {
+            sheet.Cells[row + k, 2] = "Общее количество";
+            sheet.Cells[row + k, countColumn + 1] = k.ToString();
         }
         //for (int i = 0; i < Temp.Count; i++) richTextBox1.Text += Temp[i] + "\r\n";//отладка
-        public void bordersTable()
+        public void bordersTable()//границы и стиль таблицы
         {
-            range1 = sheet.Range[sheet.Cells[11, 1], sheet.Cells[12 + k, 7]]; //выделяем всю таблицу
+            range1 = sheet.Range[sheet.Cells[row - 1, 1], sheet.Cells[row + k, countColumn+1]]; //выделяем всю таблицу
             range1.Cells.Font.Size = 10;
             range1.Cells.Font.Italic = true;
             range1.Cells.Font.Bold = false;
@@ -182,18 +272,20 @@ namespace MyTable
             range1.Borders.LineStyle = Excel1.XlLineStyle.xlContinuous; //границы выделенной области
             range1.Borders.Weight = Excel1.XlBorderWeight.xlMedium;
 
-            sheet.Cells[12 + k, 2].Font.Bold = true;//всего жирное
-            sheet.Cells[12 + k, 7].Font.Bold = true;//сумма жирная
+            sheet.Cells[row + k, 2].Font.Bold = true;//всего жирное
+            sheet.Cells[row + k, countColumn + 1].Font.Bold = true;//сумма жирная
         }
-        public void endSheet()
+        public void endSheet()        //подпись
         {
+            row += 5;
             //подпись
-            sheet.Cells[17 + k, 2] = "Главный энергетик";
-            sheet.Cells[17 + k, 2].Font.Italic = true;
-            sheet.Cells[17 + k, 5] = "Канавин А.А.";
-            sheet.Cells[17 + k, 5].Font.Italic = true;
-            sheet.Cells[19 + k, 4] = "М.П.";
-            sheet.Cells[19 + k, 4].HorizontalAlignment = Excel1.Constants.xlRight;
+            sheet.Cells[row + k, 2] = "Главный энергетик";
+            sheet.Cells[row + k, 2].Font.Italic = true;
+            sheet.Cells[row + k, 5] = "Канавин А.А.";
+            sheet.Cells[row + k, 5].Font.Italic = true;
+            row += 2;
+            sheet.Cells[row + k, 4] = "М.П.";
+            sheet.Cells[row + k, 4].HorizontalAlignment = Excel1.Constants.xlRight;
         }
 
         // Открываем созданный excel-файл

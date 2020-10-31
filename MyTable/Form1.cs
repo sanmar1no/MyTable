@@ -2760,7 +2760,7 @@ namespace MyTable
                     if (DateTime.Parse(counters[k, EtazR, 0, PomesR]) > dataTekus1 && DateTime.Parse(counters[k, EtazR, 0, PomesR]) <= dataTekus2)// && value2==0)
                     {
                         value2 = double.Parse(counters[k, EtazR, 1, PomesR]);//конечные показания
-                        koeff = int.Parse(counters[k, EtazR, 4, PomesR]);
+                        koeff = int.Parse(counters[k, EtazR, 4, PomesR]);//ошибка при k=1,EtazR=1,PomesR=1??
                         DataK = k;
                     }
                     if (DateTime.Parse(counters[k, EtazR, 0, PomesR]) > dataPred2 && DateTime.Parse(counters[k, EtazR, 0, PomesR]) < dataTekus2)
@@ -3456,18 +3456,17 @@ namespace MyTable
 
         private void button51_Click(object sender, EventArgs e)//Отчет за период
         {
-            ExcelPrinter report1 = new ExcelPrinter();
-
-            report1.head(ExcelPrinter.Company.Impuls);
-            report1.headUser(comboBox23.Text, dateTimePicker5.Value, dateTimePicker6.Value);
-            report1.headTable(dateTimePicker5.Value, dateTimePicker6.Value);
+            ExcelPrinter report1 = new ExcelPrinter(ExcelPrinter.Company.SKB, ExcelPrinter.Report.countersPeriod, dateTimePicker5.Value, dateTimePicker6.Value);
+            report1.arendaCB23=comboBox23.Text;
+            report1.headName();
             //циклом заполним таблицу
             List<string> Temp = new List<string>();
             Temp.AddRange(ToReport(comboBox23.Text, dateTimePicker5.Value, dateTimePicker6.Value).ToArray());
             report1.bodyTable(Temp);
-            report1.footerTable();
+            report1.footerTableSumm("G");
             report1.bordersTable();
             report1.endSheet();
+            
         }
 
         List<string> ToReport(string arendator, DateTime DataOtMes, DateTime DataDoMes)// выведет построчно: корпус-помещение, №счетчика, показания на начало, показания на конец, расчетный коэфф., расчет.
@@ -3838,47 +3837,18 @@ namespace MyTable
 
         private void button61_Click(object sender, EventArgs e)//инвентаризация
         {
-            // Создаём экземпляр нашего приложения
-            Excel1.Application excelApp = new Excel1.Application();
-            // Создаём экземпляр рабочий книги Excel
-            Excel1.Workbook workBook;
-            // Создаём экземпляр листа Excel
-            Excel1.Worksheet sheet = null;
-            // Создаём экземпляр области ячеек Excel
-            Excel1.Range range1 = null;
-            workBook = excelApp.Workbooks.Add();
-            sheet = (Excel1.Worksheet)workBook.Worksheets.get_Item(1);
-
-            //Заполняем
-
-
-            //заголовок
-            sheet.Cells.Font.Name = "ISOCPEUR";
-            sheet.Cells.Font.Size = 12;
-            sheet.Range[sheet.Cells[1, 1], sheet.Cells[1, 7]].Merge();
-            sheet.Cells[1, 1].Font.Size = 24;
-            sheet.Cells[1, 1].Font.Name = "Times New Roman";
-            sheet.Cells.Font.Bold = true;
-            sheet.Cells[1, 1] = "АО «Компания Импульс»";
-            sheet.Cells[1, 1].HorizontalAlignment = Excel1.Constants.xlCenter;
-            sheet.Cells[2, 1] = "Инвентаризация счетчиков";
-            sheet.Rows[2].RowHeight = 22;
-
-            //таблица
-            sheet.Columns[1].ColumnWidth = 5;
-            sheet.Columns[2].ColumnWidth = 22;
-            sheet.Columns[3].ColumnWidth = 10;
-            sheet.Columns[4].ColumnWidth = 12;
-            sheet.Columns[5].ColumnWidth = 9;
-            sheet.Columns[7].ColumnWidth = 12;
-            sheet.Cells[3, 1] = "№ п/п";
-            sheet.Cells[3, 2] = "№ Корпуса и помещения";
-            sheet.Cells[3, 3] = "№ счетчика";
-            sheet.Cells[3, 4] = "Марка счетчика";
-            sheet.Cells[3, 5] = "Год выпуска/поверки";
-            sheet.Cells[3, 6] = "Показания (последние), кВт*ч";
-            int k = 0;//0
+            ExcelPrinter report1 = new ExcelPrinter(ExcelPrinter.Company.Impuls, ExcelPrinter.Report.countersInventory);
+            report1.headName();
             //циклом заполним таблицу
+            report1.bodyTable(InvertoryTable());
+            report1.footerTableCount();
+            report1.bordersTable();
+            report1.endSheet();
+            
+        }
+        List<string> InvertoryTable()
+        {
+            List<string> Temp = new List<string>();
             for (int floor = 0; floor < 4; floor++)
             {
                 for (int room = 0; room < maxRoom; room++)
@@ -3887,40 +3857,19 @@ namespace MyTable
                     {
                         if (!(counters[0, floor, 3, room] == null || counters[0, floor, 3, room] == "" || counters[0, floor, 3, room] == "расчет"))
                         {
-                            sheet.Cells[4 + k, 1] = (k + 1).ToString() + ".";//№
-                            sheet.Cells[4 + k, 2] = "Корп. " + data[floor, 0, room].ToString() + ", Помещ. " + data[floor, 1, room].ToString();//№ Корпуса и помещения
-                            sheet.Cells[4 + k, 3] = counters[0, floor, 3, room];//№ счетчика
-                            if (data[floor, 10, room] != null) sheet.Cells[4 + k, 4] = data[floor, 10, room].ToString();//Марка счетчика
-                            if (data[floor, 11, room] != null) sheet.Cells[4 + k, 5] = data[floor, 11, room].ToString();//Год выпуска/поверки
-                            if (counters[0, floor, 1, room] != null) sheet.Cells[4 + k, 6] = counters[0, floor, 1, room];//Показания (последние), кВт*ч
-                            k++;
+                            Temp.Add("Корп. " + data[floor, 0, room].ToString() + ", Помещ. " + data[floor, 1, room].ToString());//№ Корпуса и помещения
+                            Temp.Add(counters[0, floor, 3, room]);//№ счетчика
+                            if (data[floor, 10, room] != null) Temp.Add(data[floor, 10, room].ToString());//Марка счетчика
+                            else Temp.Add("");
+                            if (data[floor, 11, room] != null) Temp.Add(data[floor, 11, room].ToString());//Год выпуска/поверки
+                            else Temp.Add("");
+                            if (counters[0, floor, 1, room] != null) Temp.Add(counters[0, floor, 1, room]);//Показания (последние), кВт*ч
+                            else Temp.Add("");
                         }
                     }
                 }
             }
-
-            sheet.Cells[4 + k, 2] = "Всего счетчиков в базе: "+k.ToString();
-
-
-            range1 = sheet.Range[sheet.Cells[3, 1], sheet.Cells[4 + k, 6]]; //выделяем всю таблицу
-            range1.Cells.Font.Size = 10;
-            range1.Cells.Font.Italic = true;
-            range1.Cells.Font.Bold = false;
-            range1.Cells.WrapText = true;
-            range1.Borders.LineStyle = Excel1.XlLineStyle.xlContinuous; //границы выделенной области
-            range1.Borders.Weight = Excel1.XlBorderWeight.xlMedium;
-
-            sheet.Cells[4 + k, 2].Font.Bold = true;//всего жирное
-            //подпись
-            sheet.Cells[9 + k, 2] = "Главный энергетик";
-            sheet.Cells[9 + k, 2].Font.Italic = true;
-            sheet.Cells[9 + k, 5] = "Канавин А.А.";
-            sheet.Cells[9 + k, 5].Font.Italic = true;
-            sheet.Cells[11 + k, 4] = "М.П.";
-            sheet.Cells[11 + k, 4].HorizontalAlignment = Excel1.Constants.xlRight;
-            //покажем поьзователю отчет
-            excelApp.Visible = true;
-            excelApp.UserControl = false;
+            return Temp;
         }
         /*
     counters[k, floorGlobal, 0, roomGlobal] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//дата съема показаний 1.
