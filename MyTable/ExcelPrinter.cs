@@ -193,6 +193,9 @@ namespace MyTable
                 case Report.countersInventoryElectro:
                     headTableCI();
                     break;
+                case Report.countersInventoryAqua:
+                    headTableCI();
+                    break;
             }
         }
         private void headTableCP()//nextDate = dTP6; CP-countersPeriod
@@ -228,7 +231,7 @@ namespace MyTable
             sheet.Cells[row, 3] = "№ счетчика";
             sheet.Cells[row, 4] = "Марка счетчика";
             sheet.Cells[row, 5] = "Год выпуска/поверки";
-            sheet.Cells[row, 6] = "Показания (последние), кВт*ч";
+            sheet.Cells[row, 6] = "Показания (последние), " + (report==Report.countersInventoryElectro ? "кВт*ч" : "куб.м.");
             countColumn = 5;
         }
 

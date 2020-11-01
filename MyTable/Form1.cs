@@ -3254,7 +3254,7 @@ namespace MyTable
                         comboBox18.Text = "";
                         nomerE = true;
                     }
-                    if (counters[k, floorGlobal, 2, roomGlobal] != null && counters[k, floorGlobal, 5, roomGlobal] != null && counters[k, floorGlobal, 7, roomGlobal] != null)//добавить остальное, когда займемся водой
+                    if (!(counters[k, floorGlobal, 2, roomGlobal] == null || counters[k, floorGlobal, 5, roomGlobal] == null) || counters[k, floorGlobal, 7, roomGlobal] != null)//добавить остальное, когда займемся водой
                     {
                         /*
                              counters[k, floorGlobal, 8, roomGlobal]//для воды счетчик-расчет-или счетчик/расчет в data? 3.
