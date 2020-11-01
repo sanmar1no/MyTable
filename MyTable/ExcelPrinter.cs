@@ -66,7 +66,8 @@ namespace MyTable
         public enum Report
         {
             countersPeriod = 0,
-            countersInventory
+            countersInventoryElectro,
+            countersInventoryAqua
         }
         public void head()
         {
@@ -167,8 +168,11 @@ namespace MyTable
                     headArenda();
                     nameTable("Расчет количества потребленной электроэнергии за " + periodMY(dTP5, dTP6));
                     break;
-                case Report.countersInventory:
-                    nameTable("Инвентаризация счетчиков");
+                case Report.countersInventoryElectro:
+                    nameTable("Инвентаризация электросчетчиков");
+                    break;
+                case Report.countersInventoryAqua:
+                    nameTable("Инвентаризация водомеров");
                     break;
             }
             headTable();
@@ -186,7 +190,7 @@ namespace MyTable
                 case Report.countersPeriod:
                     headTableCP();
                     break;
-                case Report.countersInventory:
+                case Report.countersInventoryElectro:
                     headTableCI();
                     break;
             }

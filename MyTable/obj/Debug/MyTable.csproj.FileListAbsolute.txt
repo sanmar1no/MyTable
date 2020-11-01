@@ -44,4 +44,5 @@ C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\obj\Debug\MyTable.csproj.Co
 C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\obj\Debug\MyTable.exe
 C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\obj\Debug\MyTable.pdb
 C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\obj\Debug\MyTable.Form1.resources
-C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\obj\Debug\MyTable.csprojResolveAssemblyReference.cache
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\obj\Debug\MyTable.csprojAssemblyReference.cache
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\obj\Debug\MyTable.csproj.CoreCompileInputs.cache

@@ -3456,17 +3456,9 @@ namespace MyTable
 
         private void button51_Click(object sender, EventArgs e)//Отчет за период
         {
-            ExcelPrinter report1 = new ExcelPrinter(ExcelPrinter.Company.SKB, ExcelPrinter.Report.countersPeriod, dateTimePicker5.Value, dateTimePicker6.Value);
-            report1.arendaCB23=comboBox23.Text;
-            report1.headName();
-            //циклом заполним таблицу
-            List<string> Temp = new List<string>();
-            Temp.AddRange(ToReport(comboBox23.Text, dateTimePicker5.Value, dateTimePicker6.Value).ToArray());
-            report1.bodyTable(Temp);
-            report1.footerTableSumm("G");
-            report1.bordersTable();
-            report1.endSheet();
-            
+            ReportPrinter report = new ReportPrinter(ExcelPrinter.Company.SKB, ExcelPrinter.Report.countersPeriod, dateTimePicker5.Value, dateTimePicker6.Value);
+            report.arendaCB23 = comboBox23.Text;
+            report.AddList(ToReport(comboBox23.Text, dateTimePicker5.Value, dateTimePicker6.Value));
         }
 
         List<string> ToReport(string arendator, DateTime DataOtMes, DateTime DataDoMes)// выведет построчно: корпус-помещение, №счетчика, показания на начало, показания на конец, расчетный коэфф., расчет.
@@ -3837,28 +3829,23 @@ namespace MyTable
 
         private void button61_Click(object sender, EventArgs e)//инвентаризация электросчетчиков
         {
-            ExcelPrinter report1 = new ExcelPrinter(ExcelPrinter.Company.Impuls, ExcelPrinter.Report.countersInventory);
-            report1.headName();
-            //циклом заполним таблицу
-            report1.bodyTable(InvertoryTable());
-            report1.footerTableCount();
-            report1.bordersTable();
-            report1.endSheet();
-            
+            ReportPrinter report = new ReportPrinter(ExcelPrinter.Company.Impuls, ExcelPrinter.Report.countersInventoryElectro);
+            report.AddList(InvertoryTable(userKeyEnum.electro));
         }
 
         private void button62_Click(object sender, EventArgs e)//инвентаризация водомеров
         {
-            ExcelPrinter report1 = new ExcelPrinter(ExcelPrinter.Company.Impuls, ExcelPrinter.Report.countersInventory);
-            report1.headName();
-            //циклом заполним таблицу
-            report1.bodyTable(InvertoryTable());
-            report1.footerTableCount();
-            report1.bordersTable();
-            report1.endSheet();
+            ReportPrinter report = new ReportPrinter(ExcelPrinter.Company.Impuls, ExcelPrinter.Report.countersInventoryAqua);
+            report.AddList(InvertoryTable(userKeyEnum.aqua));
         }
-        
-        List<string> InvertoryTable()
+        enum userKeyEnum
+        {
+            electro,
+            aqua,
+            arenda,
+            admin
+        }
+        List<string> InvertoryTable(userKeyEnum keyEnum)
         {
             List<string> Temp = new List<string>();
             for (int floor = 0; floor < 4; floor++)
@@ -3867,16 +3854,42 @@ namespace MyTable
                 {
                     if (!(data[floor, 0, room] == null || data[floor, 1, room] == null))
                     {
-                        if (!(counters[0, floor, 3, room] == null || counters[0, floor, 3, room] == "" || counters[0, floor, 3, room] == "расчет"))
+                        if (!(keyEnum != userKeyEnum.electro || counters[0, floor, 3, room] == null || counters[0, floor, 3, room] == "" || counters[0, floor, 3, room] == "расчет")
+                            || !(keyEnum != userKeyEnum.aqua || counters[0, floor, 5, room] == null || counters[0, floor, 5, room] == "" || counters[0, floor, 5, room] == "расчет"))
                         {
                             Temp.Add("Корп. " + data[floor, 0, room].ToString() + ", Помещ. " + data[floor, 1, room].ToString());//№ Корпуса и помещения
-                            Temp.Add(counters[0, floor, 3, room]);//№ электросчетчика
-                            if (data[floor, 10, room] != null) Temp.Add(data[floor, 10, room].ToString());//Марка счетчика
-                            else Temp.Add("");
-                            if (data[floor, 11, room] != null) Temp.Add(data[floor, 11, room].ToString());//Год выпуска/поверки
-                            else Temp.Add("");
-                            if (counters[0, floor, 1, room] != null) Temp.Add(counters[0, floor, 1, room]);//Показания (последние), кВт*ч
-                            else Temp.Add("");
+                            if (keyEnum == userKeyEnum.electro) Temp.Add(counters[0, floor, 3, room]);//№ электросчетчика
+                            if (keyEnum == userKeyEnum.aqua) Temp.Add(counters[0, floor, 5, room]);//№ водомера
+                            if (keyEnum == userKeyEnum.electro)
+                            {
+                                if (data[floor, 10, room] != null) Temp.Add(data[floor, 10, room].ToString());//Марка электросчетчика
+                                else Temp.Add("");
+                            }
+                            if (keyEnum == userKeyEnum.aqua)
+                            {
+                                if (data[floor, 13, room] != null) Temp.Add(data[floor, 13, room].ToString());//Марка водомера
+                                else Temp.Add("");
+                            }
+                            if (keyEnum == userKeyEnum.electro)
+                            {
+                                if (data[floor, 11, room] != null) Temp.Add(data[floor, 11, room].ToString());//Год выпуска/поверки электросчетчика
+                                else Temp.Add("");
+                            }
+                            if (keyEnum == userKeyEnum.aqua)
+                            {
+                                if (data[floor, 14, room] != null) Temp.Add(data[floor, 14, room].ToString());//Год выпуска/поверки водомера
+                                else Temp.Add("");
+                            }
+                            if (keyEnum == userKeyEnum.electro)
+                            {
+                                if (counters[0, floor, 1, room] != null) Temp.Add(counters[0, floor, 1, room]);//Показания (последние), кВт*ч
+                                else Temp.Add("");
+                            }
+                            if (keyEnum == userKeyEnum.aqua)
+                            {
+                                if (counters[0, floor, 2, room] != null) Temp.Add(counters[0, floor, 2, room]);//Показания (последние), кВт*ч
+                                else Temp.Add("");
+                            }
                         }
                     }
                 }
