@@ -3835,7 +3835,7 @@ namespace MyTable
             //  modCounters[3] = "014105";
         }
 
-        private void button61_Click(object sender, EventArgs e)//инвентаризация
+        private void button61_Click(object sender, EventArgs e)//инвентаризация электросчетчиков
         {
             ExcelPrinter report1 = new ExcelPrinter(ExcelPrinter.Company.Impuls, ExcelPrinter.Report.countersInventory);
             report1.headName();
@@ -3846,6 +3846,18 @@ namespace MyTable
             report1.endSheet();
             
         }
+
+        private void button62_Click(object sender, EventArgs e)//инвентаризация водомеров
+        {
+            ExcelPrinter report1 = new ExcelPrinter(ExcelPrinter.Company.Impuls, ExcelPrinter.Report.countersInventory);
+            report1.headName();
+            //циклом заполним таблицу
+            report1.bodyTable(InvertoryTable());
+            report1.footerTableCount();
+            report1.bordersTable();
+            report1.endSheet();
+        }
+        
         List<string> InvertoryTable()
         {
             List<string> Temp = new List<string>();
@@ -3858,7 +3870,7 @@ namespace MyTable
                         if (!(counters[0, floor, 3, room] == null || counters[0, floor, 3, room] == "" || counters[0, floor, 3, room] == "расчет"))
                         {
                             Temp.Add("Корп. " + data[floor, 0, room].ToString() + ", Помещ. " + data[floor, 1, room].ToString());//№ Корпуса и помещения
-                            Temp.Add(counters[0, floor, 3, room]);//№ счетчика
+                            Temp.Add(counters[0, floor, 3, room]);//№ электросчетчика
                             if (data[floor, 10, room] != null) Temp.Add(data[floor, 10, room].ToString());//Марка счетчика
                             else Temp.Add("");
                             if (data[floor, 11, room] != null) Temp.Add(data[floor, 11, room].ToString());//Год выпуска/поверки

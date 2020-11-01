@@ -160,6 +160,7 @@
             this.textBox10 = new System.Windows.Forms.TextBox();
             this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.button61 = new System.Windows.Forms.Button();
             this.button51 = new System.Windows.Forms.Button();
             this.comboBox23 = new System.Windows.Forms.ComboBox();
             this.label58 = new System.Windows.Forms.Label();
@@ -237,7 +238,7 @@
             this.Hint = new System.Windows.Forms.ToolTip(this.components);
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.button61 = new System.Windows.Forms.Button();
+            this.button62 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -1629,6 +1630,7 @@
             // tabPage3
             // 
             this.tabPage3.BackColor = System.Drawing.Color.Transparent;
+            this.tabPage3.Controls.Add(this.button62);
             this.tabPage3.Controls.Add(this.button61);
             this.tabPage3.Controls.Add(this.button51);
             this.tabPage3.Controls.Add(this.comboBox23);
@@ -1655,6 +1657,16 @@
             this.tabPage3.Size = new System.Drawing.Size(661, 771);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Отчеты";
+            // 
+            // button61
+            // 
+            this.button61.Location = new System.Drawing.Point(177, 58);
+            this.button61.Name = "button61";
+            this.button61.Size = new System.Drawing.Size(165, 25);
+            this.button61.TabIndex = 69;
+            this.button61.Text = "Инвентаризация";
+            this.button61.UseVisualStyleBackColor = true;
+            this.button61.Click += new System.EventHandler(this.button61_Click);
             // 
             // button51
             // 
@@ -1769,9 +1781,9 @@
             // 
             // button36
             // 
-            this.button36.Location = new System.Drawing.Point(177, 102);
+            this.button36.Location = new System.Drawing.Point(177, 119);
             this.button36.Name = "button36";
-            this.button36.Size = new System.Drawing.Size(165, 42);
+            this.button36.Size = new System.Drawing.Size(165, 25);
             this.button36.TabIndex = 57;
             this.button36.Text = "Показания эл.эн.";
             this.button36.UseVisualStyleBackColor = true;
@@ -2446,15 +2458,15 @@
             // 
             this.folderBrowserDialog1.SelectedPath = "@";
             // 
-            // button61
+            // button62
             // 
-            this.button61.Location = new System.Drawing.Point(175, 54);
-            this.button61.Name = "button61";
-            this.button61.Size = new System.Drawing.Size(167, 39);
-            this.button61.TabIndex = 69;
-            this.button61.Text = "Инвентаризация";
-            this.button61.UseVisualStyleBackColor = true;
-            this.button61.Click += new System.EventHandler(this.button61_Click);
+            this.button62.Location = new System.Drawing.Point(177, 89);
+            this.button62.Name = "button62";
+            this.button62.Size = new System.Drawing.Size(165, 25);
+            this.button62.TabIndex = 70;
+            this.button62.Text = "Инвентаризация 2";
+            this.button62.UseVisualStyleBackColor = true;
+            this.button62.Click += new System.EventHandler(this.button62_Click);
             // 
             // Form1
             // 
@@ -2701,6 +2713,7 @@
         private System.Windows.Forms.Button button60;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button button61;
+        private System.Windows.Forms.Button button62;
     }
 }
 
