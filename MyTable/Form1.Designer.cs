@@ -160,6 +160,7 @@
             this.textBox10 = new System.Windows.Forms.TextBox();
             this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.button62 = new System.Windows.Forms.Button();
             this.button61 = new System.Windows.Forms.Button();
             this.button51 = new System.Windows.Forms.Button();
             this.comboBox23 = new System.Windows.Forms.ComboBox();
@@ -238,7 +239,6 @@
             this.Hint = new System.Windows.Forms.ToolTip(this.components);
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.button62 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -1500,6 +1500,7 @@
             this.textBox11.Name = "textBox11";
             this.textBox11.Size = new System.Drawing.Size(118, 22);
             this.textBox11.TabIndex = 52;
+            this.textBox11.TextChanged += new System.EventHandler(this.textBox11_TextChanged);
             // 
             // comboBox6
             // 
@@ -1618,6 +1619,7 @@
             this.textBox10.Name = "textBox10";
             this.textBox10.Size = new System.Drawing.Size(118, 22);
             this.textBox10.TabIndex = 50;
+            this.textBox10.TextChanged += new System.EventHandler(this.textBox10_TextChanged);
             // 
             // dateTimePicker2
             // 
@@ -1657,6 +1659,16 @@
             this.tabPage3.Size = new System.Drawing.Size(661, 771);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Отчеты";
+            // 
+            // button62
+            // 
+            this.button62.Location = new System.Drawing.Point(177, 89);
+            this.button62.Name = "button62";
+            this.button62.Size = new System.Drawing.Size(165, 25);
+            this.button62.TabIndex = 70;
+            this.button62.Text = "Инвентаризация 2";
+            this.button62.UseVisualStyleBackColor = true;
+            this.button62.Click += new System.EventHandler(this.button62_Click);
             // 
             // button61
             // 
@@ -1963,7 +1975,7 @@
             this.button56.Name = "button56";
             this.button56.Size = new System.Drawing.Size(97, 26);
             this.button56.TabIndex = 52;
-            this.button56.Text = "изменения";
+            this.button56.Text = "ReLoadBD";
             this.button56.UseVisualStyleBackColor = true;
             this.button56.Click += new System.EventHandler(this.button56_Click);
             // 
@@ -2457,16 +2469,6 @@
             // folderBrowserDialog1
             // 
             this.folderBrowserDialog1.SelectedPath = "@";
-            // 
-            // button62
-            // 
-            this.button62.Location = new System.Drawing.Point(177, 89);
-            this.button62.Name = "button62";
-            this.button62.Size = new System.Drawing.Size(165, 25);
-            this.button62.TabIndex = 70;
-            this.button62.Text = "Инвентаризация 2";
-            this.button62.UseVisualStyleBackColor = true;
-            this.button62.Click += new System.EventHandler(this.button62_Click);
             // 
             // Form1
             // 
