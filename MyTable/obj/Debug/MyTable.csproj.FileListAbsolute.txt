@@ -37,7 +37,6 @@ C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\obj\Debug\Interop.ACCTRLLib
 C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\obj\Debug\Interop.VBIDE.dll
 C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\obj\Debug\AxInterop.ACCTRLLib.dll
 C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\obj\Debug\MyTable.csproj.ResolveComReference.cache
-C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\obj\Debug\PictureBox.Form1.resources
 C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\obj\Debug\MyTable.Properties.Resources.resources
 C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\obj\Debug\MyTable.csproj.GenerateResource.cache
 C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\obj\Debug\MyTable.csproj.CoreCompileInputs.cache
@@ -46,3 +45,4 @@ C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\obj\Debug\MyTable.pdb
 C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\obj\Debug\MyTable.Form1.resources
 C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\obj\Debug\MyTable.csprojAssemblyReference.cache
 C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\obj\Debug\MyTable.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\sanmar1no\MyTable\MyTable\obj\Debug\MyTable.Form1.resources
