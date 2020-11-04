@@ -1364,19 +1364,214 @@ namespace MyTable
         {
             comboBox19.Text = "";
         }
-
-        private void button8_Click(object sender, EventArgs e)
+        List<string> ReportElectroTable(DateTime DateSelect,out List<string> NoInfoValues, out List<string> NoInfoCounters)
         {
-            string s = null;
-            string s1 = "";
-            string s2 = "значение";
-            string s3 = s2;
-            string s4 = "значение2";
+            DateSelect=DateSelect.AddMonths(1);
+            List<string> Arenda = ArendaLongActualy(DateSelect, "ToLongName");//здесь вставить функцию ArendaLongActualy(DateTime DateSelect);
+            NoInfoValues = new List<string>();
+            NoInfoCounters = new List<string>();
+            List<string> ToReportTable = new List<string>();
 
-            if (!(s == null && s1 == "") && (s != s1)) richTextBox1.Text += "1\r\n";
-            if (!(s == null && s2 == "") && (s != s2)) richTextBox1.Text += "2\r\n";//прокатило
-            if (!(s2 == null && s3 == "")&& (s2 != s3)) richTextBox1.Text += "3\r\n";
-            if (!(s3 == null && s4 == "") && (s3 != s4)) richTextBox1.Text += "4\r\n";//прокатило
+            richTextBox1.Clear();
+            for (int arenda1 = 0; arenda1 < Arenda.Count(); arenda1++)
+            {
+                for (int floor = 0; floor < 4; floor++)
+                {
+                    for (int room = 0; room < maxRoom; room++)
+                    {////
+                        for (int arendaData = 0; arendaData < 10; arendaData++)
+                        {
+                            if (arenda[arendaData, floor, 0, room] != null)
+                            {
+                                if (DateTime.Parse(arenda[arendaData, floor, 0, room]).Month <= DateSelect.Month && DateTime.Parse(arenda[arendaData, floor, 0, room]).Year <= DateSelect.Year)
+                                {
+                                    if (arenda[arendaData, floor, 1, room] != null)
+                                    {
+
+                                        if (Arenda[arenda1] == arenda[arendaData, floor, 1, room])
+                                        {
+                                            bool goodValue = false;//true=показание счетчиков внесено на указанный период
+                                            for (int counter = 0; counter < 60; counter++)
+                                            {
+                                                if (counters[counter, floor, 0, room] != null)
+                                                {
+                                                    if (ToDateRaschet(DateSelect) == ToDateRaschet(DateTime.Parse(counters[counter, floor, 0, room])))
+                                                    {
+                                                        if (!(counters[0, floor, 3, room] == "" || counters[0, floor, 3, room] == null))
+                                                        {
+                                                            ToReportTable.Add(arenda[0, floor, 1, room]);
+                                                            ToReportTable.Add(counters[counter, floor, 3, room]);
+                                                            ToReportTable.Add(counters[counter, floor, 6, room]);
+                                                            goodValue = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                                //else break;
+                                            }
+                                            if (!goodValue)
+                                            {
+                                                if (!(counters[0, floor, 3, room] == "" || counters[0, floor, 3, room] == null))
+                                                {
+                                                    NoInfoValues.Add(arenda[0, floor, 1, room]);
+                                                    NoInfoValues.Add(counters[0, floor, 3, room]);
+                                                    NoInfoValues.Add("");
+                                                }
+                                                else
+                                                {
+                                                    NoInfoCounters.Add(arenda[0, floor, 1, room]);
+                                                    NoInfoCounters.Add("");
+                                                    NoInfoCounters.Add("");
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return ToReportTable;
+        }
+        private void button8_Click(object sender, EventArgs e) //выведем отчет по показаниям в richtextbox1
+        {
+            List<string> Arenda = ArendaLongActualy(dateTimePicker5.Value,"ToLongName");//здесь вставить функцию ArendaLongActualy(DateTime DateSelect);
+            List<string> NoInfoValues = new List<string>();
+            List<string> NoInfoCounters = new List<string>();
+            DateTime DateSelect = dateTimePicker5.Value;
+
+            richTextBox1.Clear();
+            for (int arenda1 = 0; arenda1 < Arenda.Count(); arenda1++)
+            {
+                for (int floor = 0; floor < 4; floor++)
+                {
+                    for (int room = 0; room < maxRoom; room++)
+                    {////
+                        for (int arendaData = 0; arendaData < 10; arendaData++)
+                        {
+                            if (arenda[arendaData, floor, 0, room] != null)
+                            {
+                                if (DateTime.Parse(arenda[arendaData, floor, 0, room]).Month <= DateSelect.Month && DateTime.Parse(arenda[arendaData, floor, 0, room]).Year <= DateSelect.Year)
+                                {
+                                    if (arenda[arendaData, floor, 1, room] != null)
+                                    {
+
+                                        if (Arenda[arenda1] == arenda[arendaData, floor, 1, room])
+                                        {
+                                            bool goodValue = false;//true=показание счетчиков внесено на указанный период
+                                            for (int counter = 0; counter < 60; counter++)
+                                            {
+                                                if (counters[counter, floor, 0, room] != null)
+                                                {
+                                                    if (ToDateRaschet(DateSelect) == ToDateRaschet(DateTime.Parse(counters[counter, floor, 0, room])))
+                                                    {
+                                                        if (!(counters[0, floor, 3, room] == "" || counters[0, floor, 3, room] == null))
+                                                        {
+                                                            richTextBox1.Text += arenda[0, floor, 1, room];
+                                                            richTextBox1.Text += counters[counter, floor, 3, room] + " ";
+                                                            richTextBox1.Text += counters[counter, floor, 6, room] + "\r\n";
+                                                            goodValue = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                                //else break;
+                                            }
+                                            if (!goodValue)
+                                            {
+                                                if (!(counters[0, floor, 3, room] == "" || counters[0, floor, 3, room] == null))
+                                                {
+                                                    NoInfoValues.Add(arenda[0, floor, 1, room] + counters[0, floor, 3, room]);
+                                                }
+                                                else NoInfoCounters.Add(arenda[0, floor, 1, room] + counters[0, floor, 3, room]);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            richTextBox1.Text += "Арендаторы и счетчики, по которым не внесена информация за период:\r\n";
+            foreach (string elem in NoInfoValues)
+            {
+                richTextBox1.Text += elem + "\r\n";
+            }
+            richTextBox1.Text += "Арендаторы, по которым не внесены номера счетчиков:\r\n";
+            foreach (string elem in NoInfoCounters)
+            {
+                richTextBox1.Text += elem + "\r\n";
+            }
+        }
+
+        List<string> ArendaLongActualy(DateTime DateSelect,string ParametrSort)
+        {
+            List<string> ArendatorS = new List<string>();
+            List<string> ArendatorLong = new List<string>();
+            List<string> SortArendator = new List<string>();
+            for (int floor = 0; floor < 4; floor++)
+            {
+                for (int room = 0; room < maxRoom; room++)
+                {
+                    for (int arenda1 = 0; arenda1 < 10; arenda1++)
+                    {
+                        if (arenda[arenda1, floor, 0, room] != null)
+                        {
+                            if (DateTime.Parse(arenda[arenda1, floor, 0, room]).Month <= DateSelect.Month && DateTime.Parse(arenda[arenda1, floor, 0, room]).Year <= DateSelect.Year)
+                            {
+                                if (arenda[arenda1, floor, 1, room] != null)
+                                {
+                                    ArendatorS.Add(arenda[arenda1, floor, 1, room]);
+                                }
+                            }
+                        }
+                        else break;
+                    }
+                }
+            }
+            ArendatorS = ArendatorS.Distinct().ToList();
+            for (int i = 0; i < ArendatorS.Count; i++)
+            {
+                bool Over = true;
+                for (int j = 0; j < SortArendator.Count; j++)
+                {
+                    if (String.Compare(ToShort(ArendatorS[i]), ToShort(SortArendator[j]), StringComparison.CurrentCultureIgnoreCase) <= 0)
+                    {
+                        SortArendator.Insert(j, ArendatorS[i].ToString());
+                        Over = false;
+                        break;
+                    }
+                }
+                if (Over)
+                {
+                    SortArendator.Add(ArendatorS[i]);
+                }
+            }
+            for (int i1 = 0; i1 < SortArendator.Count; i1++)
+            {
+                switch (ParametrSort)
+                {
+                    case "ToLongName":
+                        ArendatorLong.Add(ToLongName(SortArendator[i1]));
+                        break;
+                    case "ToLongNamePomes":
+                        ArendatorLong.Add(ToLongNamePomes(SortArendator[i1]));
+                        break;
+                    case "ToLongNameSchet":
+                        ArendatorLong.Add(ToLongNameSchet(SortArendator[i1]));
+                        break;
+                }
+
+            }
+            return ArendatorLong;
+        }
+
+        bool ToDateActive(DateTime date)
+        {
+
+            return false;
         }
         
         private void button9_Click(object sender, EventArgs e)
@@ -2502,9 +2697,16 @@ namespace MyTable
             UserKey = "admin";
         }
 
-        private void button31_Click(object sender, EventArgs e)
+        private void button31_Click(object sender, EventArgs e)//вывести список арендаторов
         {
-            OutputSorting("ToLongName");
+            //OutputSorting("ToLongName");
+            richTextBox2.Clear();
+            List<string> Arenda = new List<string>();
+            Arenda = ArendaLongActualy(dateTimePicker5.Value, "ToLongName");
+            foreach (string elem in Arenda)
+            {
+                richTextBox2.Text += elem + "\r\n";
+            }
         }
 
         List<string> Sort()
@@ -2521,17 +2723,17 @@ namespace MyTable
             List<string> SortArendator = new List<string>();
             for (int i = 0; i < Arendator.Count; i++)
             {
-                bool Bolshe = true;
+                bool Over = true;
                 for (int j = 0; j < SortArendator.Count; j++)
                 {
                     if (String.Compare(ToShort(Arendator[i]), ToShort(SortArendator[j]), StringComparison.CurrentCultureIgnoreCase) <= 0)
                     {
                         SortArendator.Insert(j,Arendator[i].ToString());
-                        Bolshe = false;
+                        Over = false;
                         break;
                     }
                 }
-                if (Bolshe)
+                if (Over)
                 {
                     SortArendator.Add(Arendator[i]);
                 }
@@ -2793,10 +2995,10 @@ namespace MyTable
                     {
                         if (rezult != 0)
                         {
-                            if (double.Parse(counters[k, EtazR, 1, PomesR]) != 10000 || double.Parse(counters[k, EtazR, 1, PomesR]) != 100000 || double.Parse(counters[k, EtazR, 1, PomesR]) != 1000000 || double.Parse(counters[k, EtazR, 1, PomesR]) != 10000000) rezult -= double.Parse(counters[k, EtazR, 1, PomesR]) * int.Parse(counters[k, EtazR, 4, PomesR]);
-                            else sbros = double.Parse(counters[k, EtazR, 1, PomesR]) * int.Parse(counters[k, EtazR, 4, PomesR]);
+                            if (double.Parse(counters[k, EtazR, 1, PomesR]) != 10000 || double.Parse(counters[k, EtazR, 1, PomesR]) != 100000 || double.Parse(counters[k, EtazR, 1, PomesR]) != 1000000 || double.Parse(counters[k, EtazR, 1, PomesR]) != 10000000) rezult -= double.Parse(counters[k, EtazR, 1, PomesR]) * double.Parse(counters[k, EtazR, 4, PomesR]);
+                            else sbros = double.Parse(counters[k, EtazR, 1, PomesR]) * double.Parse(counters[k, EtazR, 4, PomesR]);
                         }
-                        else rezult = double.Parse(counters[k, EtazR, 1, PomesR]) * int.Parse(counters[k, EtazR, 4, PomesR]);//умножим на коэффициент
+                        else rezult = double.Parse(counters[k, EtazR, 1, PomesR]) * double.Parse(counters[k, EtazR, 4, PomesR]);//умножим на коэффициент
                     }
                 }
                 else break;
@@ -3997,6 +4199,18 @@ namespace MyTable
         private void textBox11_TextChanged(object sender, EventArgs e)
         {
             if (textBox11.BackColor == Color.Red) textBox11.BackColor = Color.White;
+        }
+
+        private void button63_Click(object sender, EventArgs e)//основной отчет в Excel
+        {
+            List<string> NoInfoValues = new List<string>();
+            List<string> NoInfoCounters = new List<string>();
+            ReportPrinter report = new ReportPrinter(ExcelPrinter.Company.SKB, ExcelPrinter.Report.countersPeriodAll,dateTimePicker5.Value);
+            report.AddList(ReportElectroTable(dateTimePicker5.Value, out NoInfoValues, out NoInfoCounters));
+            report = new ReportPrinter(ExcelPrinter.Company.SKB, ExcelPrinter.Report.countersPeriodAll, dateTimePicker5.Value);
+            report.AddList(NoInfoValues);
+            report = new ReportPrinter(ExcelPrinter.Company.SKB, ExcelPrinter.Report.countersPeriodAll, dateTimePicker5.Value);
+            report.AddList(NoInfoCounters);
         }
 
         List<string> InvertoryTable(userKeyEnum keyEnum)
