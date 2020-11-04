@@ -11,58 +11,62 @@ namespace MyTable
     public partial class Form1 : Form
     {
         
+
+        string UserKey = "electro";                             //"arenda" "electro" "voda" ""
+
+        List<string> File = new List<string>();
+        
+        //переменные графической части   (начало)
+        Bitmap bitmap;
+        Graphics g;
+
         int numRoomTemp = -1;
         int scale = 1;
         int scalekX = 1;
         int scalekY = 1;
-        string UserKey = "electro";                             //"arenda" "electro" "voda" ""
-
-        List<string> File = new List<string>();
-
-        Bitmap bitmap;
-        Graphics g;
 
         public Point cur, curnew;
         bool g1 = false;
+        bool g3 = true; //изменено 29.04.20
 
-        bool tim = false;
-
-        int[] countRoom = new int[4];
-        int[,,] koord = new int[4, 40, 1];
-        const int RMD = 40;                                     //размер таблицы data
-        string[,,] data = new string[4, RMD, 1];
-        const int RMA = 8;
-        string[,,,] arenda = new string[10, 4, RMA, 1];
-        const int RMC = 16;                                     //размер таблицы счетчиков
-        string[,,,] counters = new string[60, 4, RMC, 1];
-        int floorGlobal = 0;                                    //текущий этаж
-        int roomGlobal = 0;                                     //текущее помещение
-        int maxRoom = 300;
-        string[] modData = new string[RMD];
-        string[] modCounters = new string[RMC];
-        string[] modArenda = new string[RMA];
-        string[] dataMod = { "", "" };                          //[1] - ключ electro или voda
-        string dataModA = "";                                   //дата измененная для таблицы арендаторов (расширение на перспективу. пока не реализована таблица на форме)
-
-        int panelCentrX = 626;
-        int panelCentrY = 389;
+        bool tim = false;                                       //подмигивание помещением попеременно серым и оранжевым
 
         Point[] poligon1 = new Point[20];
-        int GlobalP = 21; //количество точек многогранника, (максимально 20, 21 - за диапазоном)
+        int GlobalP = 21;                                       //количество точек многогранника, (максимально 20, 21 - за диапазоном)
 
         Point[] figa1 = new Point[1];
 
-        bool g3 = true; //изменено 29.04.20
+        int panelCentrX = 626;                                  //начальне значения центра карты
+        int panelCentrY = 389;
+        //конец графической части 
+
+        //основные переменные
+        int[] countRoom = new int[4];                           //количество помещений на этаже (всего 4-ре этажа)
+        int[,,] koord = new int[4, 40, 1];                      //координаты помещений на карте (также применяется для графической части)
+        const int RMD = 40;                                     //размер таблицы data
+        string[,,] data = new string[4, RMD, 1];                //основная таблица
+        const int RMA = 8;                                      //количество колонок или размер таблицы арендаторов
+        string[,,,] arenda = new string[10, 4, RMA, 1];         //таблица арендаторов
+        const int RMC = 16;                                     //размер таблицы счетчиков
+        string[,,,] counters = new string[60, 4, RMC, 1];       //таблица счетчиков
+        int floorGlobal = 0;                                    //текущий этаж
+        int roomGlobal = 0;                                     //текущее помещение
+        int maxRoom = 300;                                      //максимально возможное количество помещений на этаже
+        string[] modData = new string[RMD];                     //массив изменений в строке таблицы data
+        string[] modCounters = new string[RMC];                 //массив изменений в строке таблицы counters
+        string[] modArenda = new string[RMA];                   //массив изменений в строке таблицы arenda
+        string[] dataMod = { "", "" };                          //[1] - ключ electro или voda
+        string dataModA = "";                                   //дата измененная для таблицы арендаторов (расширение на перспективу. пока не реализована таблица на форме)
 
         bool panelHide = false;
 
-        int time3 = 0;
+        int time3 = 0;                                          //попытка сохранения (до 10)
 
         int[] outL2et_pom = new int[2];//0= выбранный этаж, 1= порядковый номер помещения
 
         bool dgCellEdit = false;
 
-        bool redact = false;    //какого лешего она зеленая? используется в моих функциях как глобальная переменная (Sch "Ты ей в двух местах присваиваешь Значения, но нигде не вызываешь")
+        bool redact = false;    //разобраться после отчетов, для чего использовалась переменная, после - удалить
 
         bool dataGridClear = false;
 
