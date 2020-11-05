@@ -4205,14 +4205,14 @@ namespace MyTable
         {
             List<string> NoInfoValues = new List<string>();
             List<string> NoInfoCounters = new List<string>();
-            /*
+            
             ReportPrinter report = new ReportPrinter(ExcelPrinter.Company.SKB, ExcelPrinter.Report.countersPeriodAll,dateTimePicker5.Value);
             report.AddList(ReportElectroTable(dateTimePicker5.Value, out NoInfoValues, out NoInfoCounters));
             report = new ReportPrinter(ExcelPrinter.Company.SKB, ExcelPrinter.Report.countersPeriodAll, dateTimePicker5.Value);
             report.AddList(NoInfoValues);
             report = new ReportPrinter(ExcelPrinter.Company.SKB, ExcelPrinter.Report.countersPeriodAll, dateTimePicker5.Value);
             report.AddList(NoInfoCounters);
-            */
+            
         }
 
         List<string> InvertoryTable(userKeyEnum keyEnum)
