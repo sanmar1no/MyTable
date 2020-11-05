@@ -1181,6 +1181,7 @@ namespace MyTable
             
         }
 
+        //Кнопка - Отцентрироваться
         private void button3_Click(object sender, EventArgs e)
         {
             double x = panelCentrX - (Center(textBox1.Text).X) * scale / 20; //626 и 389 - это центр панели с пиктурбоксом
@@ -1341,17 +1342,20 @@ namespace MyTable
             return room;
         }
 
+        //Кнопка - Center
         private void button4_Click(object sender, EventArgs e)
         {
             label3.Text = Center(textBox1.Text).X + ";" + Center(textBox1.Text).Y;
         }
 
+        //Кнопка - MastaB
         private void button5_Click(object sender, EventArgs e)
         {
             pictureBox1.Size = pictureBox1.Image.Size;
             scale = 20;
         }
 
+        //Кнопка - MastaB2
         private void button6_Click(object sender, EventArgs e)
         {
             pictureBox1.Width = scalekX;
@@ -1360,10 +1364,12 @@ namespace MyTable
             scale = 1;
         }
 
+        //Кнопка - 4
         private void button7_Click(object sender, EventArgs e)
         {
             comboBox19.Text = "";
         }
+
         List<string> ReportElectroTable(DateTime DateSelect,out List<string> NoInfoValues, out List<string> NoInfoCounters)
         {
             DateSelect=DateSelect.AddMonths(1);
@@ -1434,7 +1440,9 @@ namespace MyTable
             }
             return ToReportTable;
         }
-        private void button8_Click(object sender, EventArgs e) //выведем отчет по показаниям в richtextbox1
+
+        //Кнопка - test (выведем отчет по показаниям в richtextbox1)
+        private void button8_Click(object sender, EventArgs e)
         {
             List<string> Arenda = ArendaLongActualy(dateTimePicker5.Value,"ToLongName");//здесь вставить функцию ArendaLongActualy(DateTime DateSelect);
             List<string> NoInfoValues = new List<string>();
@@ -1573,7 +1581,8 @@ namespace MyTable
 
             return false;
         }
-        
+
+        //Кнопка - Обвести контур
         private void button9_Click(object sender, EventArgs e)
         {
             g3 = false;
@@ -1599,7 +1608,8 @@ namespace MyTable
                 }
             }
         }
-        
+
+        //Кнопка - Закончить контур
         private void button10_Click(object sender, EventArgs e)
         {
             if (GlobalP != 21)
@@ -1636,6 +1646,7 @@ namespace MyTable
             //  button9.Enabled = true;
         }
 
+        //Кнопка - in/out
         private void button11_Click(object sender, EventArgs e)
         {
             Point[] figure = new Point[3];
@@ -1660,17 +1671,19 @@ namespace MyTable
             g.Dispose();
         }
 
+        //Кнопка - Poligon Point3
         private void button12_Click(object sender, EventArgs e)
         {
             g3 = true;
         }
 
+        //Кнопка - ClearImg
         private void button13_Click(object sender, EventArgs e)
         {
             pictureBox1.Load(@"точки.png");
         }
 
-        //save
+        //Кнокпа - save
         private void button14_Click(object sender, EventArgs e)
         {
             if (checkBox2.Checked) pictureBox1.Image.Save(@"Этаж" + (floorGlobal + 1).ToString() + ".png", System.Drawing.Imaging.ImageFormat.Png);
@@ -1678,6 +1691,7 @@ namespace MyTable
             System.IO.File.WriteAllLines(@DateTime.Now.ToShortDateString() + ".txt", File, Encoding.Default);
         }
 
+        //Кнопка - Hide
         private void button15_Click(object sender, EventArgs e)
         {
             if (panelHide == false)
@@ -1721,7 +1735,7 @@ namespace MyTable
             panelCentrY = panel1.Size.Height / 2;
         }
 
-        //saveDB
+        //Кнопка - saveDB
         private void button1_Click(object sender, EventArgs e)
         {
             File.Clear();
@@ -1772,7 +1786,7 @@ namespace MyTable
             for (int i = 0; i < File.Count; i++) richTextBox1.Text += File[i] + "\r\n";
         }
 
-        //этаж1
+        //Кнопка - Этаж 1
         private void button2_Click(object sender, EventArgs e)
         {
             floorGlobal = 0;
@@ -1785,7 +1799,7 @@ namespace MyTable
             pictureBox1.Load(@"этаж1.png");
         }
 
-        //этаж2
+        //Кнопка - Этаж 2
         private void button16_Click(object sender, EventArgs e)
         {
             floorGlobal = 1;
@@ -1798,7 +1812,7 @@ namespace MyTable
             pictureBox1.Load(@"этаж2.png");
         }
 
-        //этаж3
+        //Кнопка - Этаж 3
         private void button17_Click(object sender, EventArgs e)
         {
             floorGlobal = 2;
@@ -1811,7 +1825,7 @@ namespace MyTable
             pictureBox1.Load(@"этаж3.png");
         }
 
-        //этаж4
+        //Кнопка - Этаж 4
         private void button18_Click(object sender, EventArgs e)
         {
             floorGlobal = 3;
@@ -1875,7 +1889,7 @@ namespace MyTable
             }
         }
 
-        //записать данные (Сохранить изменения)
+        //Кнопка - записать данные (Сохранить изменения)
         private void button19_Click(object sender, EventArgs e)
         {
             if (comboBox5.Text != "" && comboBox6.Text != "")
@@ -2189,6 +2203,7 @@ namespace MyTable
             return rezult;
         }
 
+        //Кнопка - test
         private void button20_Click(object sender, EventArgs e)
         {
            // RasxodFull
@@ -2281,6 +2296,7 @@ namespace MyTable
             }
         }
 
+        //Кнопка - LoadDBinCB
         private void button21_Click(object sender, EventArgs e)
         {
             List<string> Arend1 = new List<string>();//арендатор
@@ -2373,6 +2389,7 @@ namespace MyTable
             checkBox1.Checked = false;
         }
 
+        //Кнопка - ClearCB
         private void button22_Click(object sender, EventArgs e)
         {
             ClearCB();
@@ -2437,6 +2454,7 @@ namespace MyTable
             // richTextBox1.Text += massivA[i].ToString() + "\r\n";
         }
 
+        //Кнопка - koordToRich
         private void button24_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < 200; i++)
@@ -2456,6 +2474,7 @@ namespace MyTable
             }
         }
 
+        //Кнопка - koordToImg
         private void button25_Click(object sender, EventArgs e)
         {
             bitmap = new Bitmap(pictureBox1.Image);
@@ -2521,6 +2540,7 @@ namespace MyTable
             }
         }
 
+        //Кнопка - voda
         private void button26_Click(object sender, EventArgs e)
         {
             UserKey = "voda";
@@ -2554,6 +2574,7 @@ namespace MyTable
             }
         }
 
+        //Кнопка - arenda
         private void button27_Click(object sender, EventArgs e)
         {
             UserKey = "arenda";
@@ -2587,6 +2608,7 @@ namespace MyTable
             }
         }
 
+        //Кнопка - electro
         private void button28_Click(object sender, EventArgs e)
         {
             UserKey = "electro";
@@ -2610,6 +2632,7 @@ namespace MyTable
             }
         }
 
+        //Кнопка - Load
         private void button29_Click(object sender, EventArgs e)
         {
             int etaz = 0;
@@ -2692,12 +2715,14 @@ namespace MyTable
             }
         }
 
+        //Кнопка - admin
         private void button30_Click(object sender, EventArgs e)
         {
             UserKey = "admin";
         }
 
-        private void button31_Click(object sender, EventArgs e)//вывести список арендаторов
+        //Кнопка - Вывести арендаторов (вывести список арендаторов)
+        private void button31_Click(object sender, EventArgs e)
         {
             //OutputSorting("ToLongName");
             richTextBox2.Clear();
@@ -2875,12 +2900,13 @@ namespace MyTable
             return s;
         }
 
+        //Кнопка - Вывести ар.+помещ.
         private void button32_Click(object sender, EventArgs e)
         {
             OutputSorting("ToLongNamePomes");
         }
 
-        //арендаторы и счетчики
+        //Кнопка - Арендаторы и счетчики
         private void button33_Click(object sender, EventArgs e)
         {
             dataGridView1.Visible = false;
@@ -2926,6 +2952,7 @@ namespace MyTable
             dateTimePicker6.Value = dateTimePicker5.Value;
         }
 
+        //Кнопка - Арендаторы и расход
         private void button34_Click(object sender, EventArgs e)
         {
             dataGridView1.Visible = false;
@@ -3119,7 +3146,7 @@ namespace MyTable
             return Math.Round(summa, 1);
         }
 
-        //скорректировать ДБ (добавить электросчетчики)
+        //скорректировать ДБ (добавить электросчетчики) (Кнопка - Correct DB)
         private void button35_Click(object sender, EventArgs e)
         {            
             for (int et = 0; et < 4; et++)
@@ -3158,6 +3185,7 @@ namespace MyTable
             timer3.Enabled = true;
         }
 
+        //Кнопка - Показания эл.эн.
         private void button36_Click(object sender, EventArgs e)
         {
             dataMod[1] = "electro";//переключимся на счетчик электроэнергии
@@ -3185,6 +3213,7 @@ namespace MyTable
             richTextBox1.Text += richTextBox1.Text.Replace("\n", "&rn");
         }
 
+        //Кнопка - toMulti
         private void button38_Click(object sender, EventArgs e)
         {
             richTextBox1.Text += richTextBox1.Text.Replace("&rn", "\n");
@@ -3298,6 +3327,7 @@ namespace MyTable
             }
         }
 
+        //Кнопка - Del
         private void button39_Click(object sender, EventArgs e)
         {
             textBox18.Clear();
@@ -3444,6 +3474,7 @@ namespace MyTable
             }
         }
 
+        //Кнопка - Арендаторы и счетчики
         private void button40_Click(object sender, EventArgs e)
         {
             OutputSorting("ToLongNameSchet");
@@ -3602,7 +3633,7 @@ namespace MyTable
             
         }
 
-        //вывести массив счетчиков
+        //вывести массив счетчиков (Кнопка - mass[ch])
         private void button41_Click(object sender, EventArgs e)
         {
             for (int k = 59; k > -1; k--)
@@ -3615,6 +3646,7 @@ namespace MyTable
             }
         }
 
+        //Кнопка - Т Е Р Р И Т О Р И Я
         private void button45_Click(object sender, EventArgs e)
         {
             HideAr();//спрятать чертеж
@@ -3681,6 +3713,7 @@ namespace MyTable
             richTextBox1.Text += comboBox19.Text.ToString() + "\r\n";
         }
 
+        //Кнопка - Расчет
         private void checkBox5_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBox5.Checked)
@@ -3732,6 +3765,7 @@ namespace MyTable
             }
         }
 
+        //Кнопка - DB counters (dublicate)
         private void button48_Click(object sender, EventArgs e)
         {
             for (int et = 0; et < 4; et++)
@@ -3756,6 +3790,7 @@ namespace MyTable
             }
         }
 
+        //Кнопка - DEL DUBLICATE
         private void button49_Click(object sender, EventArgs e)
         {
             string temp = "";
@@ -3781,7 +3816,7 @@ namespace MyTable
             } 
         }
 
-        //Отчет за период
+        //Кнопка - Отчет за период
         private void button51_Click(object sender, EventArgs e)
         {
             ReportPrinter report = new ReportPrinter(ExcelPrinter.Company.SKB, ExcelPrinter.Report.countersPeriod, dateTimePicker5.Value, dateTimePicker6.Value);
@@ -3939,6 +3974,7 @@ namespace MyTable
             }
         }
 
+        //Кнопка - Rename Свободно
         private void button52_Click(object sender, EventArgs e)
         {
             for (int et = 0; et < 4; et++)
@@ -3961,6 +3997,7 @@ namespace MyTable
             if (comboBox5.Text != "" && comboBox6.Text != "") Unlock(true);
         }
 
+        //Кнопка - Sort
         private void button53_Click(object sender, EventArgs e)
         {
             comboBox19.Items.AddRange(Sort().ToArray());
@@ -3996,6 +4033,7 @@ namespace MyTable
             else button47.Enabled = false;
         }
 
+        //Кнопка - П Л А Н
         private void button42_Click(object sender, EventArgs e)
         {
             VisibleAr(textBox22.Text);
@@ -4059,30 +4097,34 @@ namespace MyTable
             pictureBox1.Visible = true; 
         }
 
+        //Кнопка - ZoomIN
         private void button54_Click(object sender, EventArgs e)
         {
             axAcCtrl1.Zoom_In();
         }
 
+        //Кнопка - Однолинейная схема
         private void button43_Click(object sender, EventArgs e)
         {
             VisibleAr(textBox23.Text);
             ButtonBlue(3);
         }
 
+        //Кнопка - План электросети
         private void button44_Click(object sender, EventArgs e)
         {
             VisibleAr(textBox24.Text);
             ButtonBlue(4);
         }
 
+        //Кнопка - План водоснабжения
         private void button46_Click(object sender, EventArgs e)
         {
             VisibleAr(textBox25.Text);
             ButtonBlue(5);
         }
 
-        //Убрать в базе данных =zablokirovano=
+        //Убрать в базе данных =zablokirovano= (Кнопка - ReLoadBD)
         private void button56_Click(object sender, EventArgs e)
         {
             File = System.IO.File.ReadAllLines(@"Data.txt", Encoding.Default).ToList();
@@ -4091,13 +4133,14 @@ namespace MyTable
 
         }
 
+        //Кнопка - LoadDB
         private void button57_Click(object sender, EventArgs e)
         {
             File = System.IO.File.ReadAllLines(@"Data.txt", Encoding.Default).ToList();
             LoadDB();
         }
 
-        //тестовая, изменить счетчик
+        //тестовая, изменить счетчик (Кнопка - Измен.)
         private void button58_Click(object sender, EventArgs e)
         {
             floorGlobal = 0;
@@ -4110,7 +4153,7 @@ namespace MyTable
             //  modCounters[3] = "014105";
         }
 
-        //вывести изменения на экран
+        //вывести изменения на экран (Кнопка - Экран)
         private void button59_Click(object sender, EventArgs e)
         {
             File.Clear();
@@ -4165,7 +4208,7 @@ namespace MyTable
             richTextBox1.Text += Rich;
         }
 
-        //тестовая, изменить Арендатора
+        //тестовая, изменить Арендатора (Кнопка - ИзмA)
         private void button60_Click(object sender, EventArgs e)
         {
             floorGlobal = 0;
@@ -4177,14 +4220,14 @@ namespace MyTable
             //  modCounters[3] = "014105";
         }
 
-        //инвентаризация электросчетчиков
+        //инвентаризация электросчетчиков (Кнопка - Инвентаризация)
         private void button61_Click(object sender, EventArgs e)
         {
             ReportPrinter report = new ReportPrinter(ExcelPrinter.Company.Impuls, ExcelPrinter.Report.countersInventoryElectro);
             report.AddList(InvertoryTable(userKeyEnum.electro));
         }
 
-        //инвентаризация водомеров
+        //инвентаризация водомеров (Кнопка - Инвентаризация 2)
         private void button62_Click(object sender, EventArgs e)
         {
             ReportPrinter report = new ReportPrinter(ExcelPrinter.Company.Impuls, ExcelPrinter.Report.countersInventoryAqua);
@@ -4201,7 +4244,8 @@ namespace MyTable
             if (textBox11.BackColor == Color.Red) textBox11.BackColor = Color.White;
         }
 
-        private void button63_Click(object sender, EventArgs e)//основной отчет в Excel
+        //основной отчет в Excel (Кнопка - Арендаторы, расход2)
+        private void button63_Click(object sender, EventArgs e)
         {
             List<string> NoInfoValues = new List<string>();
             List<string> NoInfoCounters = new List<string>();
