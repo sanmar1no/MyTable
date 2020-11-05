@@ -24,7 +24,11 @@ namespace MyTable
         {
         }
         public ReportPrinter(ExcelPrinter.Company company, ExcelPrinter.Report report)
-            : this(company, report, new DateTime(), new DateTime())
+            : this(company, report, DateTime.Now, new DateTime())
+        {
+        }
+        public ReportPrinter(ExcelPrinter.Company company, ExcelPrinter.Report report, DateTime dTP5)
+            : this(company, report, dTP5, new DateTime())
         {
         }
         public ReportPrinter(ExcelPrinter.Company company, ExcelPrinter.Report report, DateTime dTP5, DateTime dTP6)
@@ -72,6 +76,16 @@ namespace MyTable
                     report1.headName();
                     report1.bodyTable(TableList);
                     report1.footerTableCount();
+                    report1.bordersTable();
+                    report1.endSheet();
+                    break;
+                case ExcelPrinter.Report.countersPeriodAll:                 //Основной отчет по электроэнергии (период - месяц)
+                    report1.company = ExcelPrinter.Company.SKB;
+                    report1.report = ExcelPrinter.Report.countersPeriodAll;
+                    report1.dTP5 = dTP5;
+                    report1.headName();
+                    report1.bodyTable(TableList);
+                    report1.footerTableSumm("D");
                     report1.bordersTable();
                     report1.endSheet();
                     break;

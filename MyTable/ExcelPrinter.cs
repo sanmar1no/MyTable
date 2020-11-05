@@ -66,8 +66,9 @@ namespace MyTable
         public enum Report
         {
             countersPeriod = 0,
+            countersPeriodAll,
             countersInventoryElectro,
-            countersInventoryAqua
+            countersInventoryAqua            
         }
         public void head()
         {
@@ -174,6 +175,15 @@ namespace MyTable
                 case Report.countersInventoryAqua:
                     nameTable("Инвентаризация водомеров");
                     break;
+                case Report.countersPeriodAll:
+                    string dataStr = "";
+                    if (dTP5 != new DateTime())
+                    {
+                        DateTime toName = dTP5;// dTP5.AddMonths(-1);
+                        dataStr = MonthToStr(toName.Month) + " " + toName.Year + "г.";
+                    }                    
+                    nameTable("Расчет количества потребленной электроэнергии за "+ dataStr);
+                    break;
             }
             headTable();
         }
@@ -195,6 +205,9 @@ namespace MyTable
                     break;
                 case Report.countersInventoryAqua:
                     headTableCI();
+                    break;
+                case Report.countersPeriodAll:
+                    headTableREPORT();
                     break;
             }
         }
@@ -234,9 +247,21 @@ namespace MyTable
             sheet.Cells[row, 6] = "Показания (последние), " + (report==Report.countersInventoryElectro ? "кВт*ч" : "куб.м.");
             countColumn = 5;
         }
-
+        private void headTableREPORT()
+        {
+            row++;
+            sheet.Columns[1].ColumnWidth = 5;
+            sheet.Columns[2].ColumnWidth = 40;
+            sheet.Columns[3].ColumnWidth = 10;
+            sheet.Columns[4].ColumnWidth = 10;
+            sheet.Cells[row, 1] = "№ п/п";
+            sheet.Cells[row, 2] = "Арендатор";
+            sheet.Cells[row, 3] = "№ счетчика";
+            sheet.Cells[row, 4] = "Расход, кВт*ч";
+            countColumn = 3;
+        }
         //Temp.AddRange(ToReport(comboBox23.Text, dateTimePicker5.Value, dateTimePicker6.Value).ToArray());
-        
+
         public void bodyTable(List<string> Temp)//заполнение таблицы из List
         {
             //циклом заполним таблицу
@@ -261,7 +286,7 @@ namespace MyTable
             Excel1.Range formulaRange = sheet.Range[sheet.Cells[row, countColumn + 1], sheet.Cells[row - 1 + k, countColumn + 1]];
             string ToAdresEx = formulaRange.get_Address(1, 1, Excel1.XlReferenceStyle.xlR1C1, Type.Missing, Type.Missing);
             if (k > 0) sheet.Cells[row + k, countColumn+1].Formula = "=SUM("+literColumn+row.ToString()+":"+literColumn + (row-1 + k).ToString() + ")";//формула (сумма)
-            else sheet.Cells[row + k, 7] = "0";
+            else sheet.Cells[row + k, countColumn + 1] = "0";
         }
         public void footerTableCount()//последняя строка Всего:
         {
