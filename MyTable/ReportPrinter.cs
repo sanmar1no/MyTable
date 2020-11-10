@@ -10,7 +10,7 @@ namespace MyTable
         public Variables.UserKeyEnum reportKey = new Variables.UserKeyEnum();
         public DateTime dTP5 = new DateTime();
         public DateTime dTP6 = new DateTime();
-        private List<string> TableList = new List<string>();
+        private List<Cell> TableList = new List<Cell>();
 
         public ReportPrinter()
             : this(new ExcelPrinter.Company(), DateTime.Now, new DateTime())
@@ -35,7 +35,7 @@ namespace MyTable
             this.dTP5 = dTP5;
             this.dTP6 = dTP6;
         }
-        public void AddList(List<string> List)
+        public void AddList(List<Cell> List)
         {
             TableList.Clear();
             TableList.AddRange(List);
@@ -186,18 +186,13 @@ namespace MyTable
             Header.Add("№ п/п");
             Header.Add("Наименование организации ");
             Cell cell = new Cell();
-            cell.ForeColor = Color.Red;
-            cell.ColorInterior = Color.Green;
-            string s = cell.font.Italic.ToString();
-            cell.value = "123123";
-           // cell.border.LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;-		cell	font = {Name = "ISOCPEUR" Size=10}	MyTable.Cell
-
+            cell.Value = "123123";
             ExcelPrinter report1 = new ExcelPrinter();
             report1.NameTable("Перечень арендаторов АО \"Компания Импульс\",  ");
             report1.HeadTable(Header);
             Table.Add(cell);
             Table.Add(cell);
-            report1.BodyTable1(Table);
+            report1.BodyTable(Table);
         }
     }
 }

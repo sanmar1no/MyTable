@@ -12,16 +12,31 @@ namespace MyTable
     {
         public Color ForeColor = Color.Black;
         public Color ColorInterior = Color.White;
-        public string value = "";
+        private string value1;
+        public string Value 
+        {
+            get { return value1; }
+            set 
+            {
+                if (Value != null)
+                {
+                    value1 = Value;
+                }
+                else
+                {
+                    value1 = "";
+                }
+            }
+        }
         public dynamic font = new System.Drawing.Font("ISOCPEUR", 10, FontStyle.Italic & ~FontStyle.Bold);
         public dynamic LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
         public dynamic Weight = Microsoft.Office.Interop.Excel.XlBorderWeight.xlThin;//.xlMedium;
-        public Cell()
-        {
-            // FontStyle.Italic;
-
+        public Cell() : this("")
+        { 
         }
-
-        
+        public Cell(string Value)
+        {
+            this.Value = Value;
+        }
     }
 }
