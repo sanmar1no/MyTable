@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Office.Interop.Excel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Excel1 = Microsoft.Office.Interop.Excel;
@@ -129,9 +130,41 @@ namespace MyTable
                     sheet.Cells[row + k, 1] = (k + 1).ToString() + ".";
                     for (int i = 0; i < countColumn; i++)
                     {
-                        sheet.Cells[row + k, i+2] = Temp[k * countColumn + i].Replace(',', '.');  
+                        if (Temp[k * countColumn + i] != null)
+                            sheet.Cells[row + k, i + 2] = Temp[k * countColumn + i].Replace(',', '.');
+                        else sheet.Cells[row + k, i + 2] = "";
                     }
                     // sheet.Cells[12 + k, 7].NumberFormat = "0,0";//формат ячейки числовой
+                }
+            }
+        }
+        public void BodyTable1(List<Cell> Temp)
+        {
+            row++;
+            if (Temp.Count > 0)
+            {
+                for (; k < (Temp.Count) / countColumn; k++)
+                {
+                    sheet.Cells[row + k, 1].Font.Color = Temp[k * countColumn].ForeColor;
+                    sheet.Cells[row + k, 1].SelectionFont = Temp[k * countColumn].font;
+                   //sheet.Cells[row + k, 1].Font.Bold = Temp[k * countColumn].font.Bold;
+                    sheet.Cells[row + k, 1].Interior.Color = Temp[k * countColumn].ColorInterior;
+                    sheet.Cells[row + k, 1].Borders.LineStyle = Temp[k * countColumn].LineStyle;
+                    sheet.Cells[row + k, 1].Borders.Weight = Temp[k * countColumn].Weight;
+
+                    sheet.Cells[row + k, 1] = (k + 1).ToString() + ".";
+                    for (int i = 0; i < countColumn; i++)
+                    {
+                        if (Temp[k * countColumn + i] != null)
+                        {
+                            sheet.Cells[row + k, i + 2].Font.Color = Temp[k * countColumn + i].ForeColor;
+                            sheet.Cells[row + k, i + 2].Interior.Color = Temp[k * countColumn + i].ColorInterior;
+                            sheet.Cells[row + k, i + 2].Borders.LineStyle = Temp[k * countColumn + i].LineStyle;
+                            sheet.Cells[row + k, i + 2].Borders.Weight = Temp[k * countColumn + i].Weight;
+                            sheet.Cells[row + k, i + 2] = Temp[k * countColumn + i].value;
+                        }                            
+                        else sheet.Cells[row + k, i + 2] = "";
+                    }
                 }
             }
         }

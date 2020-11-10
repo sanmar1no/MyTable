@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace MyTable
 {
@@ -120,7 +121,7 @@ namespace MyTable
         {
             List<string> Header = new List<string>();
             ExcelPrinter report1 = new ExcelPrinter();
-            report1.company = ExcelPrinter.Company.Impuls;
+            report1.company = ExcelPrinter.Company.Impuls;//исправить
             Header.Add("№ п/п");
             Header.Add("№ Корпуса и помещения");
             Header.Add("№ счетчика    ");
@@ -139,7 +140,7 @@ namespace MyTable
         {
             List<string> Header = new List<string>();
             ExcelPrinter report1 = new ExcelPrinter();
-            report1.company = ExcelPrinter.Company.SKB;
+            report1.company = ExcelPrinter.Company.SKB;//исправить
             Header.Add("№ п/п");
             Header.Add("Арендатор  ");
             Header.Add("№ счетчика  ");
@@ -156,6 +157,47 @@ namespace MyTable
             report1.FooterTableSumm("D");
             report1.BordersTable();
             report1.EndSheet();
+        }
+        public void ReportArendaPhoneBook()
+        {
+            List<string> Header = new List<string>();
+            ExcelPrinter report1 = new ExcelPrinter();
+            Header.Add("№ п/п");
+            Header.Add("Наименование организации ");
+            Header.Add("ФИО руководителя организации");
+            Header.Add("Место расположения             ");
+            Header.Add("Телефоны                                                          ");
+            string dataStr = "";
+            if (dTP5 != new DateTime())
+            {
+                DateTime toName = dTP5;// dTP5.AddMonths(-1);
+                dataStr = MonthToStr(toName.Month) + " " + toName.Year + "г.";
+            }
+            report1.NameTable("Перечень арендаторов АО \"Компания Импульс\",  " + dataStr);
+            report1.HeadTable(Header);
+            report1.BodyTable(TableList);
+            report1.BordersTable();
+            report1.EndSheet();
+        }
+        public void test()
+        {
+            List<string> Header = new List<string>();
+            List<Cell> Table = new List<Cell>();
+            Header.Add("№ п/п");
+            Header.Add("Наименование организации ");
+            Cell cell = new Cell();
+            cell.ForeColor = Color.Red;
+            cell.ColorInterior = Color.Green;
+            string s = cell.font.Italic.ToString();
+            cell.value = "123123";
+           // cell.border.LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;-		cell	font = {Name = "ISOCPEUR" Size=10}	MyTable.Cell
+
+            ExcelPrinter report1 = new ExcelPrinter();
+            report1.NameTable("Перечень арендаторов АО \"Компания Импульс\",  ");
+            report1.HeadTable(Header);
+            Table.Add(cell);
+            Table.Add(cell);
+            report1.BodyTable1(Table);
         }
     }
 }

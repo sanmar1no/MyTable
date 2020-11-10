@@ -1427,6 +1427,54 @@ namespace MyTable
             }
             return ToReportTable;
         }
+
+        List<string> ReportPhoneBook(DateTime DateSelect) //выводит Лист-таблицу телефонный справочник по арендаторам
+        {
+            DateSelect = DateSelect.AddMonths(1);
+            List<string> Arenda = ArendaLongActualy(DateSelect, "ToLongName");//здесь вставить функцию ArendaLongActualy(DateTime DateSelect);
+            List<string> ToReportTable = new List<string>();
+            
+            richTextBox1.Clear();
+            for (int arenda1 = 0; arenda1 < Arenda.Count(); arenda1++)
+            {
+                string[] str = new string[4];
+                for (int floor = 0; floor < 4; floor++)
+                {
+                    for (int room = 0; room < maxRoom; room++)
+                    {
+                        for (int arendaData = 0; arendaData < 10; arendaData++)
+                        {
+                            if (arenda[arendaData, floor, 0, room] != null)
+                            {
+                                if (DateTime.Parse(arenda[arendaData, floor, 0, room]).Month <= DateSelect.Month && DateTime.Parse(arenda[arendaData, floor, 0, room]).Year <= DateSelect.Year)
+                                {
+                                    if (arenda[arendaData, floor, 1, room] != null)
+                                    {
+                                        if (Arenda[arenda1] == arenda[arendaData, floor, 1, room])
+                                        {
+                                            str[0] = arenda[arendaData, floor, 1, room];
+                                            str[1] = arenda[arendaData, floor, 2, room];
+                                            str[2] += "корп. " + data[floor, 0, room] + ", помещ." + data[floor, 1, room]+";               ";
+                                            str[3] = arenda[arendaData, floor, 6, room];
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if (str[0] != null)
+                {
+                    ToReportTable.Add(str[0]);
+                    ToReportTable.Add(str[1]);
+                    ToReportTable.Add(str[2]);//здесь перебор всех помещений арендатора на этот период (строка)
+                    ToReportTable.Add(str[3]);
+                }
+
+            }
+            return ToReportTable;
+        }
+
         private void button8_Click(object sender, EventArgs e) //выведем отчет по показаниям в richtextbox1
         {
             List<string> Arenda = ArendaLongActualy(dateTimePicker5.Value,"ToLongName");//здесь вставить функцию ArendaLongActualy(DateTime DateSelect);
@@ -2184,7 +2232,8 @@ namespace MyTable
 
         private void button20_Click(object sender, EventArgs e)
         {
-           // RasxodFull
+            ReportPrinter report1 = new ReportPrinter();
+            report1.test();
         }
 
         private void comboBox6_TextChanged(object sender, EventArgs e)
@@ -2870,7 +2919,10 @@ namespace MyTable
 
         private void button32_Click(object sender, EventArgs e)
         {
-            OutputSorting("ToLongNamePomes");
+            ReportPrinter report = new ReportPrinter(ExcelPrinter.Company.Impuls, dateTimePicker5.Value);
+            report.AddList(ReportPhoneBook(dateTimePicker5.Value));
+            report.ReportArendaPhoneBook();
+            //OutputSorting("ToLongNamePomes");
         }
 
         //арендаторы и счетчики
@@ -3895,6 +3947,7 @@ namespace MyTable
         private void textBox22_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             textBox22.Text = FileNameFD1("\\Планировки");
+            
         }
 
         //Однолинейная схема

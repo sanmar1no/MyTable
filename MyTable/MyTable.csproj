@@ -62,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cell.cs" />
     <Compile Include="DataGridViewCalendarColumn.cs">
       <SubType>Component</SubType>
     </Compile>
