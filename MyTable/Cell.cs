@@ -18,9 +18,9 @@ namespace MyTable
             get { return value1; }
             set 
             {
-                if (Value != null)
+                if (value != null)
                 {
-                    value1 = Value;
+                    value1 = value;
                 }
                 else
                 {

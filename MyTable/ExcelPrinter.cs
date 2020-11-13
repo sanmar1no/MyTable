@@ -37,10 +37,7 @@ namespace MyTable
             workBook = excelApp.Workbooks.Add();
             sheet = (Excel1.Worksheet)workBook.Worksheets.get_Item(1);
             //Заполняем
-            //покажем пользователю отчет
-            excelApp.Visible = true;
-            excelApp.UserControl = false;
-            Head();
+             Head();
         }
         public enum Company
         {
@@ -210,6 +207,9 @@ namespace MyTable
             row += 2;
             sheet.Cells[row + k, 4] = "М.П.";
             sheet.Cells[row + k, 4].HorizontalAlignment = Excel1.Constants.xlRight;
+            //покажем пользователю отчет
+            excelApp.Visible = true;
+            excelApp.UserControl = false;
         }
 
         // Открываем созданный excel-файл
