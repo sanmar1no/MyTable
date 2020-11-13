@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Office.Interop.Excel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Excel1 = Microsoft.Office.Interop.Excel;
@@ -36,10 +37,7 @@ namespace MyTable
             workBook = excelApp.Workbooks.Add();
             sheet = (Excel1.Worksheet)workBook.Worksheets.get_Item(1);
             //Заполняем
-            //покажем пользователю отчет
-            excelApp.Visible = true;
-            excelApp.UserControl = false;
-            Head();
+             Head();
         }
         public enum Company
         {
@@ -118,7 +116,7 @@ namespace MyTable
             countColumn = List.Count()-1;
         }
 
-        public void BodyTable(List<string> Temp)//заполнение таблицы из List
+        public void BodyTable2(List<string> Temp)//заполнение таблицы из List
         {
             //циклом заполним таблицу
             row++;
@@ -129,9 +127,45 @@ namespace MyTable
                     sheet.Cells[row + k, 1] = (k + 1).ToString() + ".";
                     for (int i = 0; i < countColumn; i++)
                     {
-                        sheet.Cells[row + k, i+2] = Temp[k * countColumn + i].Replace(',', '.');  
+                        if (Temp[k * countColumn + i] != null)
+                            sheet.Cells[row + k, i + 2] = Temp[k * countColumn + i].Replace(',', '.');
+                        else sheet.Cells[row + k, i + 2] = "";
                     }
                     // sheet.Cells[12 + k, 7].NumberFormat = "0,0";//формат ячейки числовой
+                }
+            }
+        }
+        public void BodyTable(List<Cell> Temp)
+        {
+            row++;
+            if (Temp.Count > 0)
+            {
+                for (; k < (Temp.Count) / countColumn; k++)
+                {
+                    sheet.Cells[row + k, 1].Font.Color = Temp[k * countColumn].ForeColor;
+                    sheet.Cells[row + k, 1].Font.Size = Temp[k * countColumn].font.Size;
+                    sheet.Cells[row + k, 1].Font.Italic = Temp[k * countColumn].font.Italic;
+                    sheet.Cells[row + k, 1].Font.Bold = Temp[k * countColumn].font.Bold;
+                    sheet.Cells[row + k, 1].Interior.Color = Temp[k * countColumn].ColorInterior;
+                    sheet.Cells[row + k, 1].Borders.LineStyle = Temp[k * countColumn].LineStyle;
+                    sheet.Cells[row + k, 1].Borders.Weight = Temp[k * countColumn].Weight;
+
+                    sheet.Cells[row + k, 1] = (k + 1).ToString() + ".";
+                    for (int i = 0; i < countColumn; i++)
+                    {
+                        if (Temp[k * countColumn + i] != null)
+                        {
+                            sheet.Cells[row + k, i + 2].Font.Color = Temp[k * countColumn + i].ForeColor;
+                            sheet.Cells[row + k, i + 2].Font.Size = Temp[k * countColumn + i].font.Size;
+                            sheet.Cells[row + k, i + 2].Font.Italic = Temp[k * countColumn + i].font.Italic;
+                            sheet.Cells[row + k, i + 2].Font.Bold = Temp[k * countColumn + i].font.Bold;
+                            sheet.Cells[row + k, i + 2].Interior.Color = Temp[k * countColumn + i].ColorInterior;
+                            sheet.Cells[row + k, i + 2].Borders.LineStyle = Temp[k * countColumn + i].LineStyle;
+                            sheet.Cells[row + k, i + 2].Borders.Weight = Temp[k * countColumn + i].Weight;
+                            sheet.Cells[row + k, i + 2] = Temp[k * countColumn + i].Value;
+                        }                            
+                        else sheet.Cells[row + k, i + 2] = "";
+                    }
                 }
             }
         }
@@ -173,6 +207,9 @@ namespace MyTable
             row += 2;
             sheet.Cells[row + k, 4] = "М.П.";
             sheet.Cells[row + k, 4].HorizontalAlignment = Excel1.Constants.xlRight;
+            //покажем пользователю отчет
+            excelApp.Visible = true;
+            excelApp.UserControl = false;
         }
 
         // Открываем созданный excel-файл

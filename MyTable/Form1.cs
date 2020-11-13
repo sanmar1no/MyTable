@@ -1362,14 +1362,13 @@ namespace MyTable
         {
             comboBox19.Text = "";
         }
-
-        List<string> ReportElectroTable(DateTime DateSelect,out List<string> NoInfoValues, out List<string> NoInfoCounters)
+        List<Cell> ReportElectroTable(DateTime DateSelect,out List<Cell> NoInfoValues, out List<Cell> NoInfoCounters)
         {
             DateSelect=DateSelect.AddMonths(1);
             List<string> Arenda = ArendaLongActualy(DateSelect, "ToLongName");//здесь вставить функцию ArendaLongActualy(DateTime DateSelect);
-            NoInfoValues = new List<string>();
-            NoInfoCounters = new List<string>();
-            List<string> ToReportTable = new List<string>();
+            NoInfoValues = new List<Cell>();
+            NoInfoCounters = new List<Cell>();
+            List<Cell> ToReportTable = new List<Cell>();
 
             richTextBox1.Clear();
             for (int arenda1 = 0; arenda1 < Arenda.Count(); arenda1++)
@@ -1398,9 +1397,9 @@ namespace MyTable
                                                     {
                                                         if (!(counters[0, floor, 3, room] == "" || counters[0, floor, 3, room] == null))
                                                         {
-                                                            ToReportTable.Add(arenda[0, floor, 1, room]);
-                                                            ToReportTable.Add(counters[counter, floor, 3, room]);
-                                                            ToReportTable.Add(counters[counter, floor, 6, room]);
+                                                            ToReportTable.Add(new Cell(arenda[0, floor, 1, room]));
+                                                            ToReportTable.Add(new Cell(counters[counter, floor, 3, room]));
+                                                            ToReportTable.Add(new Cell(counters[counter, floor, 6, room]));
                                                             goodValue = true;
                                                             break;
                                                         }
@@ -1412,15 +1411,15 @@ namespace MyTable
                                             {
                                                 if (!(counters[0, floor, 3, room] == "" || counters[0, floor, 3, room] == null))
                                                 {
-                                                    NoInfoValues.Add(arenda[0, floor, 1, room]);
-                                                    NoInfoValues.Add(counters[0, floor, 3, room]);
-                                                    NoInfoValues.Add("");
+                                                    NoInfoValues.Add(new Cell(arenda[0, floor, 1, room]));
+                                                    NoInfoValues.Add(new Cell(counters[0, floor, 3, room]));
+                                                    NoInfoValues.Add(new Cell());
                                                 }
                                                 else
                                                 {
-                                                    NoInfoCounters.Add(arenda[0, floor, 1, room]);
-                                                    NoInfoCounters.Add("");
-                                                    NoInfoCounters.Add("");
+                                                    NoInfoCounters.Add(new Cell(arenda[0, floor, 1, room]));
+                                                    NoInfoCounters.Add(new Cell());
+                                                    NoInfoCounters.Add(new Cell());
                                                 }
                                             }
                                         }
@@ -1434,8 +1433,54 @@ namespace MyTable
             return ToReportTable;
         }
 
-        //Кнопка - test (выведем отчет по показаниям в richtextbox1)
-        private void button8_Click(object sender, EventArgs e)
+        List<Cell> ReportPhoneBook(DateTime DateSelect) //выводит Лист-таблицу телефонный справочник по арендаторам
+        {
+            DateSelect = DateSelect.AddMonths(1);
+            List<string> Arenda = ArendaLongActualy(DateSelect, "ToLongName");//здесь вставить функцию ArendaLongActualy(DateTime DateSelect);
+            List<Cell> ToReportTable = new List<Cell>();
+            
+            richTextBox1.Clear();
+            for (int arenda1 = 0; arenda1 < Arenda.Count(); arenda1++)
+            {
+                string[] str = new string[4];
+                for (int floor = 0; floor < 4; floor++)
+                {
+                    for (int room = 0; room < maxRoom; room++)
+                    {
+                        for (int arendaData = 0; arendaData < 10; arendaData++)
+                        {
+                            if (arenda[arendaData, floor, 0, room] != null)
+                            {
+                                if (DateTime.Parse(arenda[arendaData, floor, 0, room]).Month <= DateSelect.Month && DateTime.Parse(arenda[arendaData, floor, 0, room]).Year <= DateSelect.Year)
+                                {
+                                    if (arenda[arendaData, floor, 1, room] != null)
+                                    {
+                                        if (Arenda[arenda1] == arenda[arendaData, floor, 1, room])
+                                        {
+                                            str[0] = arenda[arendaData, floor, 1, room];
+                                            str[1] = arenda[arendaData, floor, 2, room];
+                                            str[2] += "корп. " + data[floor, 0, room] + ", помещ." + data[floor, 1, room]+";               ";
+                                            str[3] = arenda[arendaData, floor, 6, room];
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if (str[0] != null)
+                {
+                    ToReportTable.Add(new Cell(str[0]));
+                    ToReportTable.Add(new Cell(str[1]));
+                    ToReportTable.Add(new Cell(str[2]));//здесь перебор всех помещений арендатора на этот период (строка)
+                    ToReportTable.Add(new Cell(str[3]));
+                }
+
+            }
+            return ToReportTable;
+        }
+
+        private void button8_Click(object sender, EventArgs e) //выведем отчет по показаниям в richtextbox1
         {
             List<string> Arenda = ArendaLongActualy(dateTimePicker5.Value,"ToLongName");//здесь вставить функцию ArendaLongActualy(DateTime DateSelect);
             List<string> NoInfoValues = new List<string>();
@@ -2199,7 +2244,8 @@ namespace MyTable
         //Кнопка - test
         private void button20_Click(object sender, EventArgs e)
         {
-           // RasxodFull
+            ReportPrinter report1 = new ReportPrinter();
+            report1.test();
         }
 
         private void comboBox6_TextChanged(object sender, EventArgs e)
@@ -2896,7 +2942,10 @@ namespace MyTable
         //Кнопка - Вывести ар.+помещ.
         private void button32_Click(object sender, EventArgs e)
         {
-            OutputSorting("ToLongNamePomes");
+            ReportPrinter report = new ReportPrinter(ExcelPrinter.Company.Impuls, dateTimePicker5.Value);
+            report.AddList(ReportPhoneBook(dateTimePicker5.Value));
+            report.ReportArendaPhoneBook();
+            //OutputSorting("ToLongNamePomes");
         }
 
         //Кнопка - Арендаторы и счетчики
@@ -3818,17 +3867,20 @@ namespace MyTable
         }
 
         // выведет построчно: корпус-помещение, №счетчика, показания на начало, показания на конец, расчетный коэфф., расчет.
-        List<string> ToReport(string arendator, DateTime DataOtMes, DateTime DataDoMes)
+        List<Cell> ToReport(string arendator, DateTime DataOtMes, DateTime DataDoMes)
         {
-            List<string> ToOtchet = new List<string>();
+            List<Cell> ToOtchet = new List<Cell>();
             for (int et1=0; et1 < 4; et1++)
             {
                 for (int pomesh = 0; pomesh < maxRoom; pomesh++)
                 {
                     if (arenda[0, et1, 1, pomesh] == arendator)
                     {
-                        ToOtchet.Add("Корпус №" + data[et1, 0, pomesh] + ", помещ.№" + data[et1, 1, pomesh]);//корпус-помещение
-                        ToOtchet.Add(data[et1, 9, pomesh]);//№счетчика
+                        Cell cell = new Cell();
+                        cell.Value = "Корпус №" + data[et1, 0, pomesh] + ", помещ.№" + data[et1, 1, pomesh];
+                        ToOtchet.Add(cell);//корпус-помещение
+                        cell.Value =data[et1, 9, pomesh];
+                        ToOtchet.Add(cell);//№счетчика
 
                         DateTime dataPred1 = new DateTime(DataOtMes.Year, DataOtMes.Month, 24).AddMonths(-1);//с 24 числа предыдущего месяца
                         DateTime dataPred2 = new DateTime(DataDoMes.Year, DataOtMes.Month, 7);//до 7-го числа текущего месяца.(диапазон)
@@ -3852,7 +3904,7 @@ namespace MyTable
                                             Period = true;
                                             rasxodZaPeriod += double.Parse(counters[k, et1, 6, pomesh]);
                                             richTextBox1.Text += "1:"+rasxodZaPeriod.ToString() + "\r\n";//лог
-                                            ToOtchet.Add(counters[k, et1, 1, pomesh]);
+                                            ToOtchet.Add(new Cell(counters[k, et1, 1, pomesh]));
                                             if (DataOtMes.Month == DataDoMes.Month) flag = false;//если период больше одного месяца и false - если период один месяц.
                                             else flag = true;
                                         }
@@ -3861,8 +3913,8 @@ namespace MyTable
                                     {
                                         if (DateTime.Parse(counters[k, et1, 0, pomesh]) > dataPred1 && DateTime.Parse(counters[k, et1, 0, pomesh]) < dataPred2)
                                         {
-                                            ToOtchet.Insert(ToOtchet.Count - 1, counters[k, et1, 1, pomesh]);
-                                            ToOtchet.Add(counters[k, et1, 4, pomesh]);
+                                            ToOtchet.Insert(ToOtchet.Count - 1, new Cell(counters[k, et1, 1, pomesh]));
+                                            ToOtchet.Add(new Cell(counters[k, et1, 4, pomesh]));
                                             break;
                                         }
                                         if (flag)
@@ -3879,31 +3931,31 @@ namespace MyTable
                         {
                             if (ToOtchet.Count > 3)
                             {
-                                if (ToOtchet[ToOtchet.Count - 4] == data[et1, 9, pomesh])//номер счетчика находится на две записи назад (записались оба показания)
+                                if (ToOtchet[ToOtchet.Count - 4].Value == data[et1, 9, pomesh])//номер счетчика находится на две записи назад (записались оба показания)
                                 {
-                                    ToOtchet.Add(rasxodZaPeriod.ToString());
+                                    ToOtchet.Add(new Cell(rasxodZaPeriod.ToString()));
                                     richTextBox1.Text += "3:" + rasxodZaPeriod.ToString() + "\r\n";//лог
                                 }
                                 else//записалось одно показание
                                 {
-                                    ToOtchet.Insert(ToOtchet.Count - 1, "запись отсутствует");//нет показания на начало
-                                    ToOtchet.Add("запись отсутствует");//нет показания на конец
-                                    ToOtchet.Add("запись отсутствует");//нет коэфф. счетчика
+                                    ToOtchet.Insert(ToOtchet.Count - 1, new Cell("запись отсутствует"));//нет показания на начало
+                                    ToOtchet.Add(new Cell("запись отсутствует"));//нет показания на конец
+                                    ToOtchet.Add(new Cell("запись отсутствует"));//нет коэфф. счетчика
                                 } 
                             }
                             else
                             {
-                                ToOtchet.Insert(ToOtchet.Count - 1, "запись отсутствует");//нет показания на начало
-                                ToOtchet.Add("запись отсутствует");//нет показания на конец
-                                ToOtchet.Add("запись отсутствует");//нет коэфф. счетчика
+                                ToOtchet.Insert(ToOtchet.Count - 1, new Cell("запись отсутствует"));//нет показания на начало
+                                ToOtchet.Add(new Cell("запись отсутствует"));//нет показания на конец
+                                ToOtchet.Add(new Cell("запись отсутствует"));//нет коэфф. счетчика
                             } 
                         }
                         else//расход за этот период отсутствует в базе (не записалось ни одно показание)
                         {
-                            ToOtchet.Add("запись отсутствует");//нет показания на начало
-                            ToOtchet.Add("запись отсутствует");//нет показания на конец
-                            ToOtchet.Add("запись отсутствует");//нет коэфф. счетчика
-                            ToOtchet.Add("0");//нет расхода
+                            ToOtchet.Add(new Cell("запись отсутствует"));//нет показания на начало
+                            ToOtchet.Add(new Cell("запись отсутствует"));//нет показания на конец
+                            ToOtchet.Add(new Cell("запись отсутствует"));//нет коэфф. счетчика
+                            ToOtchet.Add(new Cell("0"));//нет расхода
                         }
                     }
                 }
@@ -3930,6 +3982,7 @@ namespace MyTable
         private void textBox22_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             textBox22.Text = FileNameFD1("\\Планировки");
+            
         }
 
         //Однолинейная схема
@@ -4242,8 +4295,8 @@ namespace MyTable
         //основной отчет в Excel (Кнопка - Арендаторы, расход2)
         private void button63_Click(object sender, EventArgs e)
         {
-            List<string> NoInfoValues = new List<string>();
-            List<string> NoInfoCounters = new List<string>();
+            List<Cell> NoInfoValues = new List<Cell>();
+            List<Cell> NoInfoCounters = new List<Cell>();
             ReportPrinter report = new ReportPrinter(ExcelPrinter.Company.SKB,dateTimePicker5.Value);
             report.AddList(ReportElectroTable(dateTimePicker5.Value, out NoInfoValues, out NoInfoCounters));
             report.ReportCountersPeriodAll();
@@ -4255,9 +4308,9 @@ namespace MyTable
             report.ReportCountersPeriodAll();
         }
 
-        List<string> InvertoryTable(Variables.UserKeyEnum keyEnum)
+        List<Cell> InvertoryTable(Variables.UserKeyEnum keyEnum)
         {
-            List<string> Temp = new List<string>();
+            List<Cell> Temp = new List<Cell>();
             for (int floor = 0; floor < 4; floor++)
             {
                 for (int room = 0; room < maxRoom; room++)
@@ -4267,38 +4320,38 @@ namespace MyTable
                         if (!(keyEnum != Variables.UserKeyEnum.electro || counters[0, floor, 3, room] == null || counters[0, floor, 3, room] == "" || counters[0, floor, 3, room] == "расчет")
                             || !(keyEnum != Variables.UserKeyEnum.aqua || counters[0, floor, 5, room] == null || counters[0, floor, 5, room] == "" || counters[0, floor, 5, room] == "расчет"))
                         {
-                            Temp.Add("Корп. " + data[floor, 0, room].ToString() + ", Помещ. " + data[floor, 1, room].ToString());//№ Корпуса и помещения
-                            if (keyEnum == Variables.UserKeyEnum.electro) Temp.Add(counters[0, floor, 3, room]);//№ электросчетчика
-                            if (keyEnum == Variables.UserKeyEnum.aqua) Temp.Add(counters[0, floor, 5, room]);//№ водомера
+                            Temp.Add(new Cell("Корп. " + data[floor, 0, room].ToString() + ", Помещ. " + data[floor, 1, room].ToString()));//№ Корпуса и помещения
+                            if (keyEnum == Variables.UserKeyEnum.electro) Temp.Add(new Cell(counters[0, floor, 3, room]));//№ электросчетчика
+                            if (keyEnum == Variables.UserKeyEnum.aqua) Temp.Add(new Cell(counters[0, floor, 5, room]));//№ водомера
                             if (keyEnum == Variables.UserKeyEnum.electro)
                             {
-                                if (data[floor, 10, room] != null) Temp.Add(data[floor, 10, room].ToString());//Марка электросчетчика
-                                else Temp.Add("");
+                                if (data[floor, 10, room] != null) Temp.Add(new Cell(data[floor, 10, room].ToString()));//Марка электросчетчика
+                                else Temp.Add(new Cell());
                             }
                             if (keyEnum == Variables.UserKeyEnum.aqua)
                             {
-                                if (data[floor, 13, room] != null) Temp.Add(data[floor, 13, room].ToString());//Марка водомера
-                                else Temp.Add("");
+                                if (data[floor, 13, room] != null) Temp.Add(new Cell(data[floor, 13, room].ToString()));//Марка водомера
+                                else Temp.Add(new Cell());
                             }
                             if (keyEnum == Variables.UserKeyEnum.electro)
                             {
-                                if (data[floor, 11, room] != null) Temp.Add(data[floor, 11, room].ToString());//Год выпуска/поверки электросчетчика
-                                else Temp.Add("");
+                                if (data[floor, 11, room] != null) Temp.Add(new Cell(data[floor, 11, room].ToString()));//Год выпуска/поверки электросчетчика
+                                else Temp.Add(new Cell());
                             }
                             if (keyEnum == Variables.UserKeyEnum.aqua)
                             {
-                                if (data[floor, 14, room] != null) Temp.Add(data[floor, 14, room].ToString());//Год выпуска/поверки водомера
-                                else Temp.Add("");
+                                if (data[floor, 14, room] != null) Temp.Add(new Cell(data[floor, 14, room].ToString()));//Год выпуска/поверки водомера
+                                else Temp.Add(new Cell());
                             }
                             if (keyEnum == Variables.UserKeyEnum.electro)
                             {
-                                if (counters[0, floor, 1, room] != null) Temp.Add(counters[0, floor, 1, room]);//Показания (последние), кВт*ч
-                                else Temp.Add("");
+                                if (counters[0, floor, 1, room] != null) Temp.Add(new Cell(counters[0, floor, 1, room]));//Показания (последние), кВт*ч
+                                else Temp.Add(new Cell());
                             }
                             if (keyEnum == Variables.UserKeyEnum.aqua)
                             {
-                                if (counters[0, floor, 2, room] != null) Temp.Add(counters[0, floor, 2, room]);//Показания (последние), кВт*ч
-                                else Temp.Add("");
+                                if (counters[0, floor, 2, room] != null) Temp.Add(new Cell(counters[0, floor, 2, room]));//Показания (последние), кВт*ч
+                                else Temp.Add(new Cell());
                             }
                         }
                     }
