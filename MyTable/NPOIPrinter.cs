@@ -10,24 +10,25 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 
 
-
-namespace MyTable
-{
-    class NPOIPrinter
-    {
+namespace MyTable {
+    class NPOIPrinter {
         // Создаём экземпляр нашего приложения
         // в NPOI не нужно
         // Создаём экземпляр рабочий книги Excel
         private static IWorkbook workbook = new XSSFWorkbook();
+
         // IWorkbook workbook = new HSSFWorkbook();//xls
         // Создаём экземпляр листа Excel
         private static ISheet sheet = workbook.CreateSheet("Лист1");
+
         // Создаём экземпляр области ячеек Excel
         private static IRow rowSheet = sheet.CreateRow(0);
         ICell cell = rowSheet.CreateCell(0);
-        IFont fontBody = workbook.CreateFont();//осовной стиль таблицы
+        
+        IFont fontBody = workbook.CreateFont();                 //основной стиль таблицы
         ICellStyle bodyStyle = workbook.CreateCellStyle();
-        IFont fontDynamic = workbook.CreateFont(); //индивидуально для ячейки
+        
+        IFont fontDynamic = workbook.CreateFont();              //индивидуально для ячейки
         ICellStyle styleDynamic = workbook.CreateCellStyle();
 
         //IRow row = sheet.GetRow(1);
@@ -37,23 +38,22 @@ namespace MyTable
         private int row = 0;
         private int countColumn = 0;
 
-        FileStream stream = new FileStream("outfile.xlsx", FileMode.Create, FileAccess.Write);
-        public NPOIPrinter()
-    : this(new Company())
-        {
+        //FileStream stream = new FileStream("outfile.xlsx", FileMode.Create, FileAccess.Write);
+
+        public NPOIPrinter() : this(new Company()) {
         }
-        public NPOIPrinter(Company company)
-        {
-            this.company = company;
-            Head();
+
+        public NPOIPrinter(Company company) {
+            //this.company = company;
+            //Head();
         }
-        public enum Company
-        {
+
+        public enum Company {
             Impuls = 0,
             SKB
         }
-        private short ColorConvert(System.Drawing.Color color)
-        {
+
+        private short ColorConvert(System.Drawing.Color color) {
             /*string s= System.Drawing.KnownColor.White.ToString();           
             if (color.IsKnownColor)
             {
@@ -66,45 +66,42 @@ namespace MyTable
             XSSFColor colorX= new XSSFColor(rgb);
             
             return colorX.Indexed;
+            
             /*
              byte[] rgb = new byte[3] { 192, 0, 0 };
              XSSFCellStyle HeaderCellStyle1 = (XSSFCellStyle)xssfworkbook.CreateCellStyle();
              HeaderCellStyle1.SetFillForegroundColor(new XSSFColor(rgb));
              */
         }
-        public void Head()
-        {
+
+        public void Head() {
             //заголовок
 
-            //
             IFont font = workbook.CreateFont();
             font.FontName = "Times New Roman";            
             font.FontHeightInPoints = 24;
             font.IsBold = true;
+
             ICellStyle headStyle = workbook.CreateCellStyle();
 
             //font.Color = IndexedColors.Red.Index;
             font.Color = ColorConvert(System.Drawing.Color.Red);
             
-
             headStyle.SetFont(font);//стиль заголовка
             headStyle.Alignment = HorizontalAlignment.Center;
             //headStyle.FillPattern = FillPattern.SolidForeground;
 
-            rowSheet.Cells[0].CellStyle = headStyle;//назначаем стиль заголовка
+            rowSheet.Cells[0].CellStyle = headStyle;    //назначаем стиль заголовка
 
             fontBody.FontName = "ISOCPEUR";
             fontBody.FontHeightInPoints = 12;
             fontBody.IsBold = true;
-            bodyStyle.SetFont(fontBody);//основной стиль таблицы
-
-
+            bodyStyle.SetFont(fontBody);                //основной стиль таблицы
 
             var range = new NPOI.SS.Util.CellRangeAddress(row, row, 0, 6);
             sheet.AddMergedRegion(range);
 
-            switch (company)
-            {
+            switch (company) {
                // IRow row = sheet.CreateRow(0);
                // ICell cell = row.CreateCell(0);
                 case Company.Impuls:
@@ -114,13 +111,16 @@ namespace MyTable
                     cell.SetCellValue("ООО «СКБ-Сбытсервис»");
                     break;
             }            
-            row ++;
+
+            row++;
             AddRow("350072, Краснодарский  край, г.Краснодар,");
             AddRow("Ул. Московская, 5.");
+
             //sheet.GetRow(row).Height = 400;
+
             rowSheet.Height = 400;
-            switch (company)
-            {
+
+            switch (company) {
                 case Company.Impuls:
                     AddRow("Тел. 8(861) 252-11-21");
                     break;
@@ -128,63 +128,74 @@ namespace MyTable
                     AddRow("Тел. 8(861) 252-09-83");
                     break;
             }
+
             sheet.GetRow(row).Height = 400;
+
             //rowSheet.Height = 18;
         }
 
-        void AddRow(string s)//добавить строку, значение запишется в первую ячейку
-        {
+        //добавить строку, значение запишется в первую ячейку
+        void AddRow(string s) {
             AddRow(s, bodyStyle);
         }
-        void AddRow(string s, ICellStyle Style)//добавить строку с указанием стиля
-        {
+
+        //добавить строку с указанием стиля
+        void AddRow(string s, ICellStyle Style) {
             row++;
             rowSheet = sheet.CreateRow(row);
             AddCell(s, 0, Style);
         }
-        void AddCell(string s, int index)//добавить ячейку в текущей строке, стиль по умолчанию bodyStyle
-        {
+
+        //добавить ячейку в текущей строке, стиль по умолчанию bodyStyle
+        void AddCell(string s, int index) {
             AddCell(s, index, bodyStyle);
         }
-        void AddCell(string s,int index, ICellStyle Style)//добавить ячейку в текущей строке с указанием стиля
-        {
+
+        //добавить ячейку в текущей строке с указанием стиля
+        void AddCell(string s,int index, ICellStyle Style) {
             cell = rowSheet.CreateCell(index);
             cell.SetCellValue(s);
             rowSheet.Cells[0].CellStyle = Style;
         }
-        public void HeadArenda(string arendaCB23 = "")
-        {//userCB23 - Арендатор, dTP5 - начало периода, dTP6 - конец периода
+
+        //userCB23 - Арендатор, dTP5 - начало периода, dTP6 - конец периода
+        public void HeadArenda(string arendaCB23 = "") {
             row ++;
             AddRow("Потребитель: " + arendaCB23);
             AddRow("Адрес объекта: г.Краснодар, ул. Московская, 5.");
             sheet.GetRow(row).Height = 500;
             row += 2;
         }
-        public void NameTable(string name)//задаем имя Таблицы
-        {
+
+        //задаем имя Таблицы
+        public void NameTable(string name) {
             AddRow(name);
             sheet.GetRow(row).Height = 500;
         }
-        public void HeadTable(List<string> List)//заголовок таблицы
-        {
+
+        //заголовок таблицы
+        public void HeadTable(List<string> List) {
             row++;
             rowSheet = sheet.CreateRow(row);
             double lenght = 0;
-            foreach (string elem in List)
-            {
+            foreach (string elem in List) {
                 lenght += elem.Length;
             }
+
             double koeff = 80 / lenght;
-            for (int i = 1; i <= List.Count(); i++)
-            {
+
+            for (int i = 1; i <= List.Count(); i++) {
                 int mat1 = (int)Math.Round(List[i - 1].Length * koeff, 0, MidpointRounding.AwayFromZero);
                 sheet.SetColumnWidth(i,mat1);
                 AddCell(List[i - 1], i);
             }
+
             countColumn = List.Count() - 1;
         }
-        /*public void BodyTable(List<Cell> Temp)//заполнение таблицы из List<Cell>
-        {
+
+        //заполнение таблицы из List<Cell>
+        /*
+        public void BodyTable(List<Cell> Temp) {
             row++;
             if (Temp.Count > 0)
             {
@@ -226,17 +237,93 @@ namespace MyTable
                 }
             }
         }//*/
-        public void Hello()//тест
-        {
-           /* IRow row = sheet.CreateRow(0);
-            ICell cell = row.CreateCell(0);
-            cell.SetCellValue("Hello");
-            cell = row.CreateCell(1);
-            cell.SetCellValue("World");
 
-            var range = new NPOI.SS.Util.CellRangeAddress(1, 6, 2, 5);
-            sheet.AddMergedRegion(range);*/
-            workbook.Write(stream);
+        //тест
+        public void Hello() {
+            /* 
+             IRow row = sheet.CreateRow(0);
+             ICell cell = row.CreateCell(0);
+             cell.SetCellValue("Hello");
+             cell = row.CreateCell(1);
+             cell.SetCellValue("World");
+
+             var range = new NPOI.SS.Util.CellRangeAddress(1, 6, 2, 5);
+             sheet.AddMergedRegion(range);
+             */
+
+            //workbook.Write(stream);
+            
+
+
+            //Код SCH
+            //Создаём книгу
+            IWorkbook book = new XSSFWorkbook();
+            
+            //Создаём лист в книге
+            ISheet sheet = book.CreateSheet("test");
+
+            //1
+            IRow row = sheet.CreateRow(1);
+            ICell cell = row.CreateCell(1);
+            cell.SetCellValue("Hello World");
+
+            //2
+            row = sheet.CreateRow(2);
+            cell = row.CreateCell(2);
+            cell.SetCellValue("Hello World");
+            sheet.AutoSizeColumn(2);
+
+            //3
+            row = sheet.CreateRow(3);
+            cell = row.CreateCell(3, CellType.String);
+
+            ICellStyle style = book.CreateCellStyle();
+            //BorderStyle border = style.BorderBottom();
+
+            IFont font = book.CreateFont();
+            font.FontName = "Times New Roman";
+            font.IsBold = true;
+            font.FontHeightInPoints = 11.0;
+            font.Color = IndexedColors.Red.Index;
+            //font.Color = new XSSFColor(System.Drawing.Color.DarkBlue).Indexed; - Не заработало
+
+            style.SetFont(font);
+
+            cell.CellStyle = style;
+            cell.SetCellValue("Hello World");
+            sheet.AutoSizeColumn(3);
+
+            //4
+            row = sheet.CreateRow(4);
+            cell = row.CreateCell(4);
+
+            IDataFormat format = book.CreateDataFormat();
+            XSSFCellStyle dateStyle = (XSSFCellStyle) book.CreateCellStyle();
+            dateStyle.SetDataFormat(format.GetFormat("dd.mm.yyyy"));
+
+            cell.CellStyle = dateStyle;
+
+            cell.SetCellValue(new DateTime(2020, 11, 15));
+            sheet.AutoSizeColumn(4);
+
+            //5
+            row = sheet.CreateRow(5);
+            cell = row.CreateCell(5);
+
+            XSSFCellStyle styleB = (XSSFCellStyle) book.CreateCellStyle();
+            styleB.BorderTop = BorderStyle.Medium;
+            styleB.BorderLeft = BorderStyle.Medium;
+            styleB.BorderRight = BorderStyle.Medium;
+            styleB.BorderBottom = BorderStyle.Medium;
+
+            cell.CellStyle = styleB;
+            cell.SetCellValue(150);
+
+
+            //Сохраняем готовую книгу в файл
+            using (FileStream s = new FileStream("test.xlsx", FileMode.Create, FileAccess.Write)) {
+                book.Write(s);
+            }
 
         }
     }

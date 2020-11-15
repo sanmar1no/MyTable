@@ -56,3 +56,29 @@ C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\Bou
 C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\ICSharpCode.SharpZipLib.pdb
 C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\ICSharpCode.SharpZipLib.xml
 C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\obj\Debug\MyTable.csproj.CopyComplete
+C:\Git\MyTable\MyTable\bin\Debug\MyTable.exe.config
+C:\Git\MyTable\MyTable\bin\Debug\MyTable.exe
+C:\Git\MyTable\MyTable\bin\Debug\MyTable.pdb
+C:\Git\MyTable\MyTable\bin\Debug\BouncyCastle.Crypto.dll
+C:\Git\MyTable\MyTable\bin\Debug\ICSharpCode.SharpZipLib.dll
+C:\Git\MyTable\MyTable\bin\Debug\NPOI.dll
+C:\Git\MyTable\MyTable\bin\Debug\NPOI.OOXML.dll
+C:\Git\MyTable\MyTable\bin\Debug\NPOI.OpenXml4Net.dll
+C:\Git\MyTable\MyTable\bin\Debug\NPOI.OpenXmlFormats.dll
+C:\Git\MyTable\MyTable\bin\Debug\BouncyCastle.Crypto.xml
+C:\Git\MyTable\MyTable\bin\Debug\ICSharpCode.SharpZipLib.pdb
+C:\Git\MyTable\MyTable\bin\Debug\ICSharpCode.SharpZipLib.xml
+C:\Git\MyTable\MyTable\bin\Debug\Interop.ACCTRLLib.dll
+C:\Git\MyTable\MyTable\bin\Debug\AxInterop.ACCTRLLib.dll
+C:\Git\MyTable\MyTable\obj\Debug\MyTable.csprojAssemblyReference.cache
+C:\Git\MyTable\MyTable\obj\Debug\Interop.ACCTRLLib.dll
+C:\Git\MyTable\MyTable\obj\Debug\Interop.VBIDE.dll
+C:\Git\MyTable\MyTable\obj\Debug\AxInterop.ACCTRLLib.dll
+C:\Git\MyTable\MyTable\obj\Debug\MyTable.csproj.ResolveComReference.cache
+C:\Git\MyTable\MyTable\obj\Debug\MyTable.Form1.resources
+C:\Git\MyTable\MyTable\obj\Debug\MyTable.Properties.Resources.resources
+C:\Git\MyTable\MyTable\obj\Debug\MyTable.csproj.GenerateResource.cache
+C:\Git\MyTable\MyTable\obj\Debug\MyTable.csproj.CoreCompileInputs.cache
+C:\Git\MyTable\MyTable\obj\Debug\MyTable.csproj.CopyComplete
+C:\Git\MyTable\MyTable\obj\Debug\MyTable.exe
+C:\Git\MyTable\MyTable\obj\Debug\MyTable.pdb
