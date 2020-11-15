@@ -1355,7 +1355,19 @@ namespace MyTable
 
         private void button7_Click(object sender, EventArgs e)
         {
-            comboBox19.Text = "";
+            string s = NPOI.SS.UserModel.IndexedColors.Black.HexString;
+            
+            Color color = Color.Black;
+            string s1 = System.Drawing.KnownColor.Black.ToString();
+            if (color.IsKnownColor)
+            {
+                s=color.Name;
+                s1= NPOI.SS.UserModel.IndexedColors.ValueOf(s).HexString;
+            }
+            if (NPOI.SS.UserModel.IndexedColors.Black.ToString() == System.Drawing.KnownColor.Black.ToString())
+            {
+                textBox1.Text = "123";
+            }
         }
         List<Cell> ReportElectroTable(DateTime DateSelect,out List<Cell> NoInfoValues, out List<Cell> NoInfoCounters)
         {
@@ -2232,8 +2244,8 @@ namespace MyTable
 
         private void button20_Click(object sender, EventArgs e)
         {
-            ReportPrinter report1 = new ReportPrinter();
-            report1.test();
+            NPOIPrinter Hello = new NPOIPrinter(NPOIPrinter.Company.SKB);
+            Hello.Hello();
         }
 
         private void comboBox6_TextChanged(object sender, EventArgs e)
