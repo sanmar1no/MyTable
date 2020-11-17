@@ -85,7 +85,6 @@ namespace MyTable
 
             //font.Color = IndexedColors.Red.Index;
             font.Color = ColorConvert(System.Drawing.Color.Red);
-            
 
             headStyle.SetFont(font);//стиль заголовка
             headStyle.Alignment = HorizontalAlignment.Center;
