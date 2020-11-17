@@ -6,6 +6,7 @@ using Excel1 = Microsoft.Office.Interop.Excel;
 
 namespace MyTable
 {
+    /*
     class ExcelPrinter
     {
         //блок переменных
@@ -227,6 +228,6 @@ namespace MyTable
         excelApp.Quit();
         System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
         GC.Collect();
-        GC.WaitForPendingFinalizers();*/
-    }
+        GC.WaitForPendingFinalizers();//
+    }//*/
 }

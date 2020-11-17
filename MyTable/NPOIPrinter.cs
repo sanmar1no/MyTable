@@ -18,17 +18,17 @@ namespace MyTable
         // Создаём экземпляр нашего приложения
         // в NPOI не нужно
         // Создаём экземпляр рабочий книги Excel
-        private static IWorkbook workbook = new XSSFWorkbook();
+        private static XSSFWorkbook workbook = new XSSFWorkbook();
         // IWorkbook workbook = new HSSFWorkbook();//xls
         // Создаём экземпляр листа Excel
-        private static ISheet sheet = workbook.CreateSheet("Лист1");
+        private static XSSFSheet sheet = (XSSFSheet)workbook.CreateSheet("Лист1");
         // Создаём экземпляр области ячеек Excel
-        private static IRow rowSheet = sheet.CreateRow(0);
-        ICell cell = rowSheet.CreateCell(0);
-        IFont fontBody = workbook.CreateFont();//осовной стиль таблицы
-        ICellStyle bodyStyle = workbook.CreateCellStyle();
-        IFont fontDynamic = workbook.CreateFont(); //индивидуально для ячейки
-        ICellStyle styleDynamic = workbook.CreateCellStyle();
+        private static XSSFRow rowSheet = (XSSFRow)sheet.CreateRow(0);
+        XSSFCell cell = (XSSFCell)rowSheet.CreateCell(0);
+        XSSFFont fontBody = (XSSFFont)workbook.CreateFont();//осовной стиль таблицы
+        XSSFCellStyle bodyStyle = (XSSFCellStyle)workbook.CreateCellStyle();
+        XSSFFont fontDynamic = (XSSFFont)workbook.CreateFont(); //индивидуально для ячейки
+        XSSFCellStyle styleDynamic = (XSSFCellStyle)workbook.CreateCellStyle();
 
         //IRow row = sheet.GetRow(1);
         public Company company = new Company();
@@ -77,17 +77,24 @@ namespace MyTable
             //заголовок
 
             //
-            IFont font = workbook.CreateFont();
+            XSSFFont font = (XSSFFont)workbook.CreateFont();
             font.FontName = "Times New Roman";            
             font.FontHeightInPoints = 24;
             font.IsBold = true;
-            ICellStyle headStyle = workbook.CreateCellStyle();
+            XSSFCellStyle headStyle = (XSSFCellStyle)workbook.CreateCellStyle();
 
             //font.Color = IndexedColors.Red.Index;
-            font.Color = ColorConvert(System.Drawing.Color.Red);
+            //font.Color = ColorConvert(System.Drawing.Color.Red);
 
             headStyle.SetFont(font);//стиль заголовка
             headStyle.Alignment = HorizontalAlignment.Center;
+            headStyle.BorderBottom = BorderStyle.Dashed;
+            headStyle.BorderLeft = BorderStyle.Medium;
+            headStyle.BorderRight = BorderStyle.Thin;
+            headStyle.BorderTop = BorderStyle.Thick;
+            headStyle.FillForegroundXSSFColor = new XSSFColor(IndexedColors.Blue);
+           // headStyle.SetFillForegroundColor(new XSSFColor(System.Drawing.Color.Red));
+           // headStyle.FillBackgroundColor = IndexedColors.Blue.Index;
             //headStyle.FillPattern = FillPattern.SolidForeground;
 
             rowSheet.Cells[0].CellStyle = headStyle;//назначаем стиль заголовка
@@ -99,8 +106,8 @@ namespace MyTable
 
 
 
-            var range = new NPOI.SS.Util.CellRangeAddress(row, row, 0, 6);
-            sheet.AddMergedRegion(range);
+           // var range = new NPOI.SS.Util.CellRangeAddress(row, row, 0, 6);
+           // sheet.AddMergedRegion(range);
 
             switch (company)
             {
@@ -138,7 +145,7 @@ namespace MyTable
         void AddRow(string s, ICellStyle Style)//добавить строку с указанием стиля
         {
             row++;
-            rowSheet = sheet.CreateRow(row);
+            rowSheet = (XSSFRow)sheet.CreateRow(row);
             AddCell(s, 0, Style);
         }
         void AddCell(string s, int index)//добавить ячейку в текущей строке, стиль по умолчанию bodyStyle
@@ -147,7 +154,7 @@ namespace MyTable
         }
         void AddCell(string s,int index, ICellStyle Style)//добавить ячейку в текущей строке с указанием стиля
         {
-            cell = rowSheet.CreateCell(index);
+            cell = (XSSFCell)rowSheet.CreateCell(index);
             cell.SetCellValue(s);
             rowSheet.Cells[0].CellStyle = Style;
         }
@@ -167,7 +174,7 @@ namespace MyTable
         public void HeadTable(List<string> List)//заголовок таблицы
         {
             row++;
-            rowSheet = sheet.CreateRow(row);
+            rowSheet = (XSSFRow)sheet.CreateRow(row);
             double lenght = 0;
             foreach (string elem in List)
             {
@@ -225,6 +232,26 @@ namespace MyTable
                 }
             }
         }//*/
+        public void BodyTable(List<Cell> Temp)
+        { 
+        
+        }
+        public void FooterTableSumm(string literColumn)//последняя строка Всего:
+        { //заполнить
+        
+        }
+        public void FooterTableCount()//последняя строка Всего:
+        { 
+        
+        }
+        public void BordersTable()//границы и стиль таблицы
+        { 
+        
+        }
+        public void EndSheet()        //подпись
+        { 
+        
+        }
         public void Hello()//тест
         {
            /* IRow row = sheet.CreateRow(0);

@@ -6,30 +6,30 @@ namespace MyTable
 {
     class ReportPrinter
     {
-        public ExcelPrinter.Company company = new ExcelPrinter.Company();
+        public NPOIPrinter.Company company = new NPOIPrinter.Company();
         public Variables.UserKeyEnum reportKey = new Variables.UserKeyEnum();
         public DateTime dTP5 = new DateTime();
         public DateTime dTP6 = new DateTime();
         private List<Cell> TableList = new List<Cell>();
 
         public ReportPrinter()
-            : this(new ExcelPrinter.Company(), DateTime.Now, new DateTime())
+            : this(new NPOIPrinter.Company(), DateTime.Now, new DateTime())
         {
         }
-        public ReportPrinter(ExcelPrinter.Company company)
+        public ReportPrinter(NPOIPrinter.Company company)
             : this(company, DateTime.Now, new DateTime())
         {
         }
-        /* public ReportPrinter(ExcelPrinter.Company company, Variables.userKeyEnum report)
+        /* public ReportPrinter(NPOIPrinter.Company company, Variables.userKeyEnum report)
              : this(company, DateTime.Now, new DateTime())
          {
                     this.reportKey = reportKey;
          }*/
-        public ReportPrinter(ExcelPrinter.Company company, DateTime dTP5)
+        public ReportPrinter(NPOIPrinter.Company company, DateTime dTP5)
             : this(company, dTP5, new DateTime())
         {
         }
-        public ReportPrinter(ExcelPrinter.Company company, DateTime dTP5, DateTime dTP6)
+        public ReportPrinter(NPOIPrinter.Company company, DateTime dTP5, DateTime dTP6)
         {
             this.company = company;
             this.dTP5 = dTP5;
@@ -98,7 +98,7 @@ namespace MyTable
         public void ReportCountersPeriod(string arendaCB23) //отчет по расходу электросчетчиков за период 
         {
             List<string> Header = new List<string>();
-            ExcelPrinter report1 = new ExcelPrinter();
+            NPOIPrinter report1 = new NPOIPrinter();
             DateTime data = dTP6.AddMonths(1);
             //List<string> Header = new List<string>(){ "№", "№ точки учета по договору", "№ счетчика", "Показания на  01."+dTP5.Month + "." + dTP5.Year, "Показания на 01." + data.Month + "." + data.Year, "Расч.Коэфф.", "Расход, кВт.ч."};
             Header.Add("№ п/п");
@@ -108,7 +108,7 @@ namespace MyTable
             Header.Add("Показания на 01." + data.Month + "." + data.Year);
             Header.Add("Расч.Коэфф.");
             Header.Add("Расход, кВт.ч.");
-            report1.company = ExcelPrinter.Company.SKB;
+            report1.company = NPOIPrinter.Company.SKB;
             report1.HeadArenda(arendaCB23);
             report1.NameTable("Расчет количества потребленной электроэнергии за " + periodMY(dTP5, dTP6));
             report1.HeadTable(Header);
@@ -120,8 +120,8 @@ namespace MyTable
         public void ReportCountersInventory(Variables.UserKeyEnum reportKey) //инвентаризация электросчетчиков/водомеров
         {
             List<string> Header = new List<string>();
-            ExcelPrinter report1 = new ExcelPrinter();
-            report1.company = ExcelPrinter.Company.Impuls;//исправить
+            NPOIPrinter report1 = new NPOIPrinter();
+            report1.company = NPOIPrinter.Company.Impuls;//исправить
             Header.Add("№ п/п");
             Header.Add("№ Корпуса и помещения");
             Header.Add("№ счетчика    ");
@@ -139,8 +139,8 @@ namespace MyTable
         public void ReportCountersPeriodAll() //Основной отчет по электроэнергии (период - месяц)
         {
             List<string> Header = new List<string>();
-            ExcelPrinter report1 = new ExcelPrinter();
-            report1.company = ExcelPrinter.Company.SKB;//исправить
+            NPOIPrinter report1 = new NPOIPrinter();
+            report1.company = NPOIPrinter.Company.SKB;//исправить
             Header.Add("№ п/п");
             Header.Add("Арендатор  ");
             Header.Add("№ счетчика  ");
@@ -161,7 +161,7 @@ namespace MyTable
         public void ReportArendaPhoneBook()
         {
             List<string> Header = new List<string>();
-            ExcelPrinter report1 = new ExcelPrinter();
+            NPOIPrinter report1 = new NPOIPrinter();
             Header.Add("№ п/п");
             Header.Add("Наименование организации ");
             Header.Add("ФИО руководителя организации");
@@ -187,7 +187,7 @@ namespace MyTable
             Header.Add("Наименование организации ");
             Cell cell = new Cell();
             cell.Value = "123123";
-            ExcelPrinter report1 = new ExcelPrinter();
+            NPOIPrinter report1 = new NPOIPrinter();
             report1.NameTable("Перечень арендаторов АО \"Компания Импульс\",  ");
             report1.HeadTable(Header);
             Table.Add(cell);

@@ -2931,7 +2931,7 @@ namespace MyTable
 
         private void button32_Click(object sender, EventArgs e)
         {
-            ReportPrinter report = new ReportPrinter(ExcelPrinter.Company.Impuls, dateTimePicker5.Value);
+            ReportPrinter report = new ReportPrinter(NPOIPrinter.Company.Impuls, dateTimePicker5.Value);
             report.AddList(ReportPhoneBook(dateTimePicker5.Value));
             report.ReportArendaPhoneBook();
             //OutputSorting("ToLongNamePomes");
@@ -3841,7 +3841,7 @@ namespace MyTable
         //Отчет за период
         private void button51_Click(object sender, EventArgs e)
         {
-            ReportPrinter report = new ReportPrinter(ExcelPrinter.Company.SKB, dateTimePicker5.Value, dateTimePicker6.Value);
+            ReportPrinter report = new ReportPrinter(NPOIPrinter.Company.SKB, dateTimePicker5.Value, dateTimePicker6.Value);
             report.AddList(ToReport(comboBox23.Text, dateTimePicker5.Value, dateTimePicker6.Value));//арендатор и период от и до
             report.ReportCountersPeriod(comboBox23.Text);//отчет по арендатору за период
         }
@@ -4241,7 +4241,7 @@ namespace MyTable
         //инвентаризация электросчетчиков
         private void button61_Click(object sender, EventArgs e)
         {
-            ReportPrinter report = new ReportPrinter(ExcelPrinter.Company.Impuls);
+            ReportPrinter report = new ReportPrinter(NPOIPrinter.Company.Impuls);
             report.AddList(InvertoryTable(Variables.UserKeyEnum.electro));
             report.ReportCountersInventory(Variables.UserKeyEnum.electro);
         }
@@ -4249,7 +4249,7 @@ namespace MyTable
         //инвентаризация водомеров
         private void button62_Click(object sender, EventArgs e)
         {
-            ReportPrinter report = new ReportPrinter(ExcelPrinter.Company.Impuls);
+            ReportPrinter report = new ReportPrinter(NPOIPrinter.Company.Impuls);
             report.AddList(InvertoryTable(Variables.UserKeyEnum.aqua));
             report.ReportCountersInventory(Variables.UserKeyEnum.aqua);
         }
@@ -4268,13 +4268,13 @@ namespace MyTable
         {
             List<Cell> NoInfoValues = new List<Cell>();
             List<Cell> NoInfoCounters = new List<Cell>();
-            ReportPrinter report = new ReportPrinter(ExcelPrinter.Company.SKB,dateTimePicker5.Value);
+            ReportPrinter report = new ReportPrinter(NPOIPrinter.Company.SKB,dateTimePicker5.Value);
             report.AddList(ReportElectroTable(dateTimePicker5.Value, out NoInfoValues, out NoInfoCounters));
             report.ReportCountersPeriodAll();
-            report = new ReportPrinter(ExcelPrinter.Company.SKB, dateTimePicker5.Value);
+            report = new ReportPrinter(NPOIPrinter.Company.SKB, dateTimePicker5.Value);
             report.AddList(NoInfoValues);
             report.ReportCountersPeriodAll();
-            report = new ReportPrinter(ExcelPrinter.Company.SKB, dateTimePicker5.Value);
+            report = new ReportPrinter(NPOIPrinter.Company.SKB, dateTimePicker5.Value);
             report.AddList(NoInfoCounters);
             report.ReportCountersPeriodAll();
         }

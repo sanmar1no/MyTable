@@ -1,12 +1,5 @@
 ﻿
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
 namespace MyTable
 {
     class Cell
@@ -32,10 +25,10 @@ namespace MyTable
                     fontDynamic.IsItalic = true;
                     //font.Color = IndexedColors.Red.Index;
                     styleDynamic.SetFont(fontDynamic);
-                    styleDynamic.BorderLeft = BorderStyle.Hair;
-                    styleDynamic.BorderBottom = BorderStyle.Hair;
-                    styleDynamic.BorderRight = BorderStyle.Hair;
-                    styleDynamic.BorderTop = BorderStyle.Hair;
+                    styleDynamic.BorderLeft = BorderStyle.Thin;
+                    styleDynamic.BorderBottom = BorderStyle.Thin;
+                    styleDynamic.BorderRight = BorderStyle.Thin;
+                    styleDynamic.BorderTop = BorderStyle.Thin;
                     break;
                 case Cell.Style.bold:
                     fontDynamic.FontName = "ISOCPEUR";
@@ -44,17 +37,17 @@ namespace MyTable
                     fontDynamic.IsItalic = true;
                     //font.Color = IndexedColors.Red.Index;
                     styleDynamic.SetFont(fontDynamic);
-                    styleDynamic.BorderLeft = BorderStyle.Medium;
-                    styleDynamic.BorderBottom = BorderStyle.Medium;
-                    styleDynamic.BorderRight = BorderStyle.Medium;
-                    styleDynamic.BorderTop = BorderStyle.Medium;
+                    styleDynamic.BorderLeft = BorderStyle.Thick;
+                    styleDynamic.BorderBottom = BorderStyle.Thick;
+                    styleDynamic.BorderRight = BorderStyle.Thick;
+                    styleDynamic.BorderTop = BorderStyle.Thick;
                     break;
                 case Cell.Style.clientCame:
                     fontDynamic.FontName = "ISOCPEUR";
                     fontDynamic.FontHeightInPoints = 12;
                     fontDynamic.IsBold = true;
                     fontDynamic.IsItalic = true;
-                    font.Color = IndexedColors.Aqua.Index;
+                    fontDynamic.Color = IndexedColors.Aqua.Index;
                     styleDynamic.SetFont(fontDynamic);
                     styleDynamic.BorderLeft = BorderStyle.Medium;
                     styleDynamic.BorderBottom = BorderStyle.Medium;
@@ -66,7 +59,7 @@ namespace MyTable
                     fontDynamic.FontHeightInPoints = 12;
                     fontDynamic.IsBold = true;
                     fontDynamic.IsItalic = true;
-                    font.Color = IndexedColors.LightGreen.Index;
+                    fontDynamic.Color = IndexedColors.LightGreen.Index;
                     styleDynamic.SetFont(fontDynamic);
                     styleDynamic.BorderLeft = BorderStyle.Medium;
                     styleDynamic.BorderBottom = BorderStyle.Medium;
@@ -78,7 +71,7 @@ namespace MyTable
                     fontDynamic.FontHeightInPoints = 12;
                     fontDynamic.IsBold = false;
                     fontDynamic.IsItalic = true;
-                    font.Color = IndexedColors.Pink.Index;
+                    fontDynamic.Color = IndexedColors.Pink.Index;
                     styleDynamic.SetFont(fontDynamic);
                     styleDynamic.BorderLeft = BorderStyle.Medium;
                     styleDynamic.BorderBottom = BorderStyle.Medium;
@@ -87,8 +80,6 @@ namespace MyTable
                     break;
             }
         }
-        public Color ForeColor = Color.Black;
-        public Color ColorInterior = Color.White;
         private string value1;
         public string Value 
         {
@@ -105,9 +96,6 @@ namespace MyTable
                 }
             }
         }
-        public dynamic font = new System.Drawing.Font("ISOCPEUR", 10, FontStyle.Italic & ~FontStyle.Bold);
-        public dynamic LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
-        public dynamic Weight = Microsoft.Office.Interop.Excel.XlBorderWeight.xlThin;//.xlMedium;
         public Cell() : this("", Style.normal)
         { 
         }
