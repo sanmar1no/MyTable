@@ -97,18 +97,17 @@ namespace MyTable
         }
         public void ReportCountersPeriod(string arendaCB23) //отчет по расходу электросчетчиков за период 
         {
-            List<string> Header = new List<string>();
-            NPOIPrinter report1 = new NPOIPrinter();
+            List<Cell> Header = new List<Cell>();
+            NPOIPrinter report1 = new NPOIPrinter(company);
             DateTime data = dTP6.AddMonths(1);
             //List<string> Header = new List<string>(){ "№", "№ точки учета по договору", "№ счетчика", "Показания на  01."+dTP5.Month + "." + dTP5.Year, "Показания на 01." + data.Month + "." + data.Year, "Расч.Коэфф.", "Расход, кВт.ч."};
-            Header.Add("№ п/п");
-            Header.Add("№ точки учета по договору");
-            Header.Add("№ счетчика    ");
-            Header.Add("Показания на  01." + dTP5.Month + "." + dTP5.Year);
-            Header.Add("Показания на 01." + data.Month + "." + data.Year);
-            Header.Add("Расч.Коэфф.");
-            Header.Add("Расход, кВт.ч.");
-            report1.company = NPOIPrinter.Company.SKB;
+            Header.Add(new Cell("№ п/п",Cell.Style.bold));
+            Header.Add(new Cell("№ точки учета по договору", Cell.Style.bold));
+            Header.Add(new Cell("№ счетчика    ", Cell.Style.bold));
+            Header.Add(new Cell("Показания на  01." + dTP5.Month + "." + dTP5.Year, Cell.Style.bold));
+            Header.Add(new Cell("Показания на 01." + data.Month + "." + data.Year, Cell.Style.bold));
+            Header.Add(new Cell("Расч.Коэфф.", Cell.Style.bold));
+            Header.Add(new Cell("Расход, кВт.ч.", Cell.Style.bold));
             report1.HeadArenda(arendaCB23);
             report1.NameTable("Расчет количества потребленной электроэнергии за " + periodMY(dTP5, dTP6));
             report1.HeadTable(Header);
@@ -119,15 +118,15 @@ namespace MyTable
         }
         public void ReportCountersInventory(Variables.UserKeyEnum reportKey) //инвентаризация электросчетчиков/водомеров
         {
-            List<string> Header = new List<string>();
-            NPOIPrinter report1 = new NPOIPrinter();
-            report1.company = NPOIPrinter.Company.Impuls;//исправить
-            Header.Add("№ п/п");
-            Header.Add("№ Корпуса и помещения");
-            Header.Add("№ счетчика    ");
-            Header.Add("Марка счетчика");
-            Header.Add("Год выпуска/поверки");
-            Header.Add("Показания (последние), " + (reportKey == Variables.UserKeyEnum.electro ? "кВт*ч" : "куб.м."));
+            List<Cell> Header = new List<Cell>();
+            NPOIPrinter report1 = new NPOIPrinter(company);
+            //report1.company = NPOIPrinter.Company.Impuls;//исправить
+            Header.Add(new Cell("№ п/п", Cell.Style.bold));
+            Header.Add(new Cell("№ Корпуса и помещения", Cell.Style.bold));
+            Header.Add(new Cell("№ счетчика    ", Cell.Style.bold));
+            Header.Add(new Cell("Марка счетчика", Cell.Style.bold));
+            Header.Add(new Cell("Год выпуска/поверки", Cell.Style.bold));
+            Header.Add(new Cell("Показания (последние), " + (reportKey == Variables.UserKeyEnum.electro ? "кВт*ч" : "куб.м."), Cell.Style.bold));
             if(reportKey == Variables.UserKeyEnum.electro) report1.NameTable("Инвентаризация электросчетчиков");
             if(reportKey == Variables.UserKeyEnum.aqua) report1.NameTable("Инвентаризация водомеров");
             report1.HeadTable(Header);
@@ -138,13 +137,13 @@ namespace MyTable
         }
         public void ReportCountersPeriodAll() //Основной отчет по электроэнергии (период - месяц)
         {
-            List<string> Header = new List<string>();
-            NPOIPrinter report1 = new NPOIPrinter();
-            report1.company = NPOIPrinter.Company.SKB;//исправить
-            Header.Add("№ п/п");
-            Header.Add("Арендатор  ");
-            Header.Add("№ счетчика  ");
-            Header.Add("Расход, кВт*ч");
+            List<Cell> Header = new List<Cell>();
+            NPOIPrinter report1 = new NPOIPrinter(company);
+            //report1.company = NPOIPrinter.Company.SKB;//исправить
+            Header.Add(new Cell("№ п/п", Cell.Style.bold));
+            Header.Add(new Cell("Арендатор  ", Cell.Style.bold));
+            Header.Add(new Cell("№ счетчика  ", Cell.Style.bold));
+            Header.Add(new Cell("Расход, кВт*ч", Cell.Style.bold));
             string dataStr = "";
             if (dTP5 != new DateTime())
             {
@@ -152,7 +151,7 @@ namespace MyTable
                 dataStr = MonthToStr(toName.Month) + " " + toName.Year + "г.";
             }
             report1.NameTable("Расчет количества потребленной электроэнергии за " + dataStr);
-            report1.HeadTable(Header);
+           // report1.HeadTable(Header);
             report1.BodyTable(TableList);
             report1.FooterTableSumm("D");
             report1.BordersTable();
@@ -160,13 +159,13 @@ namespace MyTable
         }
         public void ReportArendaPhoneBook()
         {
-            List<string> Header = new List<string>();
+            List<Cell> Header = new List<Cell>();
             NPOIPrinter report1 = new NPOIPrinter();
-            Header.Add("№ п/п");
-            Header.Add("Наименование организации ");
-            Header.Add("ФИО руководителя организации");
-            Header.Add("Место расположения             ");
-            Header.Add("Телефоны                                                          ");
+            Header.Add(new Cell("№ п/п", Cell.Style.bold));
+            Header.Add(new Cell("Наименование организации ", Cell.Style.bold));
+            Header.Add(new Cell("ФИО руководителя организации", Cell.Style.bold));
+            Header.Add(new Cell("Место расположения             ", Cell.Style.bold));
+            Header.Add(new Cell("Телефоны                                                          ", Cell.Style.bold));
             string dataStr = "";
             if (dTP5 != new DateTime())
             {
@@ -181,10 +180,10 @@ namespace MyTable
         }
         public void test()
         {
-            List<string> Header = new List<string>();
+            List<Cell> Header = new List<Cell>();
             List<Cell> Table = new List<Cell>();
-            Header.Add("№ п/п");
-            Header.Add("Наименование организации ");
+            Header.Add(new Cell("№ п/п", Cell.Style.bold));
+            Header.Add(new Cell("Наименование организации ", Cell.Style.bold));
             Cell cell = new Cell();
             cell.Value = "123123";
             NPOIPrinter report1 = new NPOIPrinter();

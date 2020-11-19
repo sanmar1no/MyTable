@@ -8,6 +8,7 @@ using System.IO;
 //using NPOI.HSSF.UserModel; //для xls
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using NPOI.SS.Util;
 
 
 
@@ -18,17 +19,17 @@ namespace MyTable
         // Создаём экземпляр нашего приложения
         // в NPOI не нужно
         // Создаём экземпляр рабочий книги Excel
-        private static XSSFWorkbook workbook = new XSSFWorkbook();
+        private static IWorkbook workbook = Cell.workbook;
         // IWorkbook workbook = new HSSFWorkbook();//xls
         // Создаём экземпляр листа Excel
-        private static XSSFSheet sheet = (XSSFSheet)workbook.CreateSheet("Лист1");
+        private static ISheet sheet =  workbook.CreateSheet("Лист1");
         // Создаём экземпляр области ячеек Excel
-        private static XSSFRow rowSheet = (XSSFRow)sheet.CreateRow(0);
-        XSSFCell cell = (XSSFCell)rowSheet.CreateCell(0);
-        XSSFFont fontBody = (XSSFFont)workbook.CreateFont();//осовной стиль таблицы
-        XSSFCellStyle bodyStyle = (XSSFCellStyle)workbook.CreateCellStyle();
-        XSSFFont fontDynamic = (XSSFFont)workbook.CreateFont(); //индивидуально для ячейки
-        XSSFCellStyle styleDynamic = (XSSFCellStyle)workbook.CreateCellStyle();
+        private static IRow rowSheet = sheet.CreateRow(0);
+        private ICell cell = rowSheet.CreateCell(0);
+        private IFont fontBody = workbook.CreateFont();//осовной стиль таблицы
+        private ICellStyle bodyStyle = workbook.CreateCellStyle();
+        private IFont fontDynamic = workbook.CreateFont(); //индивидуально для ячейки
+        private ICellStyle styleDynamic =  workbook.CreateCellStyle();
 
         //IRow row = sheet.GetRow(1);
         public Company company = new Company();
@@ -38,10 +39,10 @@ namespace MyTable
         private int countColumn = 0;
 
         FileStream stream = new FileStream("outfile.xlsx", FileMode.Create, FileAccess.Write);
-        public NPOIPrinter()
-    : this(new Company())
+        public NPOIPrinter() : this(new Company())
         {
         }
+
         public NPOIPrinter(Company company)
         {
             this.company = company;
@@ -52,50 +53,23 @@ namespace MyTable
             Impuls = 0,
             SKB
         }
-        private short ColorConvert(System.Drawing.Color color)
-        {
-            /*string s= System.Drawing.KnownColor.White.ToString();           
-            if (color.IsKnownColor)
-            {
-                s = NPOI.SS.UserModel.IndexedColors.ValueOf(color.Name).HexString;
-            }
-            short colorI = NPOI.SS.UserModel.IndexedColors.ValueOf(s).Index;
-            return colorI;*/
-
-            byte[] rgb = new byte[3] { color.R, color.G, color.B };
-            XSSFColor colorX= new XSSFColor(rgb);
-            
-            return colorX.Indexed;
-            /*
-             byte[] rgb = new byte[3] { 192, 0, 0 };
-             XSSFCellStyle HeaderCellStyle1 = (XSSFCellStyle)xssfworkbook.CreateCellStyle();
-             HeaderCellStyle1.SetFillForegroundColor(new XSSFColor(rgb));
-             */
-        }
         public void Head()
         {
             //заголовок
 
             //
-            XSSFFont font = (XSSFFont)workbook.CreateFont();
+            IFont font = workbook.CreateFont();
             font.FontName = "Times New Roman";            
             font.FontHeightInPoints = 24;
             font.IsBold = true;
-            XSSFCellStyle headStyle = (XSSFCellStyle)workbook.CreateCellStyle();
+            ICellStyle headStyle = workbook.CreateCellStyle();
 
             //font.Color = IndexedColors.Red.Index;
             //font.Color = ColorConvert(System.Drawing.Color.Red);
 
             headStyle.SetFont(font);//стиль заголовка
             headStyle.Alignment = HorizontalAlignment.Center;
-            headStyle.BorderBottom = BorderStyle.Dashed;
-            headStyle.BorderLeft = BorderStyle.Medium;
-            headStyle.BorderRight = BorderStyle.Thin;
-            headStyle.BorderTop = BorderStyle.Thick;
-            headStyle.FillForegroundXSSFColor = new XSSFColor(IndexedColors.Blue);
-           // headStyle.SetFillForegroundColor(new XSSFColor(System.Drawing.Color.Red));
-           // headStyle.FillBackgroundColor = IndexedColors.Blue.Index;
-            //headStyle.FillPattern = FillPattern.SolidForeground;
+
 
             rowSheet.Cells[0].CellStyle = headStyle;//назначаем стиль заголовка
 
@@ -104,10 +78,8 @@ namespace MyTable
             fontBody.IsBold = true;
             bodyStyle.SetFont(fontBody);//основной стиль таблицы
 
-
-
-           // var range = new NPOI.SS.Util.CellRangeAddress(row, row, 0, 6);
-           // sheet.AddMergedRegion(range);
+            var range = new CellRangeAddress(row, row, 0, 6);
+            sheet.AddMergedRegion(range);
 
             switch (company)
             {
@@ -138,26 +110,61 @@ namespace MyTable
             //rowSheet.Height = 18;
         }
 
-        void AddRow(string s)//добавить строку, значение запишется в первую ячейку
+        //добавить строку, значение запишется в первую ячейку
+        private void AddRow(string s)
         {
             AddRow(s, bodyStyle);
         }
-        void AddRow(string s, ICellStyle Style)//добавить строку с указанием стиля
+
+        //добавить строку с указанием стиля
+        private void AddRow(string s, ICellStyle Style)
         {
             row++;
             rowSheet = (XSSFRow)sheet.CreateRow(row);
             AddCell(s, 0, Style);
         }
-        void AddCell(string s, int index)//добавить ячейку в текущей строке, стиль по умолчанию bodyStyle
+
+        //добавить ячейку в текущей строке, стиль по умолчанию bodyStyle
+        private void AddCell(string s, int index)
         {
             AddCell(s, index, bodyStyle);
         }
-        void AddCell(string s,int index, ICellStyle Style)//добавить ячейку в текущей строке с указанием стиля
+
+        //добавить ячейку в текущей строке с указанием стиля
+        private void AddCell(string s,int index, ICellStyle Style1, CellType type)
         {
-            cell = (XSSFCell)rowSheet.CreateCell(index);
-            cell.SetCellValue(s);
-            rowSheet.Cells[0].CellStyle = Style;
+            while (rowSheet.Cells.Count <= index)
+            {
+                int countCell = rowSheet.Cells.Count;
+                cell = (XSSFCell)rowSheet.CreateCell(countCell);
+                cell.SetCellValue(s);
+
+                //cell.Style.Numberformat.Format = "0.0";
+
+                rowSheet.Cells[countCell].CellStyle = Style1;
+                cell.SetCellType(type);
+            }
         }
+        private void AddCell(string s, int index, ICellStyle Style)
+        {
+            AddCell(s, index, Style, CellType.String);
+        }
+
+        /*
+         ReportPrinter() : this(new NPOIPrinter.Company(), DateTime.Now, new DateTime())
+         */
+        //добавить строку, используя Cell
+        private void AddRow(Cell cell1)
+        {
+            AddRow(cell1.Value, cell1.styleDynamic);
+        }
+
+        //добавить ячейку в текущей строке, используя класс Cell
+        private void AddCell(Cell cell1,int index)
+        {
+            AddCell(cell1.Value, index, cell1.styleDynamic);
+        }
+        //Укажем арендатора в шапке отчета
         public void HeadArenda(string arendaCB23 = "")
         {//userCB23 - Арендатор, dTP5 - начало периода, dTP6 - конец периода
             row ++;
@@ -166,107 +173,239 @@ namespace MyTable
             sheet.GetRow(row).Height = 500;
             row += 2;
         }
-        public void NameTable(string name)//задаем имя Таблицы
+        
+        //задаем имя Таблицы
+        public void NameTable(string name)
         {
             AddRow(name);
             sheet.GetRow(row).Height = 500;
         }
-        public void HeadTable(List<string> List)//заголовок таблицы
+
+        //заголовок(шапка) таблицы
+        public void HeadTable(List<Cell> List)
         {
             row++;
             rowSheet = (XSSFRow)sheet.CreateRow(row);
             double lenght = 0;
-            foreach (string elem in List)
+            foreach (Cell elem in List)
             {
-                lenght += elem.Length;
+                lenght += elem.Value.Length;
             }
             double koeff = 80 / lenght;
-            for (int i = 1; i <= List.Count(); i++)
+            for (int i = 0; i < List.Count(); i++)
             {
-                int mat1 = (int)Math.Round(List[i - 1].Length * koeff, 0, MidpointRounding.AwayFromZero);
-                sheet.SetColumnWidth(i,mat1);
-                AddCell(List[i - 1], i);
+                int mat1 = (int)Math.Round(List[i].Value.Length * koeff, 0, MidpointRounding.AwayFromZero);
+                sheet.SetColumnWidth(i,mat1*300);
+                //sheet.AutoSizeColumn(i);
+                AddCell(List[i].Value, i, List[i].styleDynamic);
             }
             countColumn = List.Count() - 1;
         }
-        /*public void BodyTable(List<Cell> Temp)//заполнение таблицы из List<Cell>
+
+        //заполнение таблицы из List<Cell>
+        public void BodyTable(List<Cell> Temp)
         {
-            row++;
+            //row++;
             if (Temp.Count > 0)
             {
                 for (; k < (Temp.Count) / countColumn; k++)
                 {
-                    
-                    fontDynamic.Color= ColorConvert(Temp[k * countColumn].ForeColor);
-                    fontDynamic.FontHeight= Temp[k * countColumn].font.Size;
-                    fontDynamic.IsItalic= Temp[k * countColumn].font.Italic;
-                    fontDynamic.IsBold = Temp[k * countColumn].font.Bold;
-                    styleDynamic.FillBackgroundColor = ColorConvert(Temp[k * countColumn].ColorInterior);
-                    styleDynamic.BorderBottom = Temp[k * countColumn].LineStyle;
-                    fontDynamic.Boldweight =  Temp[k * countColumn].Weight;
-
-                    sheet.Cells[row + k, 1].Font.Color = Temp[k * countColumn].ForeColor;
-                    sheet.Cells[row + k, 1].Font.Size = Temp[k * countColumn].font.Size;
-                    sheet.Cells[row + k, 1].Font.Italic = Temp[k * countColumn].font.Italic;
-                    sheet.Cells[row + k, 1].Font.Bold = Temp[k * countColumn].font.Bold;
-                    sheet.Cells[row + k, 1].Interior.Color = Temp[k * countColumn].ColorInterior;
-                    sheet.Cells[row + k, 1].Borders.LineStyle = Temp[k * countColumn].LineStyle;
-                    sheet.Cells[row + k, 1].Borders.Weight = Temp[k * countColumn].Weight;
-
-                    sheet.Cells[row + k, 1] = (k + 1).ToString() + ".";
+                    AddRow((k + 1).ToString() + ".", Temp[k * countColumn].styleDynamic);
                     for (int i = 0; i < countColumn; i++)
                     {
                         if (Temp[k * countColumn + i] != null)
                         {
-                            sheet.Cells[row + k, i + 2].Font.Color = Temp[k * countColumn + i].ForeColor;
-                            sheet.Cells[row + k, i + 2].Font.Size = Temp[k * countColumn + i].font.Size;
-                            sheet.Cells[row + k, i + 2].Font.Italic = Temp[k * countColumn + i].font.Italic;
-                            sheet.Cells[row + k, i + 2].Font.Bold = Temp[k * countColumn + i].font.Bold;
-                            sheet.Cells[row + k, i + 2].Interior.Color = Temp[k * countColumn + i].ColorInterior;
-                            sheet.Cells[row + k, i + 2].Borders.LineStyle = Temp[k * countColumn + i].LineStyle;
-                            sheet.Cells[row + k, i + 2].Borders.Weight = Temp[k * countColumn + i].Weight;
-                            sheet.Cells[row + k, i + 2] = Temp[k * countColumn + i].Value;
+                            AddCell(Temp[k * countColumn + i].Value, i+1, Temp[k * countColumn + i].styleDynamic, Temp[k * countColumn + i].Type);
                         }
-                        else sheet.Cells[row + k, i + 2] = "";
+                        else AddCell("", i+1);
                     }
                 }
             }
-        }//*/
-        public void BodyTable(List<Cell> Temp)
-        { 
-        
         }
-        public void FooterTableSumm(string literColumn)//последняя строка Всего:
-        { //заполнить
-        
-        }
-        public void FooterTableCount()//последняя строка Всего:
-        { 
-        
-        }
-        public void BordersTable()//границы и стиль таблицы
-        { 
-        
-        }
-        public void EndSheet()        //подпись
-        { 
-        
-        }
-        public void Hello()//тест
-        {
-           /* IRow row = sheet.CreateRow(0);
-            ICell cell = row.CreateCell(0);
-            cell.SetCellValue("Hello");
-            cell = row.CreateCell(1);
-            cell.SetCellValue("World");
 
-            var range = new NPOI.SS.Util.CellRangeAddress(1, 6, 2, 5);
-            sheet.AddMergedRegion(range);*/
-            workbook.Write(stream);
+        //последняя строка Всего:
+        public void FooterTableSumm(string literColumn)
+        { //заполнить
+            //AddRow("",new Cell("",Cell.Style.bold).styleDynamic);
+            AddRow(new Cell("", Cell.Style.bold));
+            AddCell(new Cell("Всего:", Cell.Style.bold),1);
+            AddCell(new Cell("", Cell.Style.bold), countColumn);
+           // var range = new CellRangeAddress(row, row+k-1, countColumn, countColumn);
+            if (k > 0)
+            {
+                cell.CellFormula = "SUM(" + literColumn + (row-k+1).ToString() + ":" + literColumn + row.ToString() + ")";
+               // s1.GetRow(1).CreateCell(3).CellFormula = "SUM(A2:C2)";
+            }
+            else
+            {
+                cell.SetCellValue("0");
+            }
+
+          /*      Excel1.Range formulaRange = sheet.Range[sheet.Cells[row, countColumn + 1], sheet.Cells[row - 1 + k, countColumn + 1]];
+            string ToAdresEx = formulaRange.get_Address(1, 1, Excel1.XlReferenceStyle.xlR1C1, Type.Missing, Type.Missing);
+            if (k > 0) sheet.Cells[row + k, countColumn + 1].Formula = "=SUM(" + literColumn + row.ToString() + ":" + literColumn + (row - 1 + k).ToString() + ")";//формула (сумма)
+            else sheet.Cells[row + k, countColumn + 1] = "0";*/
+        }
+
+        //последняя строка Всего:
+        public void FooterTableCount()
+        { 
+        
+        }
+
+        //границы и стиль таблицы
+        public void BordersTable()
+        { 
+        
+        }
+
+        //подпись
+        public void EndSheet()        
+        {
+            FileStream sw = File.Create("test.xlsx");
+            workbook.Write(sw);
+            sw.Close();
+        }
+
+        //тест
+        public void Hello()
+        {
+            /* IRow row = sheet.CreateRow(0);
+             ICell cell = row.CreateCell(0);
+             cell.SetCellValue("Hello");
+             cell = row.CreateCell(1);
+             cell.SetCellValue("World");
+
+             var range = new NPOI.SS.Util.CellRangeAddress(1, 6, 2, 5);
+             sheet.AddMergedRegion(range);*/
+
+            ISheet sheet1 = workbook.CreateSheet("Sheet1");
+
+            //fill background
+            ICellStyle style1 = workbook.CreateCellStyle();
+            style1.FillForegroundColor = IndexedColors.Blue.Index;
+            style1.FillPattern = FillPattern.SolidForeground;
+           // style1.FillBackgroundColor = IndexedColors.Pink.Index;
+            sheet1.CreateRow(0).CreateCell(0).CellStyle = style1;
+
+            //fill background
+            ICellStyle style2 = workbook.CreateCellStyle();
+           // style2.FillForegroundColor = IndexedColors.Yellow.Index;
+            style2.FillPattern = FillPattern.SolidForeground;
+            style2.FillBackgroundColor = IndexedColors.Rose.Index;
+            sheet1.CreateRow(1).CreateCell(0).CellStyle = style2;
+
+            //fill background
+            ICellStyle style3 = workbook.CreateCellStyle();
+            style3.FillForegroundColor = IndexedColors.Lime.Index;
+            style3.FillPattern = FillPattern.SolidForeground;
+            style3.FillBackgroundColor = IndexedColors.LightGreen.Index;
+            sheet1.CreateRow(2).CreateCell(0).CellStyle = style3;
+
+            //fill background
+            ICellStyle style4 = workbook.CreateCellStyle();
+            style4.FillForegroundColor = IndexedColors.Blue.Index;
+            style4.FillPattern = FillPattern.SolidForeground;
+            style4.FillBackgroundColor = IndexedColors.Blue.Index;
+            sheet1.CreateRow(3).CreateCell(0).CellStyle = style4;
+
+            //fill background
+            ICellStyle style5 = workbook.CreateCellStyle();
+            style5.FillForegroundColor = IndexedColors.LightBlue.Index;
+            style5.FillPattern = FillPattern.Bricks;
+            style5.FillBackgroundColor = IndexedColors.Plum.Index;
+            sheet1.CreateRow(4).CreateCell(0).CellStyle = style5;
+
+            //fill background
+            ICellStyle style6 = workbook.CreateCellStyle();
+            style6.FillForegroundColor = IndexedColors.SeaGreen.Index;
+            style6.FillPattern = FillPattern.FineDots;
+            style6.FillBackgroundColor = IndexedColors.White.Index;
+            sheet1.CreateRow(5).CreateCell(0).CellStyle = style6;
+
+            //fill background
+            ICellStyle style7 = workbook.CreateCellStyle();
+            style7.FillForegroundColor = IndexedColors.Orange.Index;
+            style7.FillPattern = FillPattern.Diamonds;
+            style7.FillBackgroundColor = IndexedColors.Orchid.Index;
+            sheet1.CreateRow(6).CreateCell(0).CellStyle = style7;
+
+            //fill background
+            ICellStyle style8 = workbook.CreateCellStyle();
+            style8.FillForegroundColor = IndexedColors.White.Index;
+            style8.FillPattern = FillPattern.Squares;
+            style8.FillBackgroundColor = IndexedColors.Red.Index;
+            sheet1.CreateRow(7).CreateCell(0).CellStyle = style8;
+
+            //fill background
+            ICellStyle style9 = workbook.CreateCellStyle();
+            style9.FillForegroundColor = IndexedColors.RoyalBlue.Index;
+            style9.FillPattern = FillPattern.SparseDots;
+            style9.FillBackgroundColor = IndexedColors.Yellow.Index;
+            sheet1.CreateRow(8).CreateCell(0).CellStyle = style9;
+
+            //fill background
+            ICellStyle style10 = workbook.CreateCellStyle();
+            style10.FillForegroundColor = IndexedColors.RoyalBlue.Index;
+            style10.FillPattern = FillPattern.ThinBackwardDiagonals;
+            style10.FillBackgroundColor = IndexedColors.Yellow.Index;
+            sheet1.CreateRow(9).CreateCell(0).CellStyle = style10;
+
+            //fill background
+            ICellStyle style11 = workbook.CreateCellStyle();
+            style11.FillForegroundColor = IndexedColors.RoyalBlue.Index;
+            style11.FillPattern = FillPattern.ThickForwardDiagonals;
+            style11.FillBackgroundColor = IndexedColors.Yellow.Index;
+            sheet1.CreateRow(10).CreateCell(0).CellStyle = style11;
+
+            //fill background
+            ICellStyle style12 = workbook.CreateCellStyle();
+            style12.FillForegroundColor = IndexedColors.RoyalBlue.Index;
+            style12.FillPattern = FillPattern.ThickHorizontalBands;
+            style12.FillBackgroundColor = IndexedColors.Yellow.Index;
+            sheet1.CreateRow(11).CreateCell(0).CellStyle = style12;
+
+
+            //fill background
+            ICellStyle style13 = workbook.CreateCellStyle();
+            style13.FillForegroundColor = IndexedColors.RoyalBlue.Index;
+            style13.FillPattern = FillPattern.ThickVerticalBands;
+            style13.FillBackgroundColor = IndexedColors.Yellow.Index;
+            sheet1.CreateRow(12).CreateCell(0).CellStyle = style13;
+
+            //fill background
+            ICellStyle style14 = workbook.CreateCellStyle();
+            style14.FillForegroundColor = IndexedColors.RoyalBlue.Index;
+            style14.FillPattern = FillPattern.ThickBackwardDiagonals;
+            style14.FillBackgroundColor = IndexedColors.Yellow.Index;
+            sheet1.CreateRow(13).CreateCell(0).CellStyle = style14;
+
+            //fill background
+            ICellStyle style15 = workbook.CreateCellStyle();
+            style15.FillForegroundColor = IndexedColors.RoyalBlue.Index;
+            style15.FillPattern = FillPattern.ThinForwardDiagonals;
+            style15.FillBackgroundColor = IndexedColors.Yellow.Index;
+            sheet1.CreateRow(14).CreateCell(0).CellStyle = style15;
+
+            //fill background
+            ICellStyle style16 = workbook.CreateCellStyle();
+            style16.FillForegroundColor = IndexedColors.RoyalBlue.Index;
+            style16.FillPattern = FillPattern.ThinHorizontalBands;
+            style16.FillBackgroundColor = IndexedColors.Yellow.Index;
+            sheet1.CreateRow(15).CreateCell(0).CellStyle = style16;
+
+            //fill background
+            ICellStyle style17 = workbook.CreateCellStyle();
+            style17.FillForegroundColor = IndexedColors.RoyalBlue.Index;
+            style17.FillPattern = FillPattern.ThinVerticalBands;
+            style17.FillBackgroundColor = IndexedColors.Yellow.Index;
+            sheet1.CreateRow(16).CreateCell(0).CellStyle = style17;
+
+            FileStream sw = File.Create("test.xlsx");
+            workbook.Write(sw);
+            sw.Close();
+            //workbook.Write(stream);
 
         }
     }
-
-
-
 }

@@ -2244,6 +2244,7 @@ namespace MyTable
 
         private void button20_Click(object sender, EventArgs e)
         {
+
             NPOIPrinter Hello = new NPOIPrinter(NPOIPrinter.Company.SKB);
             Hello.Hello();
         }
@@ -3856,11 +3857,9 @@ namespace MyTable
                 {
                     if (arenda[0, et1, 1, pomesh] == arendator)
                     {
-                        Cell cell = new Cell();
-                        cell.Value = "Корпус №" + data[et1, 0, pomesh] + ", помещ.№" + data[et1, 1, pomesh];
-                        ToOtchet.Add(cell);//корпус-помещение
-                        cell.Value =data[et1, 9, pomesh];
-                        ToOtchet.Add(cell);//№счетчика
+
+                        ToOtchet.Add(new Cell("Корпус №" + data[et1, 0, pomesh] + ", помещ.№" + data[et1, 1, pomesh]));//корпус-помещение
+                        ToOtchet.Add(new Cell(data[et1, 9, pomesh]));//№счетчика
 
                         DateTime dataPred1 = new DateTime(DataOtMes.Year, DataOtMes.Month, 24).AddMonths(-1);//с 24 числа предыдущего месяца
                         DateTime dataPred2 = new DateTime(DataDoMes.Year, DataOtMes.Month, 7);//до 7-го числа текущего месяца.(диапазон)
@@ -3894,7 +3893,7 @@ namespace MyTable
                                         if (DateTime.Parse(counters[k, et1, 0, pomesh]) > dataPred1 && DateTime.Parse(counters[k, et1, 0, pomesh]) < dataPred2)
                                         {
                                             ToOtchet.Insert(ToOtchet.Count - 1, new Cell(counters[k, et1, 1, pomesh]));
-                                            ToOtchet.Add(new Cell(counters[k, et1, 4, pomesh]));
+                                            ToOtchet.Add(new Cell(counters[k, et1, 4, pomesh],Cell.Style.summ));
                                             break;
                                         }
                                         if (flag)
@@ -3913,7 +3912,7 @@ namespace MyTable
                             {
                                 if (ToOtchet[ToOtchet.Count - 4].Value == data[et1, 9, pomesh])//номер счетчика находится на две записи назад (записались оба показания)
                                 {
-                                    ToOtchet.Add(new Cell(rasxodZaPeriod.ToString()));
+                                    ToOtchet.Add(new Cell(rasxodZaPeriod.ToString(),Cell.Style.summ));
                                     richTextBox1.Text += "3:" + rasxodZaPeriod.ToString() + "\r\n";//лог
                                 }
                                 else//записалось одно показание
