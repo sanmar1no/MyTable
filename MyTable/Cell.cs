@@ -9,7 +9,7 @@ namespace MyTable
         public static IWorkbook workbook = new XSSFWorkbook();
         private IFont fontDynamic = workbook.CreateFont();
         public ICellStyle styleDynamic = workbook.CreateCellStyle();
-        public CellType Type = new CellType();
+        public CellType Type = CellType.String;
         public enum Style
         {
             normal,
@@ -17,7 +17,8 @@ namespace MyTable
             summ,
             clientCame,
             clientOut,
-            colorPink
+            colorPink,
+            noBorder
         }
         public ICellStyle ToStyle(Cell.Style style)
         {
@@ -38,6 +39,7 @@ namespace MyTable
                     styleDynamic.BorderBottom = BorderStyle.Thin;
                     styleDynamic.BorderRight = BorderStyle.Thin;
                     styleDynamic.BorderTop = BorderStyle.Thin;
+                    styleDynamic.WrapText = true;
                     Type = CellType.String;
                     break;
                 case Cell.Style.bold:
@@ -51,6 +53,7 @@ namespace MyTable
                     styleDynamic.BorderBottom = BorderStyle.Thick;
                     styleDynamic.BorderRight = BorderStyle.Thick;
                     styleDynamic.BorderTop = BorderStyle.Thick;
+                    styleDynamic.WrapText = true;
                     Type = CellType.String;
                     break;
                 case Cell.Style.summ:
@@ -64,6 +67,7 @@ namespace MyTable
                     styleDynamic.BorderBottom = BorderStyle.Thin;
                     styleDynamic.BorderRight = BorderStyle.Thin;
                     styleDynamic.BorderTop = BorderStyle.Thin;
+                    styleDynamic.WrapText = true;
                     Type = CellType.Numeric;
                     //  styleDynamic.DataFormat = XSSFFormulaEvaluator.Create(workbook,)
                     break;
@@ -80,6 +84,7 @@ namespace MyTable
                     styleDynamic.BorderTop = BorderStyle.Medium;
                     styleDynamic.FillForegroundColor = IndexedColors.Aqua.Index;
                     styleDynamic.FillPattern = FillPattern.SolidForeground;
+                    styleDynamic.WrapText = true;
                     Type = CellType.String;
                     break;
                 case Cell.Style.clientOut:
@@ -94,6 +99,7 @@ namespace MyTable
                     styleDynamic.BorderTop = BorderStyle.Medium;
                     styleDynamic.FillForegroundColor = IndexedColors.LightGreen.Index;
                     styleDynamic.FillPattern = FillPattern.SolidForeground;
+                    styleDynamic.WrapText = true;
                     Type = CellType.String;
                     break;
                 case Cell.Style.colorPink:
@@ -108,23 +114,49 @@ namespace MyTable
                     styleDynamic.BorderTop = BorderStyle.Medium;
                     styleDynamic.FillForegroundColor = IndexedColors.Pink.Index;
                     styleDynamic.FillPattern = FillPattern.SolidForeground;
+                    styleDynamic.WrapText = true;
+                    Type = CellType.String;
+                    break;
+                case Cell.Style.noBorder:
+                    fontDynamic.FontName = "ISOCPEUR";
+                    fontDynamic.FontHeightInPoints = 12;
+                    fontDynamic.IsBold = false;
+                    fontDynamic.IsItalic = false;
+                    styleDynamic.SetFont(fontDynamic);
+                    styleDynamic.BorderLeft = BorderStyle.None;
+                    styleDynamic.BorderBottom = BorderStyle.None;
+                    styleDynamic.BorderRight = BorderStyle.None;
+                    styleDynamic.BorderTop = BorderStyle.None;
+                    styleDynamic.WrapText = false;
                     Type = CellType.String;
                     break;
             }
         }
-        private string value1;
-        public string Value 
+        private string valueS;
+        private double valueD;
+        public dynamic Value 
         {
-            get { return value1; }
+            get
+            {
+                if (Type == CellType.Numeric)
+                {
+                    return valueD;
+                }
+                else return valueS;
+            }
             set 
             {
                 if (value != null)
                 {
-                    value1 = value;
+                    if (Type == CellType.Numeric)
+                    {
+                        valueD = double.Parse(value);
+                    }
+                    else valueS = value;
                 }
                 else
                 {
-                    value1 = "";
+                    valueS = "";
                 }
             }
         }
@@ -138,11 +170,10 @@ namespace MyTable
         {
         }*/
         public Cell(string Value, Cell.Style style)
-        {
-            this.Value = Value;
+        {            
             //SetStyle(style);
             styleDynamic = ToStyle(style);
-            
+            this.Value = Value;
         }
     }
 }

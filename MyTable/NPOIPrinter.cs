@@ -38,7 +38,7 @@ namespace MyTable
         private int row = 0;
         private int countColumn = 0;
 
-        FileStream stream = new FileStream("outfile.xlsx", FileMode.Create, FileAccess.Write);
+        FileStream stream = new FileStream("test.xlsx", FileMode.Create, FileAccess.Write);
         public NPOIPrinter() : this(new Company())
         {
         }
@@ -111,27 +111,39 @@ namespace MyTable
         }
 
         //добавить строку, значение запишется в первую ячейку
-        private void AddRow(string s)
+        private void AddRow(dynamic s)
         {
             AddRow(s, bodyStyle);
         }
-
+        //добавить строку, используя Cell
+        private void AddRow(Cell cell1)
+        {
+            AddRow(cell1.Value, cell1.styleDynamic);
+        }
         //добавить строку с указанием стиля
-        private void AddRow(string s, ICellStyle Style)
+        private void AddRow(dynamic s, ICellStyle Style)
         {
             row++;
-            rowSheet = (XSSFRow)sheet.CreateRow(row);
+            rowSheet = (XSSFRow)sheet.CreateRow(row);            
             AddCell(s, 0, Style);
         }
 
         //добавить ячейку в текущей строке, стиль по умолчанию bodyStyle
-        private void AddCell(string s, int index)
+        private void AddCell(dynamic s, int index)
         {
             AddCell(s, index, bodyStyle);
         }
-
+        private void AddCell(dynamic s, int index, ICellStyle Style)
+        {
+            AddCell(s, index, Style, CellType.String);
+        }
+        //добавить ячейку в текущей строке, используя класс Cell
+        private void AddCell(Cell cell1, int index)
+        {
+            AddCell(cell1.Value, index, cell1.styleDynamic);
+        }
         //добавить ячейку в текущей строке с указанием стиля
-        private void AddCell(string s,int index, ICellStyle Style1, CellType type)
+        private void AddCell(dynamic s,int index, ICellStyle Style1, CellType type)
         {
             while (rowSheet.Cells.Count <= index)
             {
@@ -143,26 +155,8 @@ namespace MyTable
 
                 rowSheet.Cells[countCell].CellStyle = Style1;
                 cell.SetCellType(type);
+                
             }
-        }
-        private void AddCell(string s, int index, ICellStyle Style)
-        {
-            AddCell(s, index, Style, CellType.String);
-        }
-
-        /*
-         ReportPrinter() : this(new NPOIPrinter.Company(), DateTime.Now, new DateTime())
-         */
-        //добавить строку, используя Cell
-        private void AddRow(Cell cell1)
-        {
-            AddRow(cell1.Value, cell1.styleDynamic);
-        }
-
-        //добавить ячейку в текущей строке, используя класс Cell
-        private void AddCell(Cell cell1,int index)
-        {
-            AddCell(cell1.Value, index, cell1.styleDynamic);
         }
         //Укажем арендатора в шапке отчета
         public void HeadArenda(string arendaCB23 = "")
@@ -230,21 +224,14 @@ namespace MyTable
             AddRow(new Cell("", Cell.Style.bold));
             AddCell(new Cell("Всего:", Cell.Style.bold),1);
             AddCell(new Cell("", Cell.Style.bold), countColumn);
-           // var range = new CellRangeAddress(row, row+k-1, countColumn, countColumn);
             if (k > 0)
             {
                 cell.CellFormula = "SUM(" + literColumn + (row-k+1).ToString() + ":" + literColumn + row.ToString() + ")";
-               // s1.GetRow(1).CreateCell(3).CellFormula = "SUM(A2:C2)";
             }
             else
             {
                 cell.SetCellValue("0");
             }
-
-          /*      Excel1.Range formulaRange = sheet.Range[sheet.Cells[row, countColumn + 1], sheet.Cells[row - 1 + k, countColumn + 1]];
-            string ToAdresEx = formulaRange.get_Address(1, 1, Excel1.XlReferenceStyle.xlR1C1, Type.Missing, Type.Missing);
-            if (k > 0) sheet.Cells[row + k, countColumn + 1].Formula = "=SUM(" + literColumn + row.ToString() + ":" + literColumn + (row - 1 + k).ToString() + ")";//формула (сумма)
-            else sheet.Cells[row + k, countColumn + 1] = "0";*/
         }
 
         //последняя строка Всего:
@@ -262,9 +249,27 @@ namespace MyTable
         //подпись
         public void EndSheet()        
         {
-            FileStream sw = File.Create("test.xlsx");
-            workbook.Write(sw);
-            sw.Close();
+            AddRow("");
+            AddRow("");
+            AddRow("");
+            AddRow("");
+            AddRow("");
+           // AddCell("", 0);
+            AddCell(new Cell("Главный энергетик",Cell.Style.noBorder), 1);
+            AddCell("", 4);
+            AddCell(new Cell("Канавин А.А.", Cell.Style.noBorder), 5);
+            AddRow("");
+            AddRow("");
+            AddCell("", 3);
+            AddCell(new Cell("М.П.", Cell.Style.noBorder), 4);
+
+            //FileStream sw = File.Create("test.xlsx");
+            //workbook.Write(sw);
+            ///sw.Close();
+            ///
+            //stream = File.Create("test.xlsx");
+            workbook.Write(stream);
+            stream.Close();
         }
 
         //тест
