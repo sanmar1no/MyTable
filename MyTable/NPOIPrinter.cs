@@ -19,17 +19,17 @@ namespace MyTable
         // Создаём экземпляр нашего приложения
         // в NPOI не нужно
         // Создаём экземпляр рабочий книги Excel
-        private static IWorkbook workbook = Cell.workbook;
+        private static IWorkbook workbook = Variables.workbook;
         // IWorkbook workbook = new HSSFWorkbook();//xls
         // Создаём экземпляр листа Excel
-        private static ISheet sheet =  workbook.CreateSheet("Лист1");
+        private static ISheet sheet = Variables.sheet;
         // Создаём экземпляр области ячеек Excel
-        private static IRow rowSheet = sheet.CreateRow(0);
-        private ICell cell = rowSheet.CreateCell(0);
-        private IFont fontBody = workbook.CreateFont();//осовной стиль таблицы
-        private ICellStyle bodyStyle = workbook.CreateCellStyle();
-        private IFont fontDynamic = workbook.CreateFont(); //индивидуально для ячейки
-        private ICellStyle styleDynamic =  workbook.CreateCellStyle();
+        private static IRow rowSheet = Variables.rowSheet;
+        private ICell cell;
+        private IFont fontBody;//осовной стиль таблицы
+        private ICellStyle bodyStyle;
+        private IFont fontDynamic;//индивидуально для ячейки
+        private ICellStyle styleDynamic;
 
         //IRow row = sheet.GetRow(1);
         public Company company = new Company();
@@ -46,6 +46,14 @@ namespace MyTable
         public NPOIPrinter(Company company)
         {
             this.company = company;
+            workbook = Variables.workbook;
+            sheet = Variables.sheet;
+            rowSheet = Variables.rowSheet;
+            cell = rowSheet.CreateCell(0);
+            fontBody = workbook.CreateFont();
+            bodyStyle = workbook.CreateCellStyle();
+            fontDynamic = workbook.CreateFont();
+            styleDynamic = workbook.CreateCellStyle();
             Head();
         }
         public enum Company
@@ -270,6 +278,8 @@ namespace MyTable
             //stream = File.Create("test.xlsx");
             workbook.Write(stream);
             stream.Close();
+            //workbook = Variables.newWorkbook();
+            //Variables.newWorkbook();
         }
 
         //тест

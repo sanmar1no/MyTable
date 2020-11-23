@@ -6,7 +6,8 @@ namespace MyTable
     class Cell
     {
         // Создаём экземпляр рабочий книги Excel
-        public static IWorkbook workbook = new XSSFWorkbook();
+        //public static IWorkbook workbook = new XSSFWorkbook();
+        private static IWorkbook workbook = Variables.workbook;
         private IFont fontDynamic = workbook.CreateFont();
         public ICellStyle styleDynamic = workbook.CreateCellStyle();
         public CellType Type = CellType.String;
@@ -27,6 +28,8 @@ namespace MyTable
         }
        private void SetStyle(Cell.Style style)
         {
+            workbook = Variables.workbook;
+            fontDynamic = workbook.CreateFont();
             switch (style)
             {
                 case Cell.Style.normal:
@@ -170,9 +173,11 @@ namespace MyTable
         {
         }*/
         public Cell(string Value, Cell.Style style)
-        {            
+        {
             //SetStyle(style);
-            styleDynamic = ToStyle(style);
+            workbook = Variables.workbook;
+            styleDynamic = ToStyle(style);            
+            fontDynamic = workbook.CreateFont();
             this.Value = Value;
         }
     }

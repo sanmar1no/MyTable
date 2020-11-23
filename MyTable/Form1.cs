@@ -3842,6 +3842,7 @@ namespace MyTable
         //Отчет за период
         private void button51_Click(object sender, EventArgs e)
         {
+            Variables.newWorkbook();
             ReportPrinter report = new ReportPrinter(NPOIPrinter.Company.SKB, dateTimePicker5.Value, dateTimePicker6.Value);
             report.AddList(ToReport(comboBox23.Text, dateTimePicker5.Value, dateTimePicker6.Value));//арендатор и период от и до
             report.ReportCountersPeriod(comboBox23.Text);//отчет по арендатору за период
