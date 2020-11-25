@@ -9,6 +9,7 @@ using System.IO;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using NPOI.SS.Util;
+using System.Diagnostics;
 
 
 
@@ -22,7 +23,7 @@ namespace MyTable
         private static IWorkbook workbook = Variables.workbook;
         // IWorkbook workbook = new HSSFWorkbook();//xls
         // Создаём экземпляр листа Excel
-        private static ISheet sheet = Variables.sheet;
+        public static ISheet sheet = Variables.sheet1;
         // Создаём экземпляр области ячеек Excel
         private static IRow rowSheet = Variables.rowSheet;
         private ICell cell;
@@ -47,7 +48,7 @@ namespace MyTable
         {
             this.company = company;
             workbook = Variables.workbook;
-            sheet = Variables.sheet;
+            sheet = Variables.sheet1;
             rowSheet = Variables.rowSheet;
             cell = rowSheet.CreateCell(0);
             fontBody = workbook.CreateFont();
@@ -87,7 +88,7 @@ namespace MyTable
             bodyStyle.SetFont(fontBody);//основной стиль таблицы
 
             var range = new CellRangeAddress(row, row, 0, 6);
-            sheet.AddMergedRegion(range);
+            if(!sheet.IsMergedRegion(range))sheet.AddMergedRegion(range);
 
             switch (company)
             {
@@ -206,9 +207,9 @@ namespace MyTable
 
         //заполнение таблицы из List<Cell>
         public void BodyTable(List<Cell> Temp)
-        {
+        {    
             //row++;
-            if (Temp.Count > 0)
+            if (Temp.Count > 0&& countColumn>0)
             {
                 for (; k < (Temp.Count) / countColumn; k++)
                 {
@@ -276,8 +277,11 @@ namespace MyTable
             ///sw.Close();
             ///
             //stream = File.Create("test.xlsx");
+
             workbook.Write(stream);
             stream.Close();
+
+
             //workbook = Variables.newWorkbook();
             //Variables.newWorkbook();
         }

@@ -139,6 +139,7 @@ namespace MyTable
         {
             List<Cell> Header = new List<Cell>();
             NPOIPrinter report1 = new NPOIPrinter(company);
+            
             //report1.company = NPOIPrinter.Company.SKB;//исправить
             Header.Add(new Cell("№ п/п", Cell.Style.bold));
             Header.Add(new Cell("Арендатор  ", Cell.Style.bold));
@@ -151,7 +152,7 @@ namespace MyTable
                 dataStr = MonthToStr(toName.Month) + " " + toName.Year + "г.";
             }
             report1.NameTable("Расчет количества потребленной электроэнергии за " + dataStr);
-           // report1.HeadTable(Header);
+            report1.HeadTable(Header);
             report1.BodyTable(TableList);
             report1.FooterTableSumm("D");
             report1.BordersTable();

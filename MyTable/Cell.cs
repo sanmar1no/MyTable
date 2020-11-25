@@ -1,16 +1,21 @@
 ﻿
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using System.Diagnostics;
 namespace MyTable
 {
     class Cell
     {
         // Создаём экземпляр рабочий книги Excel
         //public static IWorkbook workbook = new XSSFWorkbook();
-        private static IWorkbook workbook = Variables.workbook;
-        private IFont fontDynamic = workbook.CreateFont();
-        public ICellStyle styleDynamic = workbook.CreateCellStyle();
+        //private static IWorkbook workbook = Variables.workbook;
+        private IFont fontDynamic = Variables.workbook.CreateFont();
+        public ICellStyle styleDynamic = Variables.workbook.CreateCellStyle();
         public CellType Type = CellType.String;
+
+        private IFont[] fontM = Variables.fontM;
+        private ICellStyle[] styleM = Variables.styleM;
+
         public enum Style
         {
             normal,
@@ -26,115 +31,49 @@ namespace MyTable
             SetStyle(style);
             return styleDynamic;
         }
-       private void SetStyle(Cell.Style style)
+
+        private void SetStyle(Cell.Style style)
         {
-            workbook = Variables.workbook;
-            fontDynamic = workbook.CreateFont();
             switch (style)
             {
                 case Cell.Style.normal:
-                    fontDynamic.FontName = "ISOCPEUR";
-                    fontDynamic.FontHeightInPoints = 12;
-                    fontDynamic.IsBold = false;
-                    fontDynamic.IsItalic = true;
-                    styleDynamic.SetFont(fontDynamic);
-                    styleDynamic.BorderLeft = BorderStyle.Thin;
-                    styleDynamic.BorderBottom = BorderStyle.Thin;
-                    styleDynamic.BorderRight = BorderStyle.Thin;
-                    styleDynamic.BorderTop = BorderStyle.Thin;
-                    styleDynamic.WrapText = true;
+                    fontDynamic = fontM[0];
+                    styleDynamic = styleM[0];
                     Type = CellType.String;
                     break;
                 case Cell.Style.bold:
-                    fontDynamic.FontName = "ISOCPEUR";
-                    fontDynamic.FontHeightInPoints = 12;
-                    fontDynamic.IsBold = true;
-                    fontDynamic.IsItalic = true;
-                    //font.Color = IndexedColors.Red.Index;
-                    styleDynamic.SetFont(fontDynamic);
-                    styleDynamic.BorderLeft = BorderStyle.Thick;
-                    styleDynamic.BorderBottom = BorderStyle.Thick;
-                    styleDynamic.BorderRight = BorderStyle.Thick;
-                    styleDynamic.BorderTop = BorderStyle.Thick;
-                    styleDynamic.WrapText = true;
+                    fontDynamic = fontM[1];
+                    styleDynamic = styleM[1];
                     Type = CellType.String;
                     break;
                 case Cell.Style.summ:
-                    fontDynamic.FontName = "ISOCPEUR";
-                    fontDynamic.FontHeightInPoints = 12;
-                    fontDynamic.IsBold = true;
-                    fontDynamic.IsItalic = true;
-                    //font.Color = IndexedColors.Red.Index;
-                    styleDynamic.SetFont(fontDynamic);
-                    styleDynamic.BorderLeft = BorderStyle.Thin;
-                    styleDynamic.BorderBottom = BorderStyle.Thin;
-                    styleDynamic.BorderRight = BorderStyle.Thin;
-                    styleDynamic.BorderTop = BorderStyle.Thin;
-                    styleDynamic.WrapText = true;
+                    fontDynamic = fontM[2];
+                    styleDynamic = styleM[2];
                     Type = CellType.Numeric;
-                    //  styleDynamic.DataFormat = XSSFFormulaEvaluator.Create(workbook,)
                     break;
                 case Cell.Style.clientCame:
-                    fontDynamic.FontName = "ISOCPEUR";
-                    fontDynamic.FontHeightInPoints = 12;
-                    fontDynamic.IsBold = true;
-                    fontDynamic.IsItalic = true;
-                    //fontDynamic.Color = IndexedColors.Aqua.Index;
-                    styleDynamic.SetFont(fontDynamic);
-                    styleDynamic.BorderLeft = BorderStyle.Medium;
-                    styleDynamic.BorderBottom = BorderStyle.Medium;
-                    styleDynamic.BorderRight = BorderStyle.Medium;
-                    styleDynamic.BorderTop = BorderStyle.Medium;
-                    styleDynamic.FillForegroundColor = IndexedColors.Aqua.Index;
-                    styleDynamic.FillPattern = FillPattern.SolidForeground;
-                    styleDynamic.WrapText = true;
+                    fontDynamic = fontM[3];
+                    styleDynamic = styleM[3];
                     Type = CellType.String;
                     break;
                 case Cell.Style.clientOut:
-                    fontDynamic.FontName = "ISOCPEUR";
-                    fontDynamic.FontHeightInPoints = 12;
-                    fontDynamic.IsBold = true;
-                    fontDynamic.IsItalic = true;
-                    styleDynamic.SetFont(fontDynamic);
-                    styleDynamic.BorderLeft = BorderStyle.Medium;
-                    styleDynamic.BorderBottom = BorderStyle.Medium;
-                    styleDynamic.BorderRight = BorderStyle.Medium;
-                    styleDynamic.BorderTop = BorderStyle.Medium;
-                    styleDynamic.FillForegroundColor = IndexedColors.LightGreen.Index;
-                    styleDynamic.FillPattern = FillPattern.SolidForeground;
-                    styleDynamic.WrapText = true;
+                    fontDynamic = fontM[4];
+                    styleDynamic = styleM[4];
                     Type = CellType.String;
                     break;
                 case Cell.Style.colorPink:
-                    fontDynamic.FontName = "ISOCPEUR";
-                    fontDynamic.FontHeightInPoints = 12;
-                    fontDynamic.IsBold = false;
-                    fontDynamic.IsItalic = true;
-                    styleDynamic.SetFont(fontDynamic);
-                    styleDynamic.BorderLeft = BorderStyle.Medium;
-                    styleDynamic.BorderBottom = BorderStyle.Medium;
-                    styleDynamic.BorderRight = BorderStyle.Medium;
-                    styleDynamic.BorderTop = BorderStyle.Medium;
-                    styleDynamic.FillForegroundColor = IndexedColors.Pink.Index;
-                    styleDynamic.FillPattern = FillPattern.SolidForeground;
-                    styleDynamic.WrapText = true;
+                    fontDynamic = fontM[5];
+                    styleDynamic = styleM[5];
                     Type = CellType.String;
                     break;
                 case Cell.Style.noBorder:
-                    fontDynamic.FontName = "ISOCPEUR";
-                    fontDynamic.FontHeightInPoints = 12;
-                    fontDynamic.IsBold = false;
-                    fontDynamic.IsItalic = false;
-                    styleDynamic.SetFont(fontDynamic);
-                    styleDynamic.BorderLeft = BorderStyle.None;
-                    styleDynamic.BorderBottom = BorderStyle.None;
-                    styleDynamic.BorderRight = BorderStyle.None;
-                    styleDynamic.BorderTop = BorderStyle.None;
-                    styleDynamic.WrapText = false;
+                    fontDynamic = fontM[6];
+                    styleDynamic = styleM[6];
                     Type = CellType.String;
                     break;
             }
         }
+
         private string valueS;
         private double valueD;
         public dynamic Value 
@@ -175,9 +114,9 @@ namespace MyTable
         public Cell(string Value, Cell.Style style)
         {
             //SetStyle(style);
-            workbook = Variables.workbook;
+            fontDynamic = Variables.workbook.CreateFont();
+            styleDynamic = Variables.workbook.CreateCellStyle();
             styleDynamic = ToStyle(style);            
-            fontDynamic = workbook.CreateFont();
             this.Value = Value;
         }
     }

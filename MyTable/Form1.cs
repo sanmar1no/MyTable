@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-
+using System.Diagnostics;
 
 namespace MyTable
 {
@@ -3846,6 +3846,7 @@ namespace MyTable
             ReportPrinter report = new ReportPrinter(NPOIPrinter.Company.SKB, dateTimePicker5.Value, dateTimePicker6.Value);
             report.AddList(ToReport(comboBox23.Text, dateTimePicker5.Value, dateTimePicker6.Value));//арендатор и период от и до
             report.ReportCountersPeriod(comboBox23.Text);//отчет по арендатору за период
+            Process.Start(@"test.xlsx");
         }
 
         // выведет построчно: корпус-помещение, №счетчика, показания на начало, показания на конец, расчетный коэфф., расчет.
@@ -4241,17 +4242,21 @@ namespace MyTable
         //инвентаризация электросчетчиков
         private void button61_Click(object sender, EventArgs e)
         {
+            Variables.newWorkbook();
             ReportPrinter report = new ReportPrinter(NPOIPrinter.Company.Impuls);
             report.AddList(InvertoryTable(Variables.UserKeyEnum.electro));
             report.ReportCountersInventory(Variables.UserKeyEnum.electro);
+            Process.Start(@"test.xlsx");
         }
 
         //инвентаризация водомеров
         private void button62_Click(object sender, EventArgs e)
         {
+            Variables.newWorkbook();
             ReportPrinter report = new ReportPrinter(NPOIPrinter.Company.Impuls);
             report.AddList(InvertoryTable(Variables.UserKeyEnum.aqua));
             report.ReportCountersInventory(Variables.UserKeyEnum.aqua);
+            Process.Start(@"test.xlsx");
         }
 
         private void textBox10_TextChanged(object sender, EventArgs e)
@@ -4263,24 +4268,27 @@ namespace MyTable
         {
             if (textBox11.BackColor == Color.Red) textBox11.BackColor = Color.White;
         }
-
-        private void button63_Click(object sender, EventArgs e)//основной отчет в Excel
+        //основной отчет в Excel (три орешка)
+        private void button63_Click(object sender, EventArgs e)
         {
+            Variables.newWorkbook();
             List<Cell> NoInfoValues = new List<Cell>();
             List<Cell> NoInfoCounters = new List<Cell>();
             ReportPrinter report = new ReportPrinter(NPOIPrinter.Company.SKB,dateTimePicker5.Value);
             report.AddList(ReportElectroTable(dateTimePicker5.Value, out NoInfoValues, out NoInfoCounters));
             report.ReportCountersPeriodAll();
-            report = new ReportPrinter(NPOIPrinter.Company.SKB, dateTimePicker5.Value);
+            report = new ReportPrinter(NPOIPrinter.Company.SKB, dateTimePicker5.Value);           
             report.AddList(NoInfoValues);
             report.ReportCountersPeriodAll();
             report = new ReportPrinter(NPOIPrinter.Company.SKB, dateTimePicker5.Value);
             report.AddList(NoInfoCounters);
             report.ReportCountersPeriodAll();
+            Process.Start(@"test.xlsx");
         }
 
         List<Cell> InvertoryTable(Variables.UserKeyEnum keyEnum)
         {
+            var timer = Stopwatch.StartNew();
             List<Cell> Temp = new List<Cell>();
             for (int floor = 0; floor < 4; floor++)
             {
@@ -4328,6 +4336,8 @@ namespace MyTable
                     }
                 }
             }
+            timer.Stop();
+            richTextBox1.Text += "Инв="+timer.ElapsedMilliseconds.ToString();
             return Temp;
         }
         
