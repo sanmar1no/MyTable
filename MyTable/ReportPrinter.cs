@@ -97,6 +97,7 @@ namespace MyTable
         }
         public void ReportCountersPeriod(string arendaCB23) //отчет по расходу электросчетчиков за период 
         {
+            Variables.fileNameExcel = Environment.CurrentDirectory + @"\Отчеты\расход по арендатору "+ arendaCB23.Replace("\"","") + " за месяц.xlsx";
             List<Cell> Header = new List<Cell>();
             NPOIPrinter report1 = new NPOIPrinter(company);
             DateTime data = dTP6.AddMonths(1);

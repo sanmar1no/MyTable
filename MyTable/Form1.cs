@@ -2242,11 +2242,17 @@ namespace MyTable
             return rezult;
         }
 
+        //проверка списка листов и возможность добавления новых листов в книгу
         private void button20_Click(object sender, EventArgs e)
         {
 
-            NPOIPrinter Hello = new NPOIPrinter(NPOIPrinter.Company.SKB);
-            Hello.Hello();
+            Variables.newWorkbook("Отчет1");
+            Variables.newSheet("List2");
+            List<string> List1 = Variables.ListSheet();
+            for (int i = 0; i < List1.Count; i++)
+            {
+                richTextBox1.Text += List1[i] + "\r\n";
+            }
         }
 
         private void comboBox6_TextChanged(object sender, EventArgs e)
@@ -3842,11 +3848,11 @@ namespace MyTable
         //Отчет за период
         private void button51_Click(object sender, EventArgs e)
         {
-            Variables.newWorkbook();
+            Variables.newWorkbook("Отчет1");
             ReportPrinter report = new ReportPrinter(NPOIPrinter.Company.SKB, dateTimePicker5.Value, dateTimePicker6.Value);
             report.AddList(ToReport(comboBox23.Text, dateTimePicker5.Value, dateTimePicker6.Value));//арендатор и период от и до
             report.ReportCountersPeriod(comboBox23.Text);//отчет по арендатору за период
-            Process.Start(@"test.xlsx");
+            Process.Start(Variables.fileNameExcel);
         }
 
         // выведет построчно: корпус-помещение, №счетчика, показания на начало, показания на конец, расчетный коэфф., расчет.
@@ -4242,7 +4248,7 @@ namespace MyTable
         //инвентаризация электросчетчиков
         private void button61_Click(object sender, EventArgs e)
         {
-            Variables.newWorkbook();
+            Variables.newWorkbook("Отчет1");
             ReportPrinter report = new ReportPrinter(NPOIPrinter.Company.Impuls);
             report.AddList(InvertoryTable(Variables.UserKeyEnum.electro));
             report.ReportCountersInventory(Variables.UserKeyEnum.electro);
@@ -4252,7 +4258,7 @@ namespace MyTable
         //инвентаризация водомеров
         private void button62_Click(object sender, EventArgs e)
         {
-            Variables.newWorkbook();
+            Variables.newWorkbook("Отчет1");
             ReportPrinter report = new ReportPrinter(NPOIPrinter.Company.Impuls);
             report.AddList(InvertoryTable(Variables.UserKeyEnum.aqua));
             report.ReportCountersInventory(Variables.UserKeyEnum.aqua);
@@ -4271,15 +4277,17 @@ namespace MyTable
         //основной отчет в Excel (три орешка)
         private void button63_Click(object sender, EventArgs e)
         {
-            Variables.newWorkbook();
+            Variables.newWorkbook("Отчет1");
             List<Cell> NoInfoValues = new List<Cell>();
             List<Cell> NoInfoCounters = new List<Cell>();
             ReportPrinter report = new ReportPrinter(NPOIPrinter.Company.SKB,dateTimePicker5.Value);
             report.AddList(ReportElectroTable(dateTimePicker5.Value, out NoInfoValues, out NoInfoCounters));
             report.ReportCountersPeriodAll();
+            Variables.newSheet("Отчет2");
             report = new ReportPrinter(NPOIPrinter.Company.SKB, dateTimePicker5.Value);           
             report.AddList(NoInfoValues);
             report.ReportCountersPeriodAll();
+            Variables.newSheet("Отчет3");
             report = new ReportPrinter(NPOIPrinter.Company.SKB, dateTimePicker5.Value);
             report.AddList(NoInfoCounters);
             report.ReportCountersPeriodAll();

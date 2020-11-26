@@ -39,7 +39,7 @@ namespace MyTable
         private int row = 0;
         private int countColumn = 0;
 
-        FileStream stream = new FileStream("test.xlsx", FileMode.Create, FileAccess.Write);
+        FileStream stream = new FileStream(@Variables.fileNameExcel, FileMode.Create, FileAccess.Write);
         public NPOIPrinter() : this(new Company())
         {
         }
@@ -420,7 +420,7 @@ namespace MyTable
             style17.FillBackgroundColor = IndexedColors.Yellow.Index;
             sheet1.CreateRow(16).CreateCell(0).CellStyle = style17;
 
-            FileStream sw = File.Create("test.xlsx");
+            FileStream sw = File.Create(Variables.fileNameExcel);
             workbook.Write(sw);
             sw.Close();
             //workbook.Write(stream);

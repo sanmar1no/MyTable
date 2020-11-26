@@ -21,18 +21,48 @@ namespace MyTable
         //Книга эксель
         public static IWorkbook workbook;
         public static ISheet sheet1;
-        public static ISheet sheet2;
-        public static ISheet sheet3;
+        public static string fileNameExcel="test.xlsx";
+
         // Создаём экземпляр области ячеек Excel
         public static IRow rowSheet;
         public static IFont[] fontM = new IFont[7];
         public static ICellStyle[] styleM = new ICellStyle[7];
+       
+        //создать в книге новый лист
+        public static void newSheet(string nameSheet)
+        {
+            sheet1 = workbook.CreateSheet(nameSheet);
+            rowSheet = sheet1.CreateRow(0);
+        }
+
+        //вывести доступные имена листов в книге
+        public static List<string> ListSheet()
+        {
+            List<string> List = new List<string>();
+            for (int i = 0; i < workbook.NumberOfSheets; i++)
+            {
+                List.Add(workbook.GetSheetName(i));
+            }
+            return List;
+        }
+
+        //создать новую книгу Excel, присвоить стилям значения
         public static void newWorkbook()
         {
+            newWorkbook("Лист1", "test.xlsx");
+        }
+        public static void newWorkbook(string nameSheet)
+        {
+            newWorkbook(nameSheet, "test.xlsx");
+        }
+        public static void newWorkbook(string nameSheet,string FileName)
+        {
             workbook = new XSSFWorkbook();
-            sheet1 = workbook.CreateSheet("Лист1");
-            sheet2 = workbook.CreateSheet("Лист2");
-            sheet2 = workbook.CreateSheet("Лист3");
+            fileNameExcel = FileName;
+            //workbook.NumberOfSheets
+            sheet1 = workbook.CreateSheet(nameSheet);
+           // sheet2 = workbook.CreateSheet("Лист2");
+           // sheet2 = workbook.CreateSheet("Лист3");
             rowSheet = sheet1.CreateRow(0);
 
             for (int i = 0; i < 7; i++)
@@ -132,5 +162,8 @@ namespace MyTable
             styleM[6].BorderTop = BorderStyle.None;
             styleM[6].WrapText = false;
         }
+
+
+
     }
 }
