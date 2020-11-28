@@ -1,16 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 
 namespace MyTable
 {
+    //Класс формирования отчетов для печати в Эксель
     class ReportPrinter
     {
         public NPOIPrinter.Company company = new NPOIPrinter.Company();
         public Variables.UserKeyEnum reportKey = new Variables.UserKeyEnum();
         public DateTime dTP5 = new DateTime();
         public DateTime dTP6 = new DateTime();
+
+        private NPOIPrinter report1;
         private List<Cell> TableList = new List<Cell>();
+
+        private static string currentDir = Environment.CurrentDirectory;
+        public string fileNameExcel { get; set; }
 
         public ReportPrinter()
             : this(new NPOIPrinter.Company(), DateTime.Now, new DateTime())
@@ -34,6 +42,7 @@ namespace MyTable
             this.company = company;
             this.dTP5 = dTP5;
             this.dTP6 = dTP6;
+            report1 = new NPOIPrinter(company); //создадим объект книги для постройки отчета, пока без имени листа
         }
         public void AddList(List<Cell> List)
         {
@@ -95,11 +104,29 @@ namespace MyTable
             }
             return retMonth;
         }
-        public void ReportCountersPeriod(string arendaCB23) //отчет по расходу электросчетчиков за период 
+        public void newWorkBook()
         {
-            Variables.fileNameExcel = Environment.CurrentDirectory + @"\Отчеты\расход по арендатору "+ arendaCB23.Replace("\"","") + " за месяц.xlsx";
+            report1 = new NPOIPrinter(company, fileNameExcel);
+        }
+
+        public void newSheet(string NameSheet)
+        {
+            report1.newSheet(NameSheet);
+        }
+
+        public void ReportCountersPeriod(string arendaCB23)
+        {
+            ReportCountersPeriod(arendaCB23, null);
+        }
+        public void ReportCountersPeriod(string arendaCB23, string FileName) //отчет по расходу электросчетчиков за период 
+        {
+            if (FileName != null && FileName != "")
+            {
+                fileNameExcel = FileName;
+            }
+            else fileNameExcel =  currentDir + @"\Отчеты\расход по арендатору " + arendaCB23.Replace("\"", "") + " за месяц.xlsx";
             List<Cell> Header = new List<Cell>();
-            NPOIPrinter report1 = new NPOIPrinter(company);
+            
             DateTime data = dTP6.AddMonths(1);
             //List<string> Header = new List<string>(){ "№", "№ точки учета по договору", "№ счетчика", "Показания на  01."+dTP5.Month + "." + dTP5.Year, "Показания на 01." + data.Month + "." + data.Year, "Расч.Коэфф.", "Расход, кВт.ч."};
             Header.Add(new Cell("№ п/п",Cell.Style.bold));
@@ -115,12 +142,23 @@ namespace MyTable
             report1.BodyTable(TableList);
             report1.FooterTableSumm("G");
             report1.BordersTable();
-            report1.EndSheet();
+            report1.EndSheet(fileNameExcel);
         }
-        public void ReportCountersInventory(Variables.UserKeyEnum reportKey) //инвентаризация электросчетчиков/водомеров
+        public void ReportCountersInventory(Variables.UserKeyEnum reportKey)
         {
+            ReportCountersInventory(reportKey, null);
+        }
+
+        //инвентаризация электросчетчиков/водомеров
+        public void ReportCountersInventory(Variables.UserKeyEnum reportKey, string FileName) 
+        {
+            if (FileName != null && FileName != "")
+            {
+                fileNameExcel = FileName;
+            }
+            else fileNameExcel = currentDir + @"\Отчеты\инвентаризация.xlsx";
             List<Cell> Header = new List<Cell>();
-            NPOIPrinter report1 = new NPOIPrinter(company);
+            //NPOIPrinter report1 = new NPOIPrinter(company, fileNameExcel);
             //report1.company = NPOIPrinter.Company.Impuls;//исправить
             Header.Add(new Cell("№ п/п", Cell.Style.bold));
             Header.Add(new Cell("№ Корпуса и помещения", Cell.Style.bold));
@@ -134,13 +172,23 @@ namespace MyTable
             report1.BodyTable(TableList);
             report1.FooterTableCount();
             report1.BordersTable();
-            report1.EndSheet();
+            report1.EndSheet(fileNameExcel);
         }
-        public void ReportCountersPeriodAll() //Основной отчет по электроэнергии (период - месяц)
+        public void ReportCountersPeriodAll()
         {
+            ReportCountersPeriodAll(null);
+        }
+
+        //Основной отчет по электроэнергии (период - месяц)
+        public void ReportCountersPeriodAll(string FileName) 
+        {
+            if (FileName != null && FileName != "")
+            {
+                fileNameExcel = FileName;
+            }
+            else fileNameExcel = currentDir + @"\Отчеты\Отчет(электроэнергия).xlsx";
             List<Cell> Header = new List<Cell>();
-            NPOIPrinter report1 = new NPOIPrinter(company);
-            
+            //NPOIPrinter report1 = new NPOIPrinter(company, fileNameExcel);
             //report1.company = NPOIPrinter.Company.SKB;//исправить
             Header.Add(new Cell("№ п/п", Cell.Style.bold));
             Header.Add(new Cell("Арендатор  ", Cell.Style.bold));
@@ -157,12 +205,21 @@ namespace MyTable
             report1.BodyTable(TableList);
             report1.FooterTableSumm("D");
             report1.BordersTable();
-            report1.EndSheet();
+            report1.EndSheet(fileNameExcel);
         }
         public void ReportArendaPhoneBook()
         {
+            ReportArendaPhoneBook(null);
+        }
+        public void ReportArendaPhoneBook(string FileName)
+        {
+            if (FileName != null && FileName != "")
+            {
+                fileNameExcel = FileName;
+            }
+            else fileNameExcel = currentDir + @"\Отчеты\Телефоны арендаторов.xlsx";
             List<Cell> Header = new List<Cell>();
-            NPOIPrinter report1 = new NPOIPrinter();
+            //NPOIPrinter report1 = new NPOIPrinter();
             Header.Add(new Cell("№ п/п", Cell.Style.bold));
             Header.Add(new Cell("Наименование организации ", Cell.Style.bold));
             Header.Add(new Cell("ФИО руководителя организации", Cell.Style.bold));
@@ -178,7 +235,7 @@ namespace MyTable
             report1.HeadTable(Header);
             report1.BodyTable(TableList);
             report1.BordersTable();
-            report1.EndSheet();
+            report1.EndSheet(fileNameExcel);
         }
         public void test()
         {

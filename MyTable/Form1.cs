@@ -2246,13 +2246,13 @@ namespace MyTable
         private void button20_Click(object sender, EventArgs e)
         {
 
-            Variables.newWorkbook("Отчет1");
+           /* Variables.newWorkbook("Отчет1");
             Variables.newSheet("List2");
             List<string> List1 = Variables.ListSheet();
             for (int i = 0; i < List1.Count; i++)
             {
                 richTextBox1.Text += List1[i] + "\r\n";
-            }
+            }*/
         }
 
         private void comboBox6_TextChanged(object sender, EventArgs e)
@@ -3848,11 +3848,10 @@ namespace MyTable
         //Отчет за период
         private void button51_Click(object sender, EventArgs e)
         {
-            Variables.newWorkbook("Отчет1");
-            ReportPrinter report = new ReportPrinter(NPOIPrinter.Company.SKB, dateTimePicker5.Value, dateTimePicker6.Value);
+            ReportPrinter report = new ReportPrinter(NPOIPrinter.Company.SKB, dateTimePicker5.Value, dateTimePicker6.Value);            
             report.AddList(ToReport(comboBox23.Text, dateTimePicker5.Value, dateTimePicker6.Value));//арендатор и период от и до
             report.ReportCountersPeriod(comboBox23.Text);//отчет по арендатору за период
-            Process.Start(Variables.fileNameExcel);
+            Process.Start(report.fileNameExcel);
         }
 
         // выведет построчно: корпус-помещение, №счетчика, показания на начало, показания на конец, расчетный коэфф., расчет.
@@ -4248,21 +4247,20 @@ namespace MyTable
         //инвентаризация электросчетчиков
         private void button61_Click(object sender, EventArgs e)
         {
-            Variables.newWorkbook("Отчет1");
             ReportPrinter report = new ReportPrinter(NPOIPrinter.Company.Impuls);
             report.AddList(InvertoryTable(Variables.UserKeyEnum.electro));
             report.ReportCountersInventory(Variables.UserKeyEnum.electro);
-            Process.Start(@"test.xlsx");
+            //Process.Start(@"test.xlsx");
+            Process.Start(report.fileNameExcel); //теперь берет имя на себя, если это не изменено в настройках методов ReportCountersInventory, ReportCountersPeriodAll и проч.
         }
 
         //инвентаризация водомеров
         private void button62_Click(object sender, EventArgs e)
-        {
-            Variables.newWorkbook("Отчет1");
+        {            
             ReportPrinter report = new ReportPrinter(NPOIPrinter.Company.Impuls);
             report.AddList(InvertoryTable(Variables.UserKeyEnum.aqua));
             report.ReportCountersInventory(Variables.UserKeyEnum.aqua);
-            Process.Start(@"test.xlsx");
+            Process.Start(report.fileNameExcel);
         }
 
         private void textBox10_TextChanged(object sender, EventArgs e)
@@ -4277,21 +4275,20 @@ namespace MyTable
         //основной отчет в Excel (три орешка)
         private void button63_Click(object sender, EventArgs e)
         {
-            Variables.newWorkbook("Отчет1");
             List<Cell> NoInfoValues = new List<Cell>();
             List<Cell> NoInfoCounters = new List<Cell>();
             ReportPrinter report = new ReportPrinter(NPOIPrinter.Company.SKB,dateTimePicker5.Value);
             report.AddList(ReportElectroTable(dateTimePicker5.Value, out NoInfoValues, out NoInfoCounters));
             report.ReportCountersPeriodAll();
-            Variables.newSheet("Отчет2");
-            report = new ReportPrinter(NPOIPrinter.Company.SKB, dateTimePicker5.Value);           
+            report.newSheet("Отчет2");
+            //report = new ReportPrinter(NPOIPrinter.Company.SKB, dateTimePicker5.Value);           
             report.AddList(NoInfoValues);
             report.ReportCountersPeriodAll();
-            Variables.newSheet("Отчет3");
-            report = new ReportPrinter(NPOIPrinter.Company.SKB, dateTimePicker5.Value);
+            report.newSheet("Отчет3");
+            //report = new ReportPrinter(NPOIPrinter.Company.SKB, dateTimePicker5.Value);
             report.AddList(NoInfoCounters);
             report.ReportCountersPeriodAll();
-            Process.Start(@"test.xlsx");
+            Process.Start(report.fileNameExcel);
         }
 
         List<Cell> InvertoryTable(Variables.UserKeyEnum keyEnum)

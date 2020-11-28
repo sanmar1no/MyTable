@@ -15,17 +15,18 @@ using System.Diagnostics;
 
 namespace MyTable
 {
+    //Класс работы с NPOI
     class NPOIPrinter
     {
         // Создаём экземпляр нашего приложения
         // в NPOI не нужно
         // Создаём экземпляр рабочий книги Excel
-        private static IWorkbook workbook = Variables.workbook;
+        public static IWorkbook workbook { get; set; }
         // IWorkbook workbook = new HSSFWorkbook();//xls
         // Создаём экземпляр листа Excel
-        public static ISheet sheet = Variables.sheet1;
+        public ISheet sheet { get; set; }
         // Создаём экземпляр области ячеек Excel
-        private static IRow rowSheet = Variables.rowSheet;
+        private IRow rowSheet;
         private ICell cell;
         private IFont fontBody;//осовной стиль таблицы
         private ICellStyle bodyStyle;
@@ -39,17 +40,169 @@ namespace MyTable
         private int row = 0;
         private int countColumn = 0;
 
-        FileStream stream = new FileStream(@Variables.fileNameExcel, FileMode.Create, FileAccess.Write);
+        private string FileNameExcel="test.xlsx";
+        FileStream stream;
+  
+        // Создаём экземпляр области ячеек Excel
+
+        public static IFont[] fontM = new IFont[7];
+        public static ICellStyle[] styleM = new ICellStyle[7];
+
+
+
+        //вывести доступные имена листов в книге
+        public List<string> ListSheet()
+        {
+            List<string> List = new List<string>();
+            for (int i = 0; i < workbook.NumberOfSheets; i++)
+            {
+                List.Add(workbook.GetSheetName(i));
+            }
+            return List;
+        }
+
+        //создать новую книгу Excel, присвоить стилям значения
+        public void newWorkbook()
+        {
+            newWorkbook("Лист1");
+        }
+        public void newWorkbook(string NameSheet)
+        {
+            workbook = new XSSFWorkbook();
+            k = 0;
+            row = 0;
+            countColumn = 0;
+            sheet = workbook.CreateSheet(NameSheet);
+            rowSheet = sheet.CreateRow(0);
+            SetStyleSheet();
+        }
+
+        //создать в книге новый лист
+        public void newSheet(string nameSheet)
+        {
+            k = 0;
+            row = 0;
+            countColumn = 0;
+            sheet = workbook.CreateSheet(nameSheet);
+            rowSheet = sheet.CreateRow(0);
+            SetStyleSheet();
+            Start();
+        }
+
+        private void SetStyleSheet()
+        {
+            for (int i = 0; i < 7; i++)
+            {
+                fontM[i] = workbook.CreateFont();
+                styleM[i] = workbook.CreateCellStyle();
+            }
+            //Cell.Style.normal:
+            fontM[0] = workbook.CreateFont();
+            fontM[0].FontName = "ISOCPEUR";
+            fontM[0].FontHeightInPoints = 12;
+            fontM[0].IsBold = false;
+            fontM[0].IsItalic = true;
+
+            styleM[0].SetFont(fontM[0]);
+            styleM[0].BorderLeft = BorderStyle.Thin;
+            styleM[0].BorderBottom = BorderStyle.Thin;
+            styleM[0].BorderRight = BorderStyle.Thin;
+            styleM[0].BorderTop = BorderStyle.Thin;
+            styleM[0].WrapText = true;
+
+            //Cell.Style.bold:
+            fontM[1].FontName = "ISOCPEUR";
+            fontM[1].FontHeightInPoints = 12;
+            fontM[1].IsBold = true;
+            fontM[1].IsItalic = true;
+            //font.Color = IndexedColors.Red.Index;
+            styleM[1].SetFont(fontM[1]);
+            styleM[1].BorderLeft = BorderStyle.Thick;
+            styleM[1].BorderBottom = BorderStyle.Thick;
+            styleM[1].BorderRight = BorderStyle.Thick;
+            styleM[1].BorderTop = BorderStyle.Thick;
+            styleM[1].WrapText = true;
+            //Cell.Style.summ:
+            fontM[2].FontName = "ISOCPEUR";
+            fontM[2].FontHeightInPoints = 12;
+            fontM[2].IsBold = true;
+            fontM[2].IsItalic = true;
+            //font.Color = IndexedColors.Red.Index;
+            styleM[2].SetFont(fontM[2]);
+            styleM[2].BorderLeft = BorderStyle.Thin;
+            styleM[2].BorderBottom = BorderStyle.Thin;
+            styleM[2].BorderRight = BorderStyle.Thin;
+            styleM[2].BorderTop = BorderStyle.Thin;
+            styleM[2].WrapText = true;
+
+            //Cell.Style.clientCame:
+            fontM[3].FontName = "ISOCPEUR";
+            fontM[3].FontHeightInPoints = 12;
+            fontM[3].IsBold = true;
+            fontM[3].IsItalic = true;
+            //fontDynamic.Color = IndexedColors.Aqua.Index;
+            styleM[3].SetFont(fontM[3]);
+            styleM[3].BorderLeft = BorderStyle.Medium;
+            styleM[3].BorderBottom = BorderStyle.Medium;
+            styleM[3].BorderRight = BorderStyle.Medium;
+            styleM[3].BorderTop = BorderStyle.Medium;
+            styleM[3].FillForegroundColor = IndexedColors.Aqua.Index;
+            styleM[3].FillPattern = FillPattern.SolidForeground;
+            styleM[3].WrapText = true;
+
+            //Cell.Style.clientOut:
+            fontM[4].FontName = "ISOCPEUR";
+            fontM[4].FontHeightInPoints = 12;
+            fontM[4].IsBold = true;
+            fontM[4].IsItalic = true;
+            styleM[4].SetFont(fontM[4]);
+            styleM[4].BorderLeft = BorderStyle.Medium;
+            styleM[4].BorderBottom = BorderStyle.Medium;
+            styleM[4].BorderRight = BorderStyle.Medium;
+            styleM[4].BorderTop = BorderStyle.Medium;
+            styleM[4].FillForegroundColor = IndexedColors.LightGreen.Index;
+            styleM[4].FillPattern = FillPattern.SolidForeground;
+            styleM[4].WrapText = true;
+            //Cell.Style.colorPink:
+            fontM[5].FontName = "ISOCPEUR";
+            fontM[5].FontHeightInPoints = 12;
+            fontM[5].IsBold = false;
+            fontM[5].IsItalic = true;
+            styleM[5].SetFont(fontM[5]);
+            styleM[5].BorderLeft = BorderStyle.Medium;
+            styleM[5].BorderBottom = BorderStyle.Medium;
+            styleM[5].BorderRight = BorderStyle.Medium;
+            styleM[5].BorderTop = BorderStyle.Medium;
+            styleM[5].FillForegroundColor = IndexedColors.Pink.Index;
+            styleM[5].FillPattern = FillPattern.SolidForeground;
+            styleM[5].WrapText = true;
+            //Style.noBorder:
+            fontM[6].FontName = "ISOCPEUR";
+            fontM[6].FontHeightInPoints = 12;
+            fontM[6].IsBold = false;
+            fontM[6].IsItalic = false;
+            styleM[6].SetFont(fontM[6]);
+            styleM[6].BorderLeft = BorderStyle.None;
+            styleM[6].BorderBottom = BorderStyle.None;
+            styleM[6].BorderRight = BorderStyle.None;
+            styleM[6].BorderTop = BorderStyle.None;
+            styleM[6].WrapText = false;
+        }
+
         public NPOIPrinter() : this(new Company())
         {
         }
-
-        public NPOIPrinter(Company company)
+        public NPOIPrinter(Company company) : this(company, "Отчет1")
+        {
+        }
+        public NPOIPrinter(Company company, string nameSheet)
         {
             this.company = company;
-            workbook = Variables.workbook;
-            sheet = Variables.sheet1;
-            rowSheet = Variables.rowSheet;
+            newWorkbook(nameSheet);
+            Start();
+        }
+        private void Start()
+        {
             cell = rowSheet.CreateCell(0);
             fontBody = workbook.CreateFont();
             bodyStyle = workbook.CreateCellStyle();
@@ -163,8 +316,7 @@ namespace MyTable
                 //cell.Style.Numberformat.Format = "0.0";
 
                 rowSheet.Cells[countCell].CellStyle = Style1;
-                cell.SetCellType(type);
-                
+                cell.SetCellType(type);                
             }
         }
         //Укажем арендатора в шапке отчета
@@ -254,10 +406,10 @@ namespace MyTable
         { 
         
         }
-
         //подпись
-        public void EndSheet()        
+        public void EndSheet(string FileName)        
         {
+            FileNameExcel = FileName;
             AddRow("");
             AddRow("");
             AddRow("");
@@ -272,15 +424,9 @@ namespace MyTable
             AddCell("", 3);
             AddCell(new Cell("М.П.", Cell.Style.noBorder), 4);
 
-            //FileStream sw = File.Create("test.xlsx");
-            //workbook.Write(sw);
-            ///sw.Close();
-            ///
-            //stream = File.Create("test.xlsx");
-
+            stream = new FileStream(@FileNameExcel, FileMode.Create, FileAccess.Write);
             workbook.Write(stream);
             stream.Close();
-
 
             //workbook = Variables.newWorkbook();
             //Variables.newWorkbook();
@@ -298,91 +444,91 @@ namespace MyTable
              var range = new NPOI.SS.Util.CellRangeAddress(1, 6, 2, 5);
              sheet.AddMergedRegion(range);*/
 
-            ISheet sheet1 = workbook.CreateSheet("Sheet1");
+            ISheet sheet = workbook.CreateSheet("sheet");
 
             //fill background
             ICellStyle style1 = workbook.CreateCellStyle();
             style1.FillForegroundColor = IndexedColors.Blue.Index;
             style1.FillPattern = FillPattern.SolidForeground;
            // style1.FillBackgroundColor = IndexedColors.Pink.Index;
-            sheet1.CreateRow(0).CreateCell(0).CellStyle = style1;
+            sheet.CreateRow(0).CreateCell(0).CellStyle = style1;
 
             //fill background
             ICellStyle style2 = workbook.CreateCellStyle();
            // style2.FillForegroundColor = IndexedColors.Yellow.Index;
             style2.FillPattern = FillPattern.SolidForeground;
             style2.FillBackgroundColor = IndexedColors.Rose.Index;
-            sheet1.CreateRow(1).CreateCell(0).CellStyle = style2;
+            sheet.CreateRow(1).CreateCell(0).CellStyle = style2;
 
             //fill background
             ICellStyle style3 = workbook.CreateCellStyle();
             style3.FillForegroundColor = IndexedColors.Lime.Index;
             style3.FillPattern = FillPattern.SolidForeground;
             style3.FillBackgroundColor = IndexedColors.LightGreen.Index;
-            sheet1.CreateRow(2).CreateCell(0).CellStyle = style3;
+            sheet.CreateRow(2).CreateCell(0).CellStyle = style3;
 
             //fill background
             ICellStyle style4 = workbook.CreateCellStyle();
             style4.FillForegroundColor = IndexedColors.Blue.Index;
             style4.FillPattern = FillPattern.SolidForeground;
             style4.FillBackgroundColor = IndexedColors.Blue.Index;
-            sheet1.CreateRow(3).CreateCell(0).CellStyle = style4;
+            sheet.CreateRow(3).CreateCell(0).CellStyle = style4;
 
             //fill background
             ICellStyle style5 = workbook.CreateCellStyle();
             style5.FillForegroundColor = IndexedColors.LightBlue.Index;
             style5.FillPattern = FillPattern.Bricks;
             style5.FillBackgroundColor = IndexedColors.Plum.Index;
-            sheet1.CreateRow(4).CreateCell(0).CellStyle = style5;
+            sheet.CreateRow(4).CreateCell(0).CellStyle = style5;
 
             //fill background
             ICellStyle style6 = workbook.CreateCellStyle();
             style6.FillForegroundColor = IndexedColors.SeaGreen.Index;
             style6.FillPattern = FillPattern.FineDots;
             style6.FillBackgroundColor = IndexedColors.White.Index;
-            sheet1.CreateRow(5).CreateCell(0).CellStyle = style6;
+            sheet.CreateRow(5).CreateCell(0).CellStyle = style6;
 
             //fill background
             ICellStyle style7 = workbook.CreateCellStyle();
             style7.FillForegroundColor = IndexedColors.Orange.Index;
             style7.FillPattern = FillPattern.Diamonds;
             style7.FillBackgroundColor = IndexedColors.Orchid.Index;
-            sheet1.CreateRow(6).CreateCell(0).CellStyle = style7;
+            sheet.CreateRow(6).CreateCell(0).CellStyle = style7;
 
             //fill background
             ICellStyle style8 = workbook.CreateCellStyle();
             style8.FillForegroundColor = IndexedColors.White.Index;
             style8.FillPattern = FillPattern.Squares;
             style8.FillBackgroundColor = IndexedColors.Red.Index;
-            sheet1.CreateRow(7).CreateCell(0).CellStyle = style8;
+            sheet.CreateRow(7).CreateCell(0).CellStyle = style8;
 
             //fill background
             ICellStyle style9 = workbook.CreateCellStyle();
             style9.FillForegroundColor = IndexedColors.RoyalBlue.Index;
             style9.FillPattern = FillPattern.SparseDots;
             style9.FillBackgroundColor = IndexedColors.Yellow.Index;
-            sheet1.CreateRow(8).CreateCell(0).CellStyle = style9;
+            sheet.CreateRow(8).CreateCell(0).CellStyle = style9;
 
             //fill background
             ICellStyle style10 = workbook.CreateCellStyle();
             style10.FillForegroundColor = IndexedColors.RoyalBlue.Index;
             style10.FillPattern = FillPattern.ThinBackwardDiagonals;
             style10.FillBackgroundColor = IndexedColors.Yellow.Index;
-            sheet1.CreateRow(9).CreateCell(0).CellStyle = style10;
+            sheet.CreateRow(9).CreateCell(0).CellStyle = style10;
 
             //fill background
             ICellStyle style11 = workbook.CreateCellStyle();
             style11.FillForegroundColor = IndexedColors.RoyalBlue.Index;
             style11.FillPattern = FillPattern.ThickForwardDiagonals;
             style11.FillBackgroundColor = IndexedColors.Yellow.Index;
-            sheet1.CreateRow(10).CreateCell(0).CellStyle = style11;
+            sheet.CreateRow(10).CreateCell(0).CellStyle = style11;
 
             //fill background
             ICellStyle style12 = workbook.CreateCellStyle();
             style12.FillForegroundColor = IndexedColors.RoyalBlue.Index;
             style12.FillPattern = FillPattern.ThickHorizontalBands;
             style12.FillBackgroundColor = IndexedColors.Yellow.Index;
-            sheet1.CreateRow(11).CreateCell(0).CellStyle = style12;
+            sheet.CreateRow(11).CreateCell(0).CellStyle = style12;
 
 
             //fill background
@@ -390,37 +536,37 @@ namespace MyTable
             style13.FillForegroundColor = IndexedColors.RoyalBlue.Index;
             style13.FillPattern = FillPattern.ThickVerticalBands;
             style13.FillBackgroundColor = IndexedColors.Yellow.Index;
-            sheet1.CreateRow(12).CreateCell(0).CellStyle = style13;
+            sheet.CreateRow(12).CreateCell(0).CellStyle = style13;
 
             //fill background
             ICellStyle style14 = workbook.CreateCellStyle();
             style14.FillForegroundColor = IndexedColors.RoyalBlue.Index;
             style14.FillPattern = FillPattern.ThickBackwardDiagonals;
             style14.FillBackgroundColor = IndexedColors.Yellow.Index;
-            sheet1.CreateRow(13).CreateCell(0).CellStyle = style14;
+            sheet.CreateRow(13).CreateCell(0).CellStyle = style14;
 
             //fill background
             ICellStyle style15 = workbook.CreateCellStyle();
             style15.FillForegroundColor = IndexedColors.RoyalBlue.Index;
             style15.FillPattern = FillPattern.ThinForwardDiagonals;
             style15.FillBackgroundColor = IndexedColors.Yellow.Index;
-            sheet1.CreateRow(14).CreateCell(0).CellStyle = style15;
+            sheet.CreateRow(14).CreateCell(0).CellStyle = style15;
 
             //fill background
             ICellStyle style16 = workbook.CreateCellStyle();
             style16.FillForegroundColor = IndexedColors.RoyalBlue.Index;
             style16.FillPattern = FillPattern.ThinHorizontalBands;
             style16.FillBackgroundColor = IndexedColors.Yellow.Index;
-            sheet1.CreateRow(15).CreateCell(0).CellStyle = style16;
+            sheet.CreateRow(15).CreateCell(0).CellStyle = style16;
 
             //fill background
             ICellStyle style17 = workbook.CreateCellStyle();
             style17.FillForegroundColor = IndexedColors.RoyalBlue.Index;
             style17.FillPattern = FillPattern.ThinVerticalBands;
             style17.FillBackgroundColor = IndexedColors.Yellow.Index;
-            sheet1.CreateRow(16).CreateCell(0).CellStyle = style17;
+            sheet.CreateRow(16).CreateCell(0).CellStyle = style17;
 
-            FileStream sw = File.Create(Variables.fileNameExcel);
+            FileStream sw = File.Create(FileNameExcel);
             workbook.Write(sw);
             sw.Close();
             //workbook.Write(stream);

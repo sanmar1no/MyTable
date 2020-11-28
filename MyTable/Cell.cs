@@ -4,17 +4,17 @@ using NPOI.XSSF.UserModel;
 using System.Diagnostics;
 namespace MyTable
 {
+    //Класс ячеек (стиль-значение)
     class Cell
     {
         // Создаём экземпляр рабочий книги Excel
-        //public static IWorkbook workbook = new XSSFWorkbook();
-        //private static IWorkbook workbook = Variables.workbook;
-        private IFont fontDynamic = Variables.workbook.CreateFont();
-        public ICellStyle styleDynamic = Variables.workbook.CreateCellStyle();
+        public IWorkbook workbook { get; set; }
+        private IFont fontDynamic;
+        public ICellStyle styleDynamic { get; set; }
         public CellType Type = CellType.String;
 
-        private IFont[] fontM = Variables.fontM;
-        private ICellStyle[] styleM = Variables.styleM;
+        private IFont[] fontM;
+        private ICellStyle[] styleM;
 
         public enum Style
         {
@@ -34,6 +34,8 @@ namespace MyTable
 
         private void SetStyle(Cell.Style style)
         {
+            fontM = NPOIPrinter.fontM;
+            styleM = NPOIPrinter.styleM;
             switch (style)
             {
                 case Cell.Style.normal:
@@ -108,14 +110,11 @@ namespace MyTable
         public Cell(string Value) : this(Value,Style.normal)
         {
         }
-      /* public Cell(string Value, Cell.Style style) : this(Value, style)
-        {
-        }*/
         public Cell(string Value, Cell.Style style)
         {
-            //SetStyle(style);
-            fontDynamic = Variables.workbook.CreateFont();
-            styleDynamic = Variables.workbook.CreateCellStyle();
+            workbook = NPOIPrinter.workbook;
+            fontDynamic = workbook.CreateFont();
+            styleDynamic = workbook.CreateCellStyle();
             styleDynamic = ToStyle(style);            
             this.Value = Value;
         }
