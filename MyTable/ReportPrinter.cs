@@ -1,39 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 
 namespace MyTable
 {
+    //Класс формирования отчетов для печати в Эксель
     class ReportPrinter
     {
-        public ExcelPrinter.Company company = new ExcelPrinter.Company();
+        public NPOIPrinter.Company company = new NPOIPrinter.Company();
         public Variables.UserKeyEnum reportKey = new Variables.UserKeyEnum();
         public DateTime dTP5 = new DateTime();
         public DateTime dTP6 = new DateTime();
+
+        private NPOIPrinter report1;
         private List<Cell> TableList = new List<Cell>();
 
+        private static string currentDir = Environment.CurrentDirectory;
+        public string fileNameExcel { get; set; }
+
         public ReportPrinter()
-            : this(new ExcelPrinter.Company(), DateTime.Now, new DateTime())
+            : this(new NPOIPrinter.Company(), DateTime.Now, new DateTime())
         {
         }
-        public ReportPrinter(ExcelPrinter.Company company)
+        public ReportPrinter(NPOIPrinter.Company company)
             : this(company, DateTime.Now, new DateTime())
         {
         }
-        /* public ReportPrinter(ExcelPrinter.Company company, Variables.userKeyEnum report)
+        /* public ReportPrinter(NPOIPrinter.Company company, Variables.userKeyEnum report)
              : this(company, DateTime.Now, new DateTime())
          {
                     this.reportKey = reportKey;
          }*/
-        public ReportPrinter(ExcelPrinter.Company company, DateTime dTP5)
+        public ReportPrinter(NPOIPrinter.Company company, DateTime dTP5)
             : this(company, dTP5, new DateTime())
         {
         }
-        public ReportPrinter(ExcelPrinter.Company company, DateTime dTP5, DateTime dTP6)
+        public ReportPrinter(NPOIPrinter.Company company, DateTime dTP5, DateTime dTP6)
         {
             this.company = company;
             this.dTP5 = dTP5;
             this.dTP6 = dTP6;
+            report1 = new NPOIPrinter(company); //создадим объект книги для постройки отчета, пока без имени листа
         }
         public void AddList(List<Cell> List)
         {
@@ -95,56 +104,96 @@ namespace MyTable
             }
             return retMonth;
         }
-        public void ReportCountersPeriod(string arendaCB23) //отчет по расходу электросчетчиков за период 
+        public void newWorkBook()
         {
-            List<string> Header = new List<string>();
-            ExcelPrinter report1 = new ExcelPrinter();
+            report1 = new NPOIPrinter(company, fileNameExcel);
+        }
+
+        public void newSheet(string NameSheet)
+        {
+            report1.newSheet(NameSheet);
+        }
+
+        public void ReportCountersPeriod(string arendaCB23)
+        {
+            ReportCountersPeriod(arendaCB23, null);
+        }
+        public void ReportCountersPeriod(string arendaCB23, string FileName) //отчет по расходу электросчетчиков за период 
+        {
+            if (FileName != null && FileName != "")
+            {
+                fileNameExcel = FileName;
+            }
+            else fileNameExcel =  currentDir + @"\Отчеты\расход по арендатору " + arendaCB23.Replace("\"", "") + " за месяц.xlsx";
+            List<Cell> Header = new List<Cell>();
+            
             DateTime data = dTP6.AddMonths(1);
             //List<string> Header = new List<string>(){ "№", "№ точки учета по договору", "№ счетчика", "Показания на  01."+dTP5.Month + "." + dTP5.Year, "Показания на 01." + data.Month + "." + data.Year, "Расч.Коэфф.", "Расход, кВт.ч."};
-            Header.Add("№ п/п");
-            Header.Add("№ точки учета по договору");
-            Header.Add("№ счетчика    ");
-            Header.Add("Показания на  01." + dTP5.Month + "." + dTP5.Year);
-            Header.Add("Показания на 01." + data.Month + "." + data.Year);
-            Header.Add("Расч.Коэфф.");
-            Header.Add("Расход, кВт.ч.");
-            report1.company = ExcelPrinter.Company.SKB;
+            Header.Add(new Cell("№ п/п",Cell.Style.bold));
+            Header.Add(new Cell("№ точки учета по договору", Cell.Style.bold));
+            Header.Add(new Cell("№ счетчика    ", Cell.Style.bold));
+            Header.Add(new Cell("Показания на  01." + dTP5.Month + "." + dTP5.Year, Cell.Style.bold));
+            Header.Add(new Cell("Показания на 01." + data.Month + "." + data.Year, Cell.Style.bold));
+            Header.Add(new Cell("Расч.Коэфф.", Cell.Style.bold));
+            Header.Add(new Cell("Расход, кВт.ч.", Cell.Style.bold));
             report1.HeadArenda(arendaCB23);
             report1.NameTable("Расчет количества потребленной электроэнергии за " + periodMY(dTP5, dTP6));
             report1.HeadTable(Header);
             report1.BodyTable(TableList);
             report1.FooterTableSumm("G");
             report1.BordersTable();
-            report1.EndSheet();
+            report1.EndSheet(fileNameExcel);
         }
-        public void ReportCountersInventory(Variables.UserKeyEnum reportKey) //инвентаризация электросчетчиков/водомеров
+        public void ReportCountersInventory(Variables.UserKeyEnum reportKey)
         {
-            List<string> Header = new List<string>();
-            ExcelPrinter report1 = new ExcelPrinter();
-            report1.company = ExcelPrinter.Company.Impuls;//исправить
-            Header.Add("№ п/п");
-            Header.Add("№ Корпуса и помещения");
-            Header.Add("№ счетчика    ");
-            Header.Add("Марка счетчика");
-            Header.Add("Год выпуска/поверки");
-            Header.Add("Показания (последние), " + (reportKey == Variables.UserKeyEnum.electro ? "кВт*ч" : "куб.м."));
+            ReportCountersInventory(reportKey, null);
+        }
+
+        //инвентаризация электросчетчиков/водомеров
+        public void ReportCountersInventory(Variables.UserKeyEnum reportKey, string FileName) 
+        {
+            if (FileName != null && FileName != "")
+            {
+                fileNameExcel = FileName;
+            }
+            else fileNameExcel = currentDir + @"\Отчеты\инвентаризация.xlsx";
+            List<Cell> Header = new List<Cell>();
+            //NPOIPrinter report1 = new NPOIPrinter(company, fileNameExcel);
+            //report1.company = NPOIPrinter.Company.Impuls;//исправить
+            Header.Add(new Cell("№ п/п", Cell.Style.bold));
+            Header.Add(new Cell("№ Корпуса и помещения", Cell.Style.bold));
+            Header.Add(new Cell("№ счетчика    ", Cell.Style.bold));
+            Header.Add(new Cell("Марка счетчика", Cell.Style.bold));
+            Header.Add(new Cell("Год выпуска/поверки", Cell.Style.bold));
+            Header.Add(new Cell("Показания (последние), " + (reportKey == Variables.UserKeyEnum.electro ? "кВт*ч" : "куб.м."), Cell.Style.bold));
             if(reportKey == Variables.UserKeyEnum.electro) report1.NameTable("Инвентаризация электросчетчиков");
             if(reportKey == Variables.UserKeyEnum.aqua) report1.NameTable("Инвентаризация водомеров");
             report1.HeadTable(Header);
             report1.BodyTable(TableList);
             report1.FooterTableCount();
             report1.BordersTable();
-            report1.EndSheet();
+            report1.EndSheet(fileNameExcel);
         }
-        public void ReportCountersPeriodAll() //Основной отчет по электроэнергии (период - месяц)
+        public void ReportCountersPeriodAll()
         {
-            List<string> Header = new List<string>();
-            ExcelPrinter report1 = new ExcelPrinter();
-            report1.company = ExcelPrinter.Company.SKB;//исправить
-            Header.Add("№ п/п");
-            Header.Add("Арендатор  ");
-            Header.Add("№ счетчика  ");
-            Header.Add("Расход, кВт*ч");
+            ReportCountersPeriodAll(null);
+        }
+
+        //Основной отчет по электроэнергии (период - месяц)
+        public void ReportCountersPeriodAll(string FileName) 
+        {
+            if (FileName != null && FileName != "")
+            {
+                fileNameExcel = FileName;
+            }
+            else fileNameExcel = currentDir + @"\Отчеты\Отчет(электроэнергия).xlsx";
+            List<Cell> Header = new List<Cell>();
+            //NPOIPrinter report1 = new NPOIPrinter(company, fileNameExcel);
+            //report1.company = NPOIPrinter.Company.SKB;//исправить
+            Header.Add(new Cell("№ п/п", Cell.Style.bold));
+            Header.Add(new Cell("Арендатор  ", Cell.Style.bold));
+            Header.Add(new Cell("№ счетчика  ", Cell.Style.bold));
+            Header.Add(new Cell("Расход, кВт*ч", Cell.Style.bold));
             string dataStr = "";
             if (dTP5 != new DateTime())
             {
@@ -156,17 +205,26 @@ namespace MyTable
             report1.BodyTable(TableList);
             report1.FooterTableSumm("D");
             report1.BordersTable();
-            report1.EndSheet();
+            report1.EndSheet(fileNameExcel);
         }
         public void ReportArendaPhoneBook()
         {
-            List<string> Header = new List<string>();
-            ExcelPrinter report1 = new ExcelPrinter();
-            Header.Add("№ п/п");
-            Header.Add("Наименование организации ");
-            Header.Add("ФИО руководителя организации");
-            Header.Add("Место расположения             ");
-            Header.Add("Телефоны                                                          ");
+            ReportArendaPhoneBook(null);
+        }
+        public void ReportArendaPhoneBook(string FileName)
+        {
+            if (FileName != null && FileName != "")
+            {
+                fileNameExcel = FileName;
+            }
+            else fileNameExcel = currentDir + @"\Отчеты\Телефоны арендаторов.xlsx";
+            List<Cell> Header = new List<Cell>();
+            //NPOIPrinter report1 = new NPOIPrinter();
+            Header.Add(new Cell("№ п/п", Cell.Style.bold));
+            Header.Add(new Cell("Наименование организации ", Cell.Style.bold));
+            Header.Add(new Cell("ФИО руководителя организации", Cell.Style.bold));
+            Header.Add(new Cell("Место расположения             ", Cell.Style.bold));
+            Header.Add(new Cell("Телефоны                                                          ", Cell.Style.bold));
             string dataStr = "";
             if (dTP5 != new DateTime())
             {
@@ -177,17 +235,17 @@ namespace MyTable
             report1.HeadTable(Header);
             report1.BodyTable(TableList);
             report1.BordersTable();
-            report1.EndSheet();
+            report1.EndSheet(fileNameExcel);
         }
         public void test()
         {
-            List<string> Header = new List<string>();
+            List<Cell> Header = new List<Cell>();
             List<Cell> Table = new List<Cell>();
-            Header.Add("№ п/п");
-            Header.Add("Наименование организации ");
+            Header.Add(new Cell("№ п/п", Cell.Style.bold));
+            Header.Add(new Cell("Наименование организации ", Cell.Style.bold));
             Cell cell = new Cell();
             cell.Value = "123123";
-            ExcelPrinter report1 = new ExcelPrinter();
+            NPOIPrinter report1 = new NPOIPrinter();
             report1.NameTable("Перечень арендаторов АО \"Компания Импульс\",  ");
             report1.HeadTable(Header);
             Table.Add(cell);
