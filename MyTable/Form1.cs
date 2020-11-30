@@ -485,7 +485,7 @@ namespace MyTable
                             {
                                 if (s.IndexOf(";") != 0)
                                 {
-                                    counters[k, floor, j, room] = s.Substring(0, s.IndexOf(";"));
+                                    counters[k, floor, j, room] = fixOutputValue(s.Substring(0, s.IndexOf(";")));//fix "No_Value"
                                 }
                                 s = s.Substring(s.IndexOf(";") + 1);
                             }
@@ -518,6 +518,14 @@ namespace MyTable
             dataMod[0] = null;
         }
 
+        string fixOutputValue(string Value)
+        {
+            if (Value == "No_Value")
+            {
+                return "";
+            }
+            return Value;
+        }
         void SaveDB()
         {
             File.Clear();
@@ -1929,280 +1937,309 @@ namespace MyTable
         }
 
         //записать данные (Сохранить изменения)
+        void Save()
+        {
+            if (countRoom[floorGlobal] == -1)
+            {
+                countRoom[floorGlobal]++;
+                roomGlobal = countRoom[floorGlobal];
+            }
+            else
+            {
+                roomGlobal = FindPom(comboBox5.Text, comboBox6.Text);
+                if (roomGlobal < 0)
+                {
+                    countRoom[floorGlobal]++;
+                    roomGlobal = countRoom[floorGlobal];
+                }
+                else
+                {
+                    //вписать остальные данные по этому помещению?
+                }
+            }//шпора data шпаргалка                
+            if (!(data[floorGlobal, 0, roomGlobal] == null && comboBox5.Text == "") && (data[floorGlobal, 0, roomGlobal] != comboBox5.Text.Replace(";", ",")))
+            {
+                modData[0] = comboBox5.Text.Replace(";", ",");//корпус
+            }
+            if (!(data[floorGlobal, 1, roomGlobal] == null && comboBox6.Text == "") && (data[floorGlobal, 1, roomGlobal] != comboBox6.Text.Replace(";", ",")))
+            {
+                modData[1] = comboBox6.Text.Replace(";", ",");//помещение
+            }
+            if (!(data[floorGlobal, 2, roomGlobal] == null && comboBox7.Text == "") && (data[floorGlobal, 2, roomGlobal] != comboBox7.Text.Replace(";", ",")))
+            {
+                modData[2] = comboBox7.Text.Replace(";", ",");//запитка от тп
+            }
+            if (!(data[floorGlobal, 3, roomGlobal] == null && comboBox8.Text == "") && (data[floorGlobal, 3, roomGlobal] != comboBox8.Text.Replace(";", ",")))
+            {
+                modData[3] = comboBox8.Text.Replace(";", ",");//запитка от сп
+            }
+            if (!(data[floorGlobal, 4, roomGlobal] == null && comboBox9.Text == "") && (data[floorGlobal, 4, roomGlobal] != comboBox9.Text.Replace(";", ",")))
+            {
+                modData[4] = comboBox9.Text.Replace(";", ",");//марка кабеля
+            }
+            if (!(data[floorGlobal, 5, roomGlobal] == null && comboBox10.Text == "") && (data[floorGlobal, 5, roomGlobal] != comboBox10.Text.Replace(";", ",")))
+            {
+                modData[5] = comboBox10.Text.Replace(";", ",");//длина кабеля (м)
+            }
+            if (!(data[floorGlobal, 6, roomGlobal] == null && comboBox11.Text == "") && (data[floorGlobal, 6, roomGlobal] != comboBox11.Text.Replace(";", ",")))
+            {
+                modData[6] = comboBox11.Text.Replace(";", ",");//мощность кВт
+            }
+            if (!(data[floorGlobal, 7, roomGlobal] == null && comboBox12.Text == "") && (data[floorGlobal, 7, roomGlobal] != comboBox12.Text.Replace(";", ",")))
+            {
+                modData[7] = comboBox12.Text.Replace(";", ",");//тип отключающего устройства
+            }
+            if (!(data[floorGlobal, 8, roomGlobal] == null && comboBox13.Text == "") && (data[floorGlobal, 8, roomGlobal] != comboBox13.Text.Replace(";", ",")))
+            {
+                modData[8] = comboBox13.Text.Replace(";", ",");//Уставка (А) In
+            }
+            if (!(data[floorGlobal, 9, roomGlobal] == null && comboBox14.Text == "") && (data[floorGlobal, 9, roomGlobal] != comboBox14.Text.Replace(";", ",")))
+            {
+                modData[9] = comboBox14.Text.Replace(";", ",");//Номер электросчетчика
+            }
+            if (!(data[floorGlobal, 10, roomGlobal] == null && comboBox15.Text == "") && (data[floorGlobal, 10, roomGlobal] != comboBox15.Text.Replace(";", ",")))
+            {
+                modData[10] = comboBox15.Text.Replace(";", ",");//марка электросчетчика
+            }
+            if (!(data[floorGlobal, 11, roomGlobal] == null && textBox4.Text == "") && (data[floorGlobal, 11, roomGlobal] != textBox4.Text.Replace(";", ",")))
+            {
+                modData[11] = textBox4.Text.Replace(";", ",");//год в/поверки эл.счетчика
+            }
+            if (!(data[floorGlobal, 12, roomGlobal] == null && comboBox16.Text == "") && (data[floorGlobal, 12, roomGlobal] != comboBox16.Text.Replace(";", ",")))
+            {
+                modData[12] = comboBox16.Text.Replace(";", ",");//номер водомера
+            }
+            if (!(data[floorGlobal, 13, roomGlobal] == null && comboBox17.Text == "") && (data[floorGlobal, 13, roomGlobal] != comboBox17.Text.Replace(";", ",")))
+            {
+                modData[13] = comboBox17.Text.Replace(";", ",");//марка водомера
+            }
+            if (!(data[floorGlobal, 14, roomGlobal] == null && textBox5.Text == "") && (data[floorGlobal, 14, roomGlobal] != textBox5.Text.Replace(";", ",")))
+            {
+                modData[14] = textBox5.Text.Replace(";", ",");//год в/поверки водомера
+            }
+            if (!(data[floorGlobal, 15, roomGlobal] == null && comboBox18.Text == "") && (data[floorGlobal, 15, roomGlobal] != comboBox18.Text.Replace(";", ",")))
+            {
+                modData[15] = comboBox18.Text.Replace(";", ",");//коэффициент ТТ
+            }
+            if (!(data[floorGlobal, 16, roomGlobal] == null && textBox6.Text == "") && (data[floorGlobal, 16, roomGlobal] != textBox6.Text.Replace(";", ",")))
+            {
+                modData[16] = textBox6.Text.Replace(";", ",");//номер фазы А
+            }
+            if (!(data[floorGlobal, 17, roomGlobal] == null && textBox7.Text == "") && (data[floorGlobal, 17, roomGlobal] != textBox7.Text.Replace(";", ",")))
+            {
+                modData[17] = textBox7.Text.Replace(";", ",");//номер фазы В
+            }
+            if (!(data[floorGlobal, 18, roomGlobal] == null && textBox8.Text == "") && (data[floorGlobal, 18, roomGlobal] != textBox8.Text.Replace(";", ",")))
+            {
+                modData[18] = textBox8.Text.Replace(";", ",");//номер фазы С
+            }
+            if (!(data[floorGlobal, 19, roomGlobal] == null && textBox9.Text == "") && (data[floorGlobal, 19, roomGlobal] != textBox9.Text.Replace(";", ",")))
+            {
+                modData[19] = textBox9.Text.Replace(";", ",");//год в/поверки
+            }
+            if (!(data[floorGlobal, 20, roomGlobal] == null && dateTimePicker3.Value.ToShortDateString() == "") && (data[floorGlobal, 20, roomGlobal] != dateTimePicker3.Value.ToShortDateString().Replace(";", ",")))
+            {
+                modData[20] = dateTimePicker3.Value.ToShortDateString().Replace(";", ",");//дата опломбировки эл.счетчика
+            }
+            if (!(data[floorGlobal, 21, roomGlobal] == null && textBox12.Text == "") && (data[floorGlobal, 21, roomGlobal] != textBox12.Text.Replace(";", ",")))
+            {
+                modData[21] = textBox12.Text.Replace(";", ",");//№ пломбы эл.счетчика
+            }
+            if (!(data[floorGlobal, 22, roomGlobal] == null && textBox14.Text == "") && (data[floorGlobal, 22, roomGlobal] != textBox14.Text.Replace(";", ",")))
+            {
+                modData[22] = textBox14.Text.Replace(";", ",");//№ пломбы ТТ "А"
+            }
+            if (!(data[floorGlobal, 23, roomGlobal] == null && textBox15.Text == "") && (data[floorGlobal, 23, roomGlobal] != textBox15.Text.Replace(";", ",")))
+            {
+                modData[23] = textBox15.Text.Replace(";", ",");//№ пломбы ТТ "В"
+            }
+            if (!(data[floorGlobal, 24, roomGlobal] == null && textBox16.Text == "") && (data[floorGlobal, 24, roomGlobal] != textBox16.Text.Replace(";", ",")))
+            {
+                modData[24] = textBox16.Text.Replace(";", ",");//№ пломбы ТТ "С"
+            }
+            if (!(data[floorGlobal, 25, roomGlobal] == null && dateTimePicker4.Value.ToShortDateString() == "") && (data[floorGlobal, 25, roomGlobal] != dateTimePicker4.Value.ToShortDateString().Replace(";", ",")))
+            {
+                modData[25] = dateTimePicker4.Value.ToShortDateString().Replace(";", ",");//дата опломбировки водомера
+            }
+            if (!(data[floorGlobal, 26, roomGlobal] == null && textBox13.Text == "") && (data[floorGlobal, 26, roomGlobal] != textBox13.Text.Replace(";", ",")))
+            {
+                modData[26] = textBox13.Text.Replace(";", ",");//№ пломбы водомера
+            }
+            if (!(data[floorGlobal, 27, roomGlobal] == null && textBox19.Text == "") && (data[floorGlobal, 27, roomGlobal] != textBox19.Text.Replace(";", ",")))
+            {
+                modData[27] = textBox19.Text.Replace(";", ",");//кв.м.               
+            }
+            if (!(data[floorGlobal, 28, roomGlobal] == null && textBox22.Text == "") && (data[floorGlobal, 28, roomGlobal] != textBox22.Text.Replace(";", ",")))
+            {
+                modData[28] = textBox22.Text.Replace(";", ",");//Планировка
+            }
+            if (!(data[floorGlobal, 29, roomGlobal] == null && textBox23.Text == "") && (data[floorGlobal, 29, roomGlobal] != textBox23.Text.Replace(";", ",")))
+            {
+                modData[29] = textBox23.Text.Replace(";", ",");//Однолинейная схема
+            }
+            if (!(data[floorGlobal, 30, roomGlobal] == null && textBox24.Text == "") && (data[floorGlobal, 30, roomGlobal] != textBox24.Text.Replace(";", ",")))
+            {
+                modData[30] = textBox24.Text.Replace(";", ",");//План электросети
+            }
+            if (!(data[floorGlobal, 31, roomGlobal] == null && textBox25.Text == "") && (data[floorGlobal, 31, roomGlobal] != textBox25.Text.Replace(";", ",")))
+            {
+                modData[31] = textBox25.Text.Replace(";", ",");//План водоснабжения
+            }
+            //data[floorGlobal, 32, roomGlobal] = textBox26.Text.Replace(";", ",");//Папка арендатора
+            int k = 0;
+            //SdvigCHtoOne(arenda, 10, dateTimePicker1.Value.ToShortDateString().Replace(";", ","),5); //в скобочках длина массива, котрый сдвигается на 1.
+
+            //ЕСЛИ арендатор не меняется, не нужно записывать новую строку. в остальных случаях новая запись.
+            if (arenda[k, floorGlobal, 0, roomGlobal] != dateTimePicker1.Value.ToShortDateString().Replace(";", ","))
+            {
+                modArenda[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");//дата начала аренды
+            }
+            if (!(arenda[k, floorGlobal, 1, roomGlobal] == null && comboBox1.Text == "") && (arenda[k, floorGlobal, 1, roomGlobal] != comboBox1.Text.Replace(";", ",")))
+            {
+                modArenda[1] = comboBox1.Text.Replace(";", ",");//арендатор
+                if (modArenda[0] == null) modArenda[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
+            }
+            if (!(arenda[k, floorGlobal, 2, roomGlobal] == null && comboBox2.Text == "") && (arenda[k, floorGlobal, 2, roomGlobal] != comboBox2.Text.Replace(";", ",")))
+            {
+                modArenda[2] = comboBox2.Text.Replace(";", ",");//ФИО
+                if (modArenda[0] == null) modArenda[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
+            }
+            if (!(arenda[k, floorGlobal, 3, roomGlobal] == null && comboBox3.Text == "") && (arenda[k, floorGlobal, 3, roomGlobal] != comboBox3.Text.Replace(";", ",")))
+            {
+                modArenda[3] = comboBox3.Text.Replace(";", ",");//должность
+                if (modArenda[0] == null) modArenda[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
+            }
+            if (!(arenda[k, floorGlobal, 4, roomGlobal] == null && comboBox4.Text == "") && (arenda[k, floorGlobal, 4, roomGlobal] != comboBox4.Text.Replace(";", ",")))
+            {
+                modArenda[4] = comboBox4.Text.Replace(";", ",");//кол-во сотрудников
+                if (modArenda[0] == null) modArenda[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
+            }
+            if (!(arenda[k, floorGlobal, 5, roomGlobal] == null && textBox17.Text == "") && (arenda[k, floorGlobal, 5, roomGlobal] != textBox17.Text.Replace(";", ",")))
+            {
+                modArenda[5] = textBox17.Text.Replace(";", ",");//e-mail
+                if (modArenda[0] == null) modArenda[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
+            }
+            if (!(arenda[k, floorGlobal, 6, roomGlobal] == null && richTextBox3.Text == "") && (arenda[k, floorGlobal, 6, roomGlobal] != richTextBox3.Text.Replace(";", ",").Replace("\n", "&rn")))
+            {
+                modArenda[6] = richTextBox3.Text.Replace(";", ",").Replace("\n", "&rn");//прочее и телефоны
+                if (modArenda[0] == null) modArenda[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
+            }
+            if (!(arenda[k, floorGlobal, 7, roomGlobal] == null && textBox26.Text == "") && (arenda[k, floorGlobal, 7, roomGlobal] != textBox26.Text.Replace(";", ",")))
+            {
+                modArenda[7] = textBox26.Text.Replace(";", ",");//Папка арендатора
+                if (modArenda[0] == null) modArenda[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
+            }
+            if (modArenda[0] != null) dataModA = arenda[k, floorGlobal, 0, roomGlobal];//изменение имеет место, запишем в dataModA значение даты до изменения
+
+            // if (!(textBox10.Text == "" && textBox11.Text == ""))
+            // {//сюда функцию запишем счетчики
+            //     WriteSchet(floorGlobal, roomGlobal, dateTimePicker2.Value, textBox10.Text, textBox11.Text, comboBox14.Text, comboBox18.Text, comboBox16.Text, comboBox4.Text);
+            //  }
+
+            if (counters[0, floorGlobal, 0, roomGlobal] != dateTimePicker2.Value.ToShortDateString().Replace(";", ","))
+            {
+                modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
+            }
+            if (!(counters[0, floorGlobal, 1, roomGlobal] == null) && (counters[0, floorGlobal, 1, roomGlobal] != textBox10.Text.Replace(";", ",")))
+            {
+                if (textBox10.Text != "")
+                {
+                    modCounters[1] = textBox10.Text.Replace(";", ",");//показания электроэнергии
+                    if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
+                }
+                else
+                {
+                    modCounters[1] = "No_Value"; //fix, далее на каждый вид энергии нужна своя таблица.
+                }
+            }
+            if (!(counters[0, floorGlobal, 2, roomGlobal] == null ) && (counters[0, floorGlobal, 2, roomGlobal] != textBox11.Text.Replace(";", ",")))
+            {
+                if (textBox11.Text != "")
+                {
+                    modCounters[2] = textBox11.Text.Replace(";", ",");//показания водомера
+                    if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
+                }
+                else 
+                {
+                    modCounters[2] = "No_Value";
+                }
+            }
+            if (!(counters[0, floorGlobal, 3, roomGlobal] == null && comboBox14.Text == "") && (counters[0, floorGlobal, 3, roomGlobal] != comboBox14.Text.Replace(";", ",")))
+            {
+                modCounters[3] = comboBox14.Text.Replace(";", ",");//номер электросчетчика
+                if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
+            }
+            if (!(counters[0, floorGlobal, 4, roomGlobal] == null && comboBox18.Text == "") && (counters[0, floorGlobal, 4, roomGlobal] != comboBox18.Text.Replace(";", ",")))
+            {
+                modCounters[4] = comboBox18.Text.Replace(";", ",");//коэффициент трансформации
+                if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
+            }
+            if (!(counters[0, floorGlobal, 5, roomGlobal] == null && comboBox16.Text == "") && (counters[0, floorGlobal, 5, roomGlobal] != comboBox16.Text.Replace(";", ",")))
+            {
+                modCounters[5] = comboBox16.Text.Replace(";", ",");//номер водомера
+                if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
+            }
+            //расчет
+            if (!(counters[0, floorGlobal, 7, roomGlobal] == null && comboBox4.Text == "") && (counters[0, floorGlobal, 7, roomGlobal] != comboBox4.Text.Replace(";", ",")))
+            {
+                modCounters[7] = comboBox4.Text.Replace(";", ",");//количество сотрудников (для воды) 
+                if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
+            }
+
+            if (checkBox5.Checked)
+            {
+                if (!(counters[k, floorGlobal, 8, roomGlobal] == null && comboBox21.Text == "") && (counters[k, floorGlobal, 8, roomGlobal] != comboBox21.Text.Replace(";", ",")))
+                {
+                    modCounters[8] = comboBox21.Text.Replace(";", ",");//корпус
+                    if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
+                }
+                if (!(counters[k, floorGlobal, 9, roomGlobal] == null && comboBox21.Text == "") && (counters[k, floorGlobal, 9, roomGlobal] != comboBox21.Text.Replace(";", ",")))
+                {
+                    modCounters[9] = comboBox21.Text.Replace(";", ",");//помещение
+                    if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
+                }
+                if (!(counters[k, floorGlobal, 10, roomGlobal] == null && ToEt(counters[k, floorGlobal, 8, roomGlobal], counters[k, floorGlobal, 9, roomGlobal]) == "") && (counters[k, floorGlobal, 10, roomGlobal] != ToEt(counters[k, floorGlobal, 8, roomGlobal], counters[k, floorGlobal, 9, roomGlobal])))
+                {
+                    modCounters[10] = ToEt(counters[k, floorGlobal, 8, roomGlobal], counters[k, floorGlobal, 9, roomGlobal]);//этаж
+                    if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
+                }
+                if (!(counters[k, floorGlobal, 11, roomGlobal] == null && comboBox22.Text == "") && (counters[k, floorGlobal, 11, roomGlobal] != comboBox22.Text.Replace(";", ",")))
+                {
+                    modCounters[11] = comboBox22.Text.Replace(";", ",");//% кВт
+                    if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
+                }
+                if (!(counters[k, floorGlobal, 12, roomGlobal] == null && textBox21.Text == "") && (counters[k, floorGlobal, 12, roomGlobal] != textBox21.Text.Replace(";", ",")))
+                {
+                    modCounters[12] = textBox21.Text.Replace(";", ",");//С постоянная величина кВт
+                    if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
+                }
+            }
+        }
         private void button19_Click(object sender, EventArgs e)
         {
             if (comboBox5.Text != "" && comboBox6.Text != "")
             {//найти индекс помещения. Если совпадений нет, то: countRoom[floorGlobal]++; roomGlobal=countRoom[floorGlobal];
-                if (comboBox14.Text != "" && textBox10.Text == "") textBox10.BackColor = Color.Red;
-                else
+
+                if (textBox10.Text == "" && textBox11.Text == "")
                 {
-                    if (comboBox16.Text != "" && textBox11.Text == "") textBox11.BackColor = Color.Red;
-                    else 
+                    //Отсутствуют показания по эл. эн. на эту дату.
+                    if (comboBox14.Text != "" && textBox10.Text == "")
                     {
-                        if (countRoom[floorGlobal] == -1)
-                        {
-                            countRoom[floorGlobal]++;
-                            roomGlobal = countRoom[floorGlobal];
-                        }
-                        else
-                        {
-                            roomGlobal = FindPom(comboBox5.Text, comboBox6.Text);
-                            if (roomGlobal < 0)
-                            {
-                                countRoom[floorGlobal]++;
-                                roomGlobal = countRoom[floorGlobal];
-                            }
-                            else
-                            {
-                                //вписать остальные данные по этому помещению?
-                            }
-                        }//шпора data шпаргалка                
-                        if (!(data[floorGlobal, 0, roomGlobal] == null && comboBox5.Text == "") && (data[floorGlobal, 0, roomGlobal] != comboBox5.Text.Replace(";", ",")))
-                        {
-                            modData[0] = comboBox5.Text.Replace(";", ",");//корпус
-                        }
-                        if (!(data[floorGlobal, 1, roomGlobal] == null && comboBox6.Text == "") && (data[floorGlobal, 1, roomGlobal] != comboBox6.Text.Replace(";", ",")))
-                        {
-                            modData[1] = comboBox6.Text.Replace(";", ",");//помещение
-                        }
-                        if (!(data[floorGlobal, 2, roomGlobal] == null && comboBox7.Text == "") && (data[floorGlobal, 2, roomGlobal] != comboBox7.Text.Replace(";", ",")))
-                        {
-                            modData[2] = comboBox7.Text.Replace(";", ",");//запитка от тп
-                        }
-                        if (!(data[floorGlobal, 3, roomGlobal] == null && comboBox8.Text == "") && (data[floorGlobal, 3, roomGlobal] != comboBox8.Text.Replace(";", ",")))
-                        {
-                            modData[3] = comboBox8.Text.Replace(";", ",");//запитка от сп
-                        }
-                        if (!(data[floorGlobal, 4, roomGlobal] == null && comboBox9.Text == "") && (data[floorGlobal, 4, roomGlobal] != comboBox9.Text.Replace(";", ",")))
-                        {
-                            modData[4] = comboBox9.Text.Replace(";", ",");//марка кабеля
-                        }
-                        if (!(data[floorGlobal, 5, roomGlobal] == null && comboBox10.Text == "") && (data[floorGlobal, 5, roomGlobal] != comboBox10.Text.Replace(";", ",")))
-                        {
-                            modData[5] = comboBox10.Text.Replace(";", ",");//длина кабеля (м)
-                        }
-                        if (!(data[floorGlobal, 6, roomGlobal] == null && comboBox11.Text == "") && (data[floorGlobal, 6, roomGlobal] != comboBox11.Text.Replace(";", ",")))
-                        {
-                            modData[6] = comboBox11.Text.Replace(";", ",");//мощность кВт
-                        }
-                        if (!(data[floorGlobal, 7, roomGlobal] == null && comboBox12.Text == "") && (data[floorGlobal, 7, roomGlobal] != comboBox12.Text.Replace(";", ",")))
-                        {
-                            modData[7] = comboBox12.Text.Replace(";", ",");//тип отключающего устройства
-                        }
-                        if (!(data[floorGlobal, 8, roomGlobal] == null && comboBox13.Text == "") && (data[floorGlobal, 8, roomGlobal] != comboBox13.Text.Replace(";", ",")))
-                        {
-                            modData[8] = comboBox13.Text.Replace(";", ",");//Уставка (А) In
-                        }
-                        if (!(data[floorGlobal, 9, roomGlobal] == null && comboBox14.Text == "") && (data[floorGlobal, 9, roomGlobal] != comboBox14.Text.Replace(";", ",")))
-                        {
-                            modData[9] = comboBox14.Text.Replace(";", ",");//Номер электросчетчика
-                        }
-                        if (!(data[floorGlobal, 10, roomGlobal] == null && comboBox15.Text == "") && (data[floorGlobal, 10, roomGlobal] != comboBox15.Text.Replace(";", ",")))
-                        {
-                            modData[10] = comboBox15.Text.Replace(";", ",");//марка электросчетчика
-                        }
-                        if (!(data[floorGlobal, 11, roomGlobal] == null && textBox4.Text == "") && (data[floorGlobal, 11, roomGlobal] != textBox4.Text.Replace(";", ",")))
-                        {
-                            modData[11] = textBox4.Text.Replace(";", ",");//год в/поверки эл.счетчика
-                        }
-                        if (!(data[floorGlobal, 12, roomGlobal] == null && comboBox16.Text == "") && (data[floorGlobal, 12, roomGlobal] != comboBox16.Text.Replace(";", ",")))
-                        {
-                            modData[12] = comboBox16.Text.Replace(";", ",");//номер водомера
-                        }
-                        if (!(data[floorGlobal, 13, roomGlobal] == null && comboBox17.Text == "") && (data[floorGlobal, 13, roomGlobal] != comboBox17.Text.Replace(";", ",")))
-                        {
-                            modData[13] = comboBox17.Text.Replace(";", ",");//марка водомера
-                        }
-                        if (!(data[floorGlobal, 14, roomGlobal] == null && textBox5.Text == "") && (data[floorGlobal, 14, roomGlobal] != textBox5.Text.Replace(";", ",")))
-                        {
-                            modData[14] = textBox5.Text.Replace(";", ",");//год в/поверки водомера
-                        }
-                        if (!(data[floorGlobal, 15, roomGlobal] == null && comboBox18.Text == "") && (data[floorGlobal, 15, roomGlobal] != comboBox18.Text.Replace(";", ",")))
-                        {
-                            modData[15] = comboBox18.Text.Replace(";", ",");//коэффициент ТТ
-                        }
-                        if (!(data[floorGlobal, 16, roomGlobal] == null && textBox6.Text == "") && (data[floorGlobal, 16, roomGlobal] != textBox6.Text.Replace(";", ",")))
-                        {
-                            modData[16] = textBox6.Text.Replace(";", ",");//номер фазы А
-                        }
-                        if (!(data[floorGlobal, 17, roomGlobal] == null && textBox7.Text == "") && (data[floorGlobal, 17, roomGlobal] != textBox7.Text.Replace(";", ",")))
-                        {
-                            modData[17] = textBox7.Text.Replace(";", ",");//номер фазы В
-                        }
-                        if (!(data[floorGlobal, 18, roomGlobal] == null && textBox8.Text == "") && (data[floorGlobal, 18, roomGlobal] != textBox8.Text.Replace(";", ",")))
-                        {
-                            modData[18] = textBox8.Text.Replace(";", ",");//номер фазы С
-                        }
-                        if (!(data[floorGlobal, 19, roomGlobal] == null && textBox9.Text == "") && (data[floorGlobal, 19, roomGlobal] != textBox9.Text.Replace(";", ",")))
-                        {
-                            modData[19] = textBox9.Text.Replace(";", ",");//год в/поверки
-                        }
-                        if (!(data[floorGlobal, 20, roomGlobal] == null && dateTimePicker3.Value.ToShortDateString() == "") && (data[floorGlobal, 20, roomGlobal] != dateTimePicker3.Value.ToShortDateString().Replace(";", ",")))
-                        {
-                            modData[20] = dateTimePicker3.Value.ToShortDateString().Replace(";", ",");//дата опломбировки эл.счетчика
-                        }
-                        if (!(data[floorGlobal, 21, roomGlobal] == null && textBox12.Text == "") && (data[floorGlobal, 21, roomGlobal] != textBox12.Text.Replace(";", ",")))
-                        {
-                            modData[21] = textBox12.Text.Replace(";", ",");//№ пломбы эл.счетчика
-                        }
-                        if (!(data[floorGlobal, 22, roomGlobal] == null && textBox14.Text == "") && (data[floorGlobal, 22, roomGlobal] != textBox14.Text.Replace(";", ",")))
-                        {
-                            modData[22] = textBox14.Text.Replace(";", ",");//№ пломбы ТТ "А"
-                        }
-                        if (!(data[floorGlobal, 23, roomGlobal] == null && textBox15.Text == "") && (data[floorGlobal, 23, roomGlobal] != textBox15.Text.Replace(";", ",")))
-                        {
-                            modData[23] = textBox15.Text.Replace(";", ",");//№ пломбы ТТ "В"
-                        }
-                        if (!(data[floorGlobal, 24, roomGlobal] == null && textBox16.Text == "") && (data[floorGlobal, 24, roomGlobal] != textBox16.Text.Replace(";", ",")))
-                        {
-                            modData[24] = textBox16.Text.Replace(";", ",");//№ пломбы ТТ "С"
-                        }
-                        if (!(data[floorGlobal, 25, roomGlobal] == null && dateTimePicker4.Value.ToShortDateString() == "") && (data[floorGlobal, 25, roomGlobal] != dateTimePicker4.Value.ToShortDateString().Replace(";", ",")))
-                        {
-                            modData[25] = dateTimePicker4.Value.ToShortDateString().Replace(";", ",");//дата опломбировки водомера
-                        }
-                        if (!(data[floorGlobal, 26, roomGlobal] == null && textBox13.Text == "") && (data[floorGlobal, 26, roomGlobal] != textBox13.Text.Replace(";", ",")))
-                        {
-                            modData[26] = textBox13.Text.Replace(";", ",");//№ пломбы водомера
-                        }
-                        if (!(data[floorGlobal, 27, roomGlobal] == null && textBox19.Text == "") && (data[floorGlobal, 27, roomGlobal] != textBox19.Text.Replace(";", ",")))
-                        {
-                            modData[27] = textBox19.Text.Replace(";", ",");//кв.м.               
-                        }
-                        if (!(data[floorGlobal, 28, roomGlobal] == null && textBox22.Text == "") && (data[floorGlobal, 28, roomGlobal] != textBox22.Text.Replace(";", ",")))
-                        {
-                            modData[28] = textBox22.Text.Replace(";", ",");//Планировка
-                        }
-                        if (!(data[floorGlobal, 29, roomGlobal] == null && textBox23.Text == "") && (data[floorGlobal, 29, roomGlobal] != textBox23.Text.Replace(";", ",")))
-                        {
-                            modData[29] = textBox23.Text.Replace(";", ",");//Однолинейная схема
-                        }
-                        if (!(data[floorGlobal, 30, roomGlobal] == null && textBox24.Text == "") && (data[floorGlobal, 30, roomGlobal] != textBox24.Text.Replace(";", ",")))
-                        {
-                            modData[30] = textBox24.Text.Replace(";", ",");//План электросети
-                        }
-                        if (!(data[floorGlobal, 31, roomGlobal] == null && textBox25.Text == "") && (data[floorGlobal, 31, roomGlobal] != textBox25.Text.Replace(";", ",")))
-                        {
-                            modData[31] = textBox25.Text.Replace(";", ",");//План водоснабжения
-                        }
-                        //data[floorGlobal, 32, roomGlobal] = textBox26.Text.Replace(";", ",");//Папка арендатора
-                        int k = 0;
-                        //SdvigCHtoOne(arenda, 10, dateTimePicker1.Value.ToShortDateString().Replace(";", ","),5); //в скобочках длина массива, котрый сдвигается на 1.
-
-                        //ЕСЛИ арендатор не меняется, не нужно записывать новую строку. в остальных случаях новая запись.
-                        if (arenda[k, floorGlobal, 0, roomGlobal] != dateTimePicker1.Value.ToShortDateString().Replace(";", ","))
-                        {
-                            modArenda[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");//дата начала аренды
-                        }
-                        if (!(arenda[k, floorGlobal, 1, roomGlobal] == null && comboBox1.Text == "") && (arenda[k, floorGlobal, 1, roomGlobal] != comboBox1.Text.Replace(";", ",")))
-                        {
-                            modArenda[1] = comboBox1.Text.Replace(";", ",");//арендатор
-                            if (modArenda[0] == null) modArenda[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
-                        }
-                        if (!(arenda[k, floorGlobal, 2, roomGlobal] == null && comboBox2.Text == "") && (arenda[k, floorGlobal, 2, roomGlobal] != comboBox2.Text.Replace(";", ",")))
-                        {
-                            modArenda[2] = comboBox2.Text.Replace(";", ",");//ФИО
-                            if (modArenda[0] == null) modArenda[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
-                        }
-                        if (!(arenda[k, floorGlobal, 3, roomGlobal] == null && comboBox3.Text == "") && (arenda[k, floorGlobal, 3, roomGlobal] != comboBox3.Text.Replace(";", ",")))
-                        {
-                            modArenda[3] = comboBox3.Text.Replace(";", ",");//должность
-                            if (modArenda[0] == null) modArenda[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
-                        }
-                        if (!(arenda[k, floorGlobal, 4, roomGlobal] == null && comboBox4.Text == "") && (arenda[k, floorGlobal, 4, roomGlobal] != comboBox4.Text.Replace(";", ",")))
-                        {
-                            modArenda[4] = comboBox4.Text.Replace(";", ",");//кол-во сотрудников
-                            if (modArenda[0] == null) modArenda[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
-                        }
-                        if (!(arenda[k, floorGlobal, 5, roomGlobal] == null && textBox17.Text == "") && (arenda[k, floorGlobal, 5, roomGlobal] != textBox17.Text.Replace(";", ",")))
-                        {
-                            modArenda[5] = textBox17.Text.Replace(";", ",");//e-mail
-                            if (modArenda[0] == null) modArenda[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
-                        }
-                        if (!(arenda[k, floorGlobal, 6, roomGlobal] == null && richTextBox3.Text == "") && (arenda[k, floorGlobal, 6, roomGlobal] != richTextBox3.Text.Replace(";", ",").Replace("\n", "&rn")))
-                        {
-                            modArenda[6] = richTextBox3.Text.Replace(";", ",").Replace("\n", "&rn");//прочее и телефоны
-                            if (modArenda[0] == null) modArenda[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
-                        }
-                        if (!(arenda[k, floorGlobal, 7, roomGlobal] == null && textBox26.Text == "") && (arenda[k, floorGlobal, 7, roomGlobal] != textBox26.Text.Replace(";", ",")))
-                        {
-                            modArenda[7] = textBox26.Text.Replace(";", ",");//Папка арендатора
-                            if (modArenda[0] == null) modArenda[0] = dateTimePicker1.Value.ToShortDateString().Replace(";", ",");
-                        }
-                        if (modArenda[0] != null) dataModA = arenda[k, floorGlobal, 0, roomGlobal];//изменение имеет место, запишем в dataModA значение даты до изменения
-
-                        // if (!(textBox10.Text == "" && textBox11.Text == ""))
-                        // {//сюда функцию запишем счетчики
-                        //     WriteSchet(floorGlobal, roomGlobal, dateTimePicker2.Value, textBox10.Text, textBox11.Text, comboBox14.Text, comboBox18.Text, comboBox16.Text, comboBox4.Text);
-                        //  }
-
-                        if (counters[0, floorGlobal, 0, roomGlobal] != dateTimePicker2.Value.ToShortDateString().Replace(";", ","))
-                        {
-                            modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
-                        }
-                        if (!(counters[0, floorGlobal, 1, roomGlobal] == null && textBox10.Text == "") && (counters[0, floorGlobal, 1, roomGlobal] != textBox10.Text.Replace(";", ",")))
-                        {
-                            modCounters[1] = textBox10.Text.Replace(";", ",");//показания электроэнергии
-                            if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
-                        }
-                        if (!(counters[0, floorGlobal, 2, roomGlobal] == null && textBox11.Text == "") && (counters[0, floorGlobal, 2, roomGlobal] != textBox11.Text.Replace(";", ",")))
-                        {
-                            modCounters[2] = textBox11.Text.Replace(";", ",");//показания водомера
-                            if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
-                        }
-                        if (!(counters[0, floorGlobal, 3, roomGlobal] == null && comboBox14.Text == "") && (counters[0, floorGlobal, 3, roomGlobal] != comboBox14.Text.Replace(";", ",")))
-                        {
-                            modCounters[3] = comboBox14.Text.Replace(";", ",");//номер электросчетчика
-                            if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
-                        }
-                        if (!(counters[0, floorGlobal, 4, roomGlobal] == null && comboBox18.Text == "") && (counters[0, floorGlobal, 4, roomGlobal] != comboBox18.Text.Replace(";", ",")))
-                        {
-                            modCounters[4] = comboBox18.Text.Replace(";", ",");//коэффициент трансформации
-                            if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
-                        }
-                        if (!(counters[0, floorGlobal, 5, roomGlobal] == null && comboBox16.Text == "") && (counters[0, floorGlobal, 5, roomGlobal] != comboBox16.Text.Replace(";", ",")))
-                        {
-                            modCounters[5] = comboBox16.Text.Replace(";", ",");//номер водомера
-                            if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
-                        }
-                        //расчет
-                        if (!(counters[0, floorGlobal, 7, roomGlobal] == null && comboBox4.Text == "") && (counters[0, floorGlobal, 7, roomGlobal] != comboBox4.Text.Replace(";", ",")))
-                        {
-                            modCounters[7] = comboBox4.Text.Replace(";", ",");//количество сотрудников (для воды) 
-                            if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
-                        }
-
-                        if (checkBox5.Checked)
-                        {
-                            if (!(counters[k, floorGlobal, 8, roomGlobal] == null && comboBox21.Text == "") && (counters[k, floorGlobal, 8, roomGlobal] != comboBox21.Text.Replace(";", ",")))
-                            {
-                                modCounters[8] = comboBox21.Text.Replace(";", ",");//корпус
-                                if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
-                            }
-                            if (!(counters[k, floorGlobal, 9, roomGlobal] == null && comboBox21.Text == "") && (counters[k, floorGlobal, 9, roomGlobal] != comboBox21.Text.Replace(";", ",")))
-                            {
-                                modCounters[9] = comboBox21.Text.Replace(";", ",");//помещение
-                                if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
-                            }
-                            if (!(counters[k, floorGlobal, 10, roomGlobal] == null && ToEt(counters[k, floorGlobal, 8, roomGlobal], counters[k, floorGlobal, 9, roomGlobal]) == "") && (counters[k, floorGlobal, 10, roomGlobal] != ToEt(counters[k, floorGlobal, 8, roomGlobal], counters[k, floorGlobal, 9, roomGlobal])))
-                            {
-                                modCounters[10] = ToEt(counters[k, floorGlobal, 8, roomGlobal], counters[k, floorGlobal, 9, roomGlobal]);//этаж
-                                if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
-                            }
-                            if (!(counters[k, floorGlobal, 11, roomGlobal] == null && comboBox22.Text == "") && (counters[k, floorGlobal, 11, roomGlobal] != comboBox22.Text.Replace(";", ",")))
-                            {
-                                modCounters[11] = comboBox22.Text.Replace(";", ",");//% кВт
-                                if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
-                            }
-                            if (!(counters[k, floorGlobal, 12, roomGlobal] == null && textBox21.Text == "") && (counters[k, floorGlobal, 12, roomGlobal] != textBox21.Text.Replace(";", ",")))
-                            {
-                                modCounters[12] = textBox21.Text.Replace(";", ",");//С постоянная величина кВт
-                                if (modCounters[0] == null) modCounters[0] = dateTimePicker2.Value.ToShortDateString().Replace(";", ",");//Дата показаний воды/электроэнергии
-                            }
-                        }
+                        textBox10.BackColor = Color.Red;
                     }
-                }     
 
+                    //Отсутствуют показания по воде на эту дату.
+                    if (comboBox16.Text != "" && textBox11.Text == "")
+                    {
+                        textBox11.BackColor = Color.Red;
+                    }
+                }
+
+                if (!((textBox10.Text == "" && textBox11.Text == "") && (comboBox16.Text != "" || comboBox14.Text != "")))
+                {
+                    //если показаия пусты, но номер хотябы одного счетчика внесен, то записывать нельзя, в противном случае записать.
+                    Save();
+                }
                 
             }
             time3 = 0;
@@ -3137,7 +3174,8 @@ namespace MyTable
                     }
                     if (DateTime.Parse(counters[k, EtazR, 0, PomesR]) > dataTekus1 && DateTime.Parse(counters[k, EtazR, 0, PomesR]) <= dataTekus2)// && value2==0)
                     {
-                        value2 = double.Parse(counters[k, EtazR, 1, PomesR]);//конечные показания
+                        string valS = counters[k, EtazR, 1, PomesR];
+                        value2 = double.Parse(valS);//конечные показания
                         if (counters[k, EtazR, 4, PomesR] == null|| counters[k, EtazR, 4, PomesR] == "") counters[k, EtazR, 4, PomesR] = "1";
                         koeff = int.Parse(counters[k, EtazR, 4, PomesR]);//ошибка при k=1,EtazR=1,PomesR=1??
                         DataK = k;
