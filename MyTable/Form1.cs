@@ -11,7 +11,6 @@ namespace MyTable
     public partial class Form1 : Form
     {
         
-
         string UserKey = "electro";                             //"arenda" "electro" "voda" ""
 
         List<string> File = new List<string>();
@@ -217,7 +216,7 @@ namespace MyTable
         }
 
         //прогрузка данных по этажу:
-        void LoadCB()
+        private void LoadCB()
         {
             //List<string> Arend1 = new List<string>();//арендатор
             List<string> data1 = new List<string>();//корпус
@@ -236,7 +235,7 @@ namespace MyTable
         }
 
         //прогрузка боксов со справочными данными
-        void LoadCB2()
+        private void LoadCB2()
         {
             List<string> data2 = new List<string>();//марка кабеля
             List<string> data3 = new List<string>();//тип отключающего устройства
@@ -373,7 +372,7 @@ namespace MyTable
             }
         }
 
-        string ToData(int floor, int j, int room, string s)
+        private string ToData(int floor, int j, int room, string s)
         {
             if (floor == floorGlobal && room == roomGlobal)
             {
@@ -387,7 +386,7 @@ namespace MyTable
         }
 
         //основная функция загрузки с раздельным внесением информации
-        void LoadDB()
+        private void LoadDB()
         {
             
             int room = 0;
@@ -518,7 +517,7 @@ namespace MyTable
             dataMod[0] = null;
         }
 
-        void SaveDB()
+        private void SaveDB()
         {
             File.Clear();
             File.Add((countRoom[0] + countRoom[1] + countRoom[2] + countRoom[3] + 4).ToString());//записали общее количество помещений в начало
@@ -571,7 +570,7 @@ namespace MyTable
         }
         
         //записать в массив counters строку modCounters, освободив для нее место в указанной позиции row
-        void addRowToMassiv(int floor, int numroom, int row)
+        private void addRowToMassiv(int floor, int numroom, int row)
         {//floor - номер этажа, numroom - номер помещения
             //1. Освободим строку row
             for (int i = 59; i > row; i--) //row не может быть меньше нуля
@@ -589,7 +588,7 @@ namespace MyTable
         }
 
         //записать в массив Arenda строку modArenda, освободив для нее место в указанной позиции row
-        void addRowToMassivA(int floor, int numroom, int row)
+        private void addRowToMassivA(int floor, int numroom, int row)
         {//floor - номер этажа, numroom - номер помещения
             //1. Освободим строку row
             for (int i = 9; i > row; i--) //row не может быть меньше нуля
@@ -606,7 +605,7 @@ namespace MyTable
             writeStrToMassA(floor, numroom, row);
         }
 
-        void writeStrToMass(int floor, int numroom, int row)
+        private void writeStrToMass(int floor, int numroom, int row)
         {//запишем в строку row значения массива с измененными значениями.
             for (int j = 0; j < RMC; j++)
             {//заменим элемент массива (только тот, который не изменился)
@@ -616,7 +615,7 @@ namespace MyTable
             RasxodFull(floor, numroom, DateTime.Parse(counters[row, floor, 0, numroom]));//вопрос, нужно ли проверить заполнение данных по электроэнергии? или это расчет по воде?
         }
 
-        void writeStrToMassA(int floor, int numroom, int row)
+        private void writeStrToMassA(int floor, int numroom, int row)
         {//запишем в строку row значения массива с измененными значениями.
             for (int j = 0; j < RMA; j++)
             {//заменим элемент массива (только тот, который не изменился)
@@ -625,7 +624,7 @@ namespace MyTable
         }
 
         //удалить строку row в таблице счетчиков
-        bool removeRowInMassiv(int floor, int numroom, int row)
+        private bool removeRowInMassiv(int floor, int numroom, int row)
         {//floor - номер этажа, numroom - номер помещения
             if ((modCounters[1] == null && dataMod[1] == "voda") || (modCounters[8] == null && dataMod[1] == "electro"))
             {
@@ -652,7 +651,7 @@ namespace MyTable
         }
 
         //удалить строку row в таблице арендаторов
-        bool removeRowInMassivA(int floor, int numroom, int row)
+        private bool removeRowInMassivA(int floor, int numroom, int row)
         {//floor - номер этажа, numroom - номер помещения
             if (modArenda[1] == "")
             {
@@ -677,7 +676,7 @@ namespace MyTable
             }
         }
 
-        void writeRowKey(int etaz, int schetchik, int k)
+        private void writeRowKey(int etaz, int schetchik, int k)
         {
             if (dataMod[1] == "electro")//запись с учетом ключа
             {                        //э 1,3,4,6,11,12,13,14,15
@@ -704,7 +703,7 @@ namespace MyTable
             }
         }
 
-        void clearRowKey(int floor, int numroom, int row)
+        private void clearRowKey(int floor, int numroom, int row)
         {
             if (modCounters[1] == null)//удаление с учетом ключа
             {                        //э 1,3,4,6,11,12,13,14,15
@@ -727,7 +726,7 @@ namespace MyTable
             }
         }
 
-        void clearRowA(int floor, int numroom, int row)
+        private void clearRowA(int floor, int numroom, int row)
         {
             for (int i = 0; i < RMA; i++)
             {
@@ -735,7 +734,7 @@ namespace MyTable
             }
         }
 
-        bool floorNumRoom(int floor, int numroom)
+        private bool floorNumRoom(int floor, int numroom)
         {
             if (outL2et_pom[0] != 7)
             {
@@ -748,7 +747,7 @@ namespace MyTable
             return false;
         }
 
-        void toCounters(int floor, int numroom)
+        private void toCounters(int floor, int numroom)
         {
             if (floorNumRoom(floor,numroom))
             {//совпал номер помещения
@@ -835,7 +834,7 @@ namespace MyTable
             }
         }
 
-        void toArenda(int floor, int numroom)
+        private void toArenda(int floor, int numroom)
         {
             if (floorNumRoom(floor, numroom))
             {//совпал номер помещения
@@ -1174,6 +1173,7 @@ namespace MyTable
             
         }
 
+        //Кнопка - Отцентрироваться
         private void button3_Click(object sender, EventArgs e)
         {
             double x = panelCentrX - (Center(textBox1.Text).X) * scale / 20; //626 и 389 - это центр панели с пиктурбоксом
@@ -1185,7 +1185,7 @@ namespace MyTable
         }
 
         //вида: 0,123,45,79    x=0,y=123,x=45,y=79 и т.д.
-        Point Center(string koord)
+        private Point Center(string koord)
         {
             if (koord == "") return new Point(0, 0);
             else
@@ -1235,7 +1235,7 @@ namespace MyTable
         }
 
         //для использования (найти помещение на карте)
-        Point CentrU(double[,] mass)
+        private Point CentrU(double[,] mass)
         {
             double x = 0, x1 = 10000;
             double y = 0, y1 = 10000;
@@ -1270,7 +1270,7 @@ namespace MyTable
         }
 
         //y=((x-x1)/(x2-x1))*(y2-y1)+y1 - функция с трассировкой вверх по игреку выводит Помещение
-        int equationSystem(Point p1, out Point[] P)
+        private int equationSystem(Point p1, out Point[] P)
         {
             P = new Point[1];
             int room = -1;
@@ -1334,17 +1334,20 @@ namespace MyTable
             return room;
         }
 
+        //Кнопка - Center
         private void button4_Click(object sender, EventArgs e)
         {
             label3.Text = Center(textBox1.Text).X + ";" + Center(textBox1.Text).Y;
         }
 
+        //Кнопка - MastaB
         private void button5_Click(object sender, EventArgs e)
         {
             pictureBox1.Size = pictureBox1.Image.Size;
             scale = 20;
         }
 
+        //Кнопка - MastaB2
         private void button6_Click(object sender, EventArgs e)
         {
             pictureBox1.Width = scalekX;
@@ -1353,6 +1356,7 @@ namespace MyTable
             scale = 1;
         }
 
+        //Кнопка - 4
         private void button7_Click(object sender, EventArgs e)
         {
             string s = NPOI.SS.UserModel.IndexedColors.Black.HexString;
@@ -1369,7 +1373,8 @@ namespace MyTable
                 textBox1.Text = "123";
             }
         }
-        List<Cell> ReportElectroTable(DateTime DateSelect,out List<Cell> NoInfoValues, out List<Cell> NoInfoCounters)
+
+        private List<Cell> ReportElectroTable(DateTime DateSelect,out List<Cell> NoInfoValues, out List<Cell> NoInfoCounters)
         {
             DateSelect=DateSelect.AddMonths(1);
             List<string> Arenda = ArendaLongActualy(DateSelect, "ToLongName");//здесь вставить функцию ArendaLongActualy(DateTime DateSelect);
@@ -1440,7 +1445,8 @@ namespace MyTable
             return ToReportTable;
         }
 
-        List<Cell> ReportPhoneBook(DateTime DateSelect) //выводит Лист-таблицу телефонный справочник по арендаторам
+        //выводит Лист-таблицу телефонный справочник по арендаторам
+        private List<Cell> ReportPhoneBook(DateTime DateSelect)
         {
             DateSelect = DateSelect.AddMonths(1);
             List<string> Arenda = ArendaLongActualy(DateSelect, "ToLongName");//здесь вставить функцию ArendaLongActualy(DateTime DateSelect);
@@ -1487,7 +1493,8 @@ namespace MyTable
             return ToReportTable;
         }
 
-        private void button8_Click(object sender, EventArgs e) //выведем отчет по показаниям в richtextbox1
+        //Кнопка - test (выведем отчет по показаниям в richtextbox1)
+        private void button8_Click(object sender, EventArgs e)
         {
             List<string> Arenda = ArendaLongActualy(dateTimePicker5.Value,"ToLongName");//здесь вставить функцию ArendaLongActualy(DateTime DateSelect);
             List<string> NoInfoValues = new List<string>();
@@ -1559,7 +1566,7 @@ namespace MyTable
             }
         }
 
-        List<string> ArendaLongActualy(DateTime DateSelect,string ParametrSort)
+        private List<string> ArendaLongActualy(DateTime DateSelect,string ParametrSort)
         {
             List<string> ArendatorS = new List<string>();
             List<string> ArendatorLong = new List<string>();
@@ -1621,12 +1628,13 @@ namespace MyTable
             return ArendatorLong;
         }
 
-        bool ToDateActive(DateTime date)
+        private bool ToDateActive(DateTime date)
         {
 
             return false;
         }
-        
+
+        //Кнопка - Обвести контур
         private void button9_Click(object sender, EventArgs e)
         {
             g3 = false;
@@ -1652,7 +1660,8 @@ namespace MyTable
                 }
             }
         }
-        
+
+        //Кнопка - Закончить контур
         private void button10_Click(object sender, EventArgs e)
         {
             if (GlobalP != 21)
@@ -1689,6 +1698,7 @@ namespace MyTable
             //  button9.Enabled = true;
         }
 
+        //Кнопка - in/out
         private void button11_Click(object sender, EventArgs e)
         {
             Point[] figure = new Point[3];
@@ -1713,17 +1723,19 @@ namespace MyTable
             g.Dispose();
         }
 
+        //Кнопка - Poligon Point3
         private void button12_Click(object sender, EventArgs e)
         {
             g3 = true;
         }
 
+        //Кнопка - ClearImg
         private void button13_Click(object sender, EventArgs e)
         {
             pictureBox1.Load(@"точки.png");
         }
 
-        //save
+        //Кнопка - Save
         private void button14_Click(object sender, EventArgs e)
         {
             if (checkBox2.Checked) pictureBox1.Image.Save(@"Этаж" + (floorGlobal + 1).ToString() + ".png", System.Drawing.Imaging.ImageFormat.Png);
@@ -1731,6 +1743,7 @@ namespace MyTable
             System.IO.File.WriteAllLines(@DateTime.Now.ToShortDateString() + ".txt", File, Encoding.Default);
         }
 
+        //Кнопка - Hide
         private void button15_Click(object sender, EventArgs e)
         {
             if (panelHide == false)
@@ -1774,7 +1787,7 @@ namespace MyTable
             panelCentrY = panel1.Size.Height / 2;
         }
 
-        //saveDB
+        //Кнопка - SaveDB
         private void button1_Click(object sender, EventArgs e)
         {
             File.Clear();
@@ -1825,56 +1838,60 @@ namespace MyTable
             for (int i = 0; i < File.Count; i++) richTextBox1.Text += File[i] + "\r\n";
         }
 
-        //этаж1
+        //Кнопка - Этаж 1
         private void button2_Click(object sender, EventArgs e)
         {
-            floorGlobal = 0;
-            LoadCB();//прогружает арендатора и корпус
-            ClearCB();//чистит все данные из боксов
-            button2.BackColor = Color.DodgerBlue;
-            button16.BackColor = SystemColors.Control;
-            button17.BackColor = SystemColors.Control;
-            button18.BackColor = SystemColors.Control;
-            pictureBox1.Load(@"этаж1.png");
+            getDrawingFloor(1);
         }
 
-        //этаж2
+        //Кнопка - Этаж 2
         private void button16_Click(object sender, EventArgs e)
         {
-            floorGlobal = 1;
-            LoadCB();//прогружает арендатора и корпус
-            ClearCB();//чистит все данные из боксов
-            button16.BackColor = Color.DodgerBlue;
-            button2.BackColor = SystemColors.Control;
-            button17.BackColor = SystemColors.Control;
-            button18.BackColor = SystemColors.Control;
-            pictureBox1.Load(@"этаж2.png");
+            getDrawingFloor(2);
         }
 
-        //этаж3
+        //Кнопка - Этаж 3
         private void button17_Click(object sender, EventArgs e)
         {
-            floorGlobal = 2;
-            LoadCB();
-            ClearCB();
-            button17.BackColor = Color.DodgerBlue;
-            button2.BackColor = SystemColors.Control;
-            button16.BackColor = SystemColors.Control;
-            button18.BackColor = SystemColors.Control;
-            pictureBox1.Load(@"этаж3.png");
+            getDrawingFloor(3);
         }
 
-        //этаж4
+        //Кнопка - Этаж 4
         private void button18_Click(object sender, EventArgs e)
         {
-            floorGlobal = 3;
-            LoadCB();
-            ClearCB();
-            button18.BackColor = Color.DodgerBlue;
+            getDrawingFloor(4);
+        }
+
+        private void getDrawingFloor(short floorNum) {
+            
+            floorGlobal = floorNum - 1;
+            
+            LoadCB();           //прогружает арендатора и корпус
+            ClearCB();          //чистит все данные из боксов
+
             button2.BackColor = SystemColors.Control;
             button16.BackColor = SystemColors.Control;
             button17.BackColor = SystemColors.Control;
-            pictureBox1.Load(@"этаж4.png");
+            button18.BackColor = SystemColors.Control;
+
+            switch (floorNum) {
+                case 1:
+                    button2.BackColor = Color.DodgerBlue;
+                    pictureBox1.Load(@"этаж1.png");
+                    break;
+                case 2:
+                    button16.BackColor = Color.DodgerBlue;
+                    pictureBox1.Load(@"этаж2.png");
+                    break;
+                case 3:
+                    button17.BackColor = Color.DodgerBlue;
+                    pictureBox1.Load(@"этаж3.png");
+                    break;
+                case 4:
+                    button18.BackColor = Color.DodgerBlue;
+                    pictureBox1.Load(@"этаж4.png");
+                    break;
+            }
         }
 
         //трансформаторы тока (показать/скрыть)
@@ -1928,7 +1945,7 @@ namespace MyTable
             }
         }
 
-        //записать данные (Сохранить изменения)
+        //Кнопка - Сохранить изменения (записать данные)
         private void button19_Click(object sender, EventArgs e)
         {
             if (comboBox5.Text != "" && comboBox6.Text != "")
@@ -2212,7 +2229,7 @@ namespace MyTable
             timer3.Enabled = true;
         }
 
-        string ToEt(string korpus, string pomeshenie)
+        private string ToEt(string korpus, string pomeshenie)
         {
             for (int et = 0; et < 4; et++)
             {
@@ -2242,7 +2259,7 @@ namespace MyTable
             return rezult;
         }
 
-        //проверка списка листов и возможность добавления новых листов в книгу
+        //Кнопка - test (проверка списка листов и возможность добавления новых листов в книгу)
         private void button20_Click(object sender, EventArgs e)
         {
 
@@ -2320,7 +2337,7 @@ namespace MyTable
         }
 
         //true - разблокировать, false - заблокировать кнопку записи
-        void Unlock(bool flag)
+        private void Unlock(bool flag)
         {            
             if (flag)
             {
@@ -2342,6 +2359,7 @@ namespace MyTable
             }
         }
 
+        //Кнопка - LoadDBinCB
         private void button21_Click(object sender, EventArgs e)
         {
             List<string> Arend1 = new List<string>();//арендатор
@@ -2382,14 +2400,14 @@ namespace MyTable
             comboBox8.Items.AddRange(data4.Distinct().ToArray());
         }
 
-        void ClearCB()
+        private void ClearCB()
         {
             comboBox5.Text = "";
             comboBox6.Text = "";
             ClearCB2();
         }
 
-        void ClearCB2()
+        private void ClearCB2()
         {
             comboBox7.Text = "";
             comboBox8.Text = "";
@@ -2434,11 +2452,13 @@ namespace MyTable
             checkBox1.Checked = false;
         }
 
+        //Кнопка - ClearCB
         private void button22_Click(object sender, EventArgs e)
         {
             ClearCB();
         }
 
+        //Кнопка - FindArenda
         private void button23_Click(object sender, EventArgs e)
         {
             int[] massivA = new int[200];
@@ -2498,6 +2518,7 @@ namespace MyTable
             // richTextBox1.Text += massivA[i].ToString() + "\r\n";
         }
 
+        //Кнопка - koordToRich
         private void button24_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < 200; i++)
@@ -2517,6 +2538,7 @@ namespace MyTable
             }
         }
 
+        //Кнопка - koordToImg
         private void button25_Click(object sender, EventArgs e)
         {
             bitmap = new Bitmap(pictureBox1.Image);
@@ -2582,6 +2604,7 @@ namespace MyTable
             }
         }
 
+        //Кнопка - voda
         private void button26_Click(object sender, EventArgs e)
         {
             UserKey = "voda";
@@ -2615,6 +2638,7 @@ namespace MyTable
             }
         }
 
+        //Кнопка - arenda
         private void button27_Click(object sender, EventArgs e)
         {
             UserKey = "arenda";
@@ -2648,6 +2672,7 @@ namespace MyTable
             }
         }
 
+        //Кнопка - electro
         private void button28_Click(object sender, EventArgs e)
         {
             UserKey = "electro";
@@ -2671,6 +2696,7 @@ namespace MyTable
             }
         }
 
+        //Кнопка - Load
         private void button29_Click(object sender, EventArgs e)
         {
             int etaz = 0;
@@ -2753,12 +2779,14 @@ namespace MyTable
             }
         }
 
+        //Кнопка - admin
         private void button30_Click(object sender, EventArgs e)
         {
             UserKey = "admin";
         }
 
-        private void button31_Click(object sender, EventArgs e)//вывести список арендаторов
+        //Кнопка - Вывести арендаторов (вывести список арендаторов)
+        private void button31_Click(object sender, EventArgs e)
         {
             //OutputSorting("ToLongName");
             richTextBox2.Clear();
@@ -2770,7 +2798,7 @@ namespace MyTable
             }
         }
 
-        List<string> Sort()
+        private List<string> Sort()
         {
             List<string> Arendator = new List<string>();
             for (int et1 = 0; et1 < 4; et1++)
@@ -2802,7 +2830,7 @@ namespace MyTable
             return SortArendator;
         }
 
-        String ToShort(string stroka)
+        private string ToShort(string stroka)
         {
             int find1 = stroka.IndexOf(" \"") + 2;
             int find2 = stroka.IndexOf(" ") + 1;
@@ -2817,7 +2845,7 @@ namespace MyTable
             else return stroka;
         }
 
-        List<string> ArendaLong(string ParametrSort)
+        private List<string> ArendaLong(string ParametrSort)
         {
             List<string> ArendatorS = new List<string>();
             List<string> ArendatorLong = new List<string>();
@@ -2860,7 +2888,7 @@ namespace MyTable
             return ArendatorLong;
         }
 
-        void OutputSorting(string ParametrSort)
+        private void OutputSorting(string ParametrSort)
         {
             dataGridView1.Visible = false;
             listBox2.Visible = false;
@@ -2876,7 +2904,7 @@ namespace MyTable
             }
         }
 
-        string ToLongName(string ArendaStringList)
+        private string ToLongName(string ArendaStringList)
         {
            /* if (ArendaStringList != "свободно")
             {
@@ -2896,7 +2924,7 @@ namespace MyTable
             return ArendaStringList;
         }
 
-        string ToLongNamePomes(string ArendaStringList)
+        private string ToLongNamePomes(string ArendaStringList)
         {
             string s = "";
             for (int j = 0; j < 4; j++)//этаж
@@ -2916,7 +2944,7 @@ namespace MyTable
             return s;
         }
 
-        string ToLongNameSchet(string ArendaStringList)
+        private string ToLongNameSchet(string ArendaStringList)
         {
             string s = "";
             for (int j = 0; j < 4; j++)//этаж
@@ -2936,6 +2964,7 @@ namespace MyTable
             return s;
         }
 
+        //Кнопка - Вывести ар.+помещ.
         private void button32_Click(object sender, EventArgs e)
         {
             ReportPrinter report = new ReportPrinter(NPOIPrinter.Company.Impuls, dateTimePicker5.Value);
@@ -2944,7 +2973,7 @@ namespace MyTable
             //OutputSorting("ToLongNamePomes");
         }
 
-        //арендаторы и счетчики
+        //Кнопка - Арендаторы и счетчики OLDsort (арендаторы и счетчики)
         private void button33_Click(object sender, EventArgs e)
         {
             dataGridView1.Visible = false;
@@ -2990,6 +3019,7 @@ namespace MyTable
             dateTimePicker6.Value = dateTimePicker5.Value;
         }
 
+        //Кнопка - Арендаторы и расход
         private void button34_Click(object sender, EventArgs e)
         {
             dataGridView1.Visible = false;
@@ -3070,7 +3100,7 @@ namespace MyTable
             return Math.Round(rezult + sbros, 1);
         }
 
-        DateTime ToDateRaschet(DateTime dat1)
+        private DateTime ToDateRaschet(DateTime dat1)
         {//определяет к какому расчетному периоду относится дата и возвращает 01 число расчетного месяца.
             if (dat1.Day >= 7 && dat1.Day <= 31) return new DateTime(dat1.Year, dat1.Month, 1);
             else
@@ -3079,7 +3109,7 @@ namespace MyTable
             }
         }
 
-        void RasxodFull(int EtazR, int PomesR, DateTime dataMes)
+        private void RasxodFull(int EtazR, int PomesR, DateTime dataMes)
         {//посчитать расход за текущий период и последующие, и пересчитать за последующие с записью в БД
             if(EtazR!=7)
             {
@@ -3183,7 +3213,7 @@ namespace MyTable
             return Math.Round(summa, 1);
         }
 
-        //скорректировать ДБ (добавить электросчетчики)
+        //Кнопка - Correct DB (скорректировать ДБ (добавить электросчетчики))
         private void button35_Click(object sender, EventArgs e)
         {            
             for (int et = 0; et < 4; et++)
@@ -3222,6 +3252,7 @@ namespace MyTable
             timer3.Enabled = true;
         }
 
+        //Кнопка - Показания эл.эн.
         private void button36_Click(object sender, EventArgs e)
         {
             dataMod[1] = "electro";//переключимся на счетчик электроэнергии
@@ -3244,11 +3275,13 @@ namespace MyTable
             }
         }
 
+        //Кнопка - toSingle
         private void button37_Click(object sender, EventArgs e)
         {
             richTextBox1.Text += richTextBox1.Text.Replace("\n", "&rn");
         }
 
+        //Кнопка - toMulti
         private void button38_Click(object sender, EventArgs e)
         {
             richTextBox1.Text += richTextBox1.Text.Replace("&rn", "\n");
@@ -3324,7 +3357,7 @@ namespace MyTable
         }
 
         //на входе помещение, на выходе мигающее помещение...
-        void kontur(int pomesh1)
+        private void kontur(int pomesh1)
         {//сперва заполнить координатами фигуру, затем найти точку внутри этого полигона, третье: отцентрироваться на этом помещении, четвертое изменить масштаб, пятое "моргнуть" 
             if (koord[floorGlobal, 0, pomesh1] != 0)
             {
@@ -3362,6 +3395,7 @@ namespace MyTable
             }
         }
 
+        //Кнопка - Del
         private void button39_Click(object sender, EventArgs e)
         {
             textBox18.Clear();
@@ -3394,7 +3428,7 @@ namespace MyTable
             redact = false;//обнуляем флаг редактирования ячеек
         }
 
-        int[] SelectL2(string selItem)
+        private int[] SelectL2(string selItem)
         {
             int[] outInt = new int[2];
             outInt[0] = 7;//"очистим массив"
@@ -3457,7 +3491,6 @@ namespace MyTable
         private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
 
-
             //рассматриваем следующие 5 параметров:
             //1. изменили дату.
             //2. изменили показание
@@ -3470,7 +3503,6 @@ namespace MyTable
                 label38.Text += " " + dataGridView1[0, e.RowIndex].Value.ToString();//дата измененной ячейки
             }*/
             //дата-показание-расход-коэффициент
-
 
         }
 
@@ -3508,6 +3540,7 @@ namespace MyTable
             }
         }
 
+        //Кнопка - Арендаторы и счетчики
         private void button40_Click(object sender, EventArgs e)
         {
             OutputSorting("ToLongNameSchet");
@@ -3582,9 +3615,10 @@ namespace MyTable
                         if (row1 < dataGridView1.RowCount )
                         {
                             row1++;
-                            richTextBox1.Text +=
-    counters[k, outL2et_pom[0], 0, outL2et_pom[1]] + " " + k.ToString() + " " +
-    DateTime.Parse(dataGridView1[0, row1].Value.ToString()).ToShortDateString() + " " + row1.ToString() + "\r\n";
+
+                            richTextBox1.Text += counters[k, outL2et_pom[0], 0, outL2et_pom[1]] + " " + k.ToString() + " " +
+                                DateTime.Parse(dataGridView1[0, row1].Value.ToString()).ToShortDateString() + " " + row1.ToString() + "\r\n";
+
                             if (counters[k, outL2et_pom[0], 0, outL2et_pom[1]] != DateTime.Parse(dataGridView1[0, row1].Value.ToString()).ToShortDateString())
                             {
                                 row1--;
@@ -3666,7 +3700,7 @@ namespace MyTable
             
         }
 
-        //вывести массив счетчиков
+        //Кнопка - mass[ch] (вывести массив счетчиков)
         private void button41_Click(object sender, EventArgs e)
         {
             for (int k = 59; k > -1; k--)
@@ -3679,10 +3713,17 @@ namespace MyTable
             }
         }
 
+        //Кнопка - Т Е Р Р И Т О Р И Я
         private void button45_Click(object sender, EventArgs e)
         {
             HideAr();//спрятать чертеж
             ButtonBlue(1);//первая кнопка выделена, нужно добавить неактивность формы на время прогрузки чертежа.
+        }
+
+        //Спрятать чертеж
+        void HideAr() {
+            axAcCtrl1.Visible = false;
+            pictureBox1.Visible = true;
         }
 
         private void button47_Click(object sender, EventArgs e)
@@ -3796,6 +3837,7 @@ namespace MyTable
             }
         }
 
+        //Кнопка - DB counters (dublicate)
         private void button48_Click(object sender, EventArgs e)
         {
             for (int et = 0; et < 4; et++)
@@ -3820,6 +3862,7 @@ namespace MyTable
             }
         }
 
+        //Кнопка - DEL DUBLICATE
         private void button49_Click(object sender, EventArgs e)
         {
             string temp = "";
@@ -3834,6 +3877,7 @@ namespace MyTable
             System.IO.File.WriteAllLines(@"Data.txt", File, Encoding.Default);
         }
 
+        //Кнопка - button50
         private void button50_Click_1(object sender, EventArgs e)
         {
             if (comboBox14.Text != "" && comboBox14.Text != "расчет")
@@ -3845,7 +3889,7 @@ namespace MyTable
             } 
         }
 
-        //Отчет за период
+        //Кнопка - Отчет за период
         private void button51_Click(object sender, EventArgs e)
         {
             ReportPrinter report = new ReportPrinter(NPOIPrinter.Company.SKB, dateTimePicker5.Value, dateTimePicker6.Value);            
@@ -3949,7 +3993,7 @@ namespace MyTable
             return ToOtchet;
         }
 
-        string FileNameFD1(string ParentFolder)
+        private string FileNameFD1(string ParentFolder)
         {
             openFileDialog1.InitialDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + ParentFolder;
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
@@ -4006,6 +4050,7 @@ namespace MyTable
             }
         }
 
+        //Кнопка - Rename Свободно
         private void button52_Click(object sender, EventArgs e)
         {
             for (int et = 0; et < 4; et++)
@@ -4028,6 +4073,7 @@ namespace MyTable
             if (comboBox5.Text != "" && comboBox6.Text != "") Unlock(true);
         }
 
+        //Кнопка - Sort
         private void button53_Click(object sender, EventArgs e)
         {
             comboBox19.Items.AddRange(Sort().ToArray());
@@ -4063,20 +4109,21 @@ namespace MyTable
             else button47.Enabled = false;
         }
 
+        //Кнопка - П Л А Н
         private void button42_Click(object sender, EventArgs e)
         {
             VisibleAr(textBox22.Text);
             ButtonBlue(2);
         }
 
-        void VisibleAr(string FileName)
+        private void VisibleAr(string FileName)
         {
             axAcCtrl1.Visible = true;
             pictureBox1.Visible = false;            
             axAcCtrl1.PutSourcePath(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + FileName);
         }
 
-        void ButtonBlue(int c)
+        private void ButtonBlue(int c)
         {
             if (c==1)
             {
@@ -4120,36 +4167,34 @@ namespace MyTable
             }
         }
 
-        void HideAr()
-        {
-            axAcCtrl1.Visible = false;
-            pictureBox1.Visible = true; 
-        }
-
+        //Кнопка - ZoomIN
         private void button54_Click(object sender, EventArgs e)
         {
             axAcCtrl1.Zoom_In();
         }
 
+        //Кнопка - Однолинейная схема
         private void button43_Click(object sender, EventArgs e)
         {
             VisibleAr(textBox23.Text);
             ButtonBlue(3);
         }
 
+        //Кнопка - План электросети
         private void button44_Click(object sender, EventArgs e)
         {
             VisibleAr(textBox24.Text);
             ButtonBlue(4);
         }
 
+        //Кнопка - План водоснабжения
         private void button46_Click(object sender, EventArgs e)
         {
             VisibleAr(textBox25.Text);
             ButtonBlue(5);
         }
 
-        //Убрать в базе данных =zablokirovano=
+        //Кнопка - ReLoadBD (Убрать в базе данных =zablokirovano=)
         private void button56_Click(object sender, EventArgs e)
         {
             File = System.IO.File.ReadAllLines(@"Data.txt", Encoding.Default).ToList();
@@ -4158,13 +4203,14 @@ namespace MyTable
 
         }
 
+        //Кнопка - LoadDB
         private void button57_Click(object sender, EventArgs e)
         {
             File = System.IO.File.ReadAllLines(@"Data.txt", Encoding.Default).ToList();
             LoadDB();
         }
 
-        //тестовая, изменить счетчик
+        //Кнопка - Измен. (тестовая, изменить счетчик)
         private void button58_Click(object sender, EventArgs e)
         {
             floorGlobal = 0;
@@ -4177,7 +4223,7 @@ namespace MyTable
             //  modCounters[3] = "014105";
         }
 
-        //вывести изменения на экран
+        //Кнопка - Экран (вывести изменения на экран)
         private void button59_Click(object sender, EventArgs e)
         {
             File.Clear();
@@ -4232,7 +4278,7 @@ namespace MyTable
             richTextBox1.Text += Rich;
         }
 
-        //тестовая, изменить Арендатора
+        //Кнопка - ИзмA (тестовая, изменить Арендатора)
         private void button60_Click(object sender, EventArgs e)
         {
             floorGlobal = 0;
@@ -4244,7 +4290,7 @@ namespace MyTable
             //  modCounters[3] = "014105";
         }
 
-        //инвентаризация электросчетчиков
+        //Кнопка - Инвентаризация (инвентаризация электросчетчиков)
         private void button61_Click(object sender, EventArgs e)
         {
             ReportPrinter report = new ReportPrinter(NPOIPrinter.Company.Impuls);
@@ -4254,7 +4300,7 @@ namespace MyTable
             Process.Start(report.fileNameExcel); //теперь берет имя на себя, если это не изменено в настройках методов ReportCountersInventory, ReportCountersPeriodAll и проч.
         }
 
-        //инвентаризация водомеров
+        //Кнопка - Инвентаризация 2 (инвентаризация водомеров)
         private void button62_Click(object sender, EventArgs e)
         {            
             ReportPrinter report = new ReportPrinter(NPOIPrinter.Company.Impuls);
@@ -4272,7 +4318,8 @@ namespace MyTable
         {
             if (textBox11.BackColor == Color.Red) textBox11.BackColor = Color.White;
         }
-        //основной отчет в Excel (три орешка)
+
+        //Кнопка - Арендаторы, расход2 (основной отчет в Excel (три орешка))
         private void button63_Click(object sender, EventArgs e)
         {
             List<Cell> NoInfoValues = new List<Cell>();
@@ -4291,7 +4338,7 @@ namespace MyTable
             Process.Start(report.fileNameExcel);
         }
 
-        List<Cell> InvertoryTable(Variables.UserKeyEnum keyEnum)
+        private List<Cell> InvertoryTable(Variables.UserKeyEnum keyEnum)
         {
             var timer = Stopwatch.StartNew();
             List<Cell> Temp = new List<Cell>();
