@@ -81,6 +81,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cell.cs" />
+    <Compile Include="Clients.cs" />
+    <Compile Include="CountersE.cs" />
     <Compile Include="DataGridViewCalendarColumn.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -96,6 +98,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportPrinter.cs" />
     <Compile Include="Rooms.cs" />
+    <Compile Include="Transformers.cs" />
     <Compile Include="Variables.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
