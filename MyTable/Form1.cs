@@ -10,11 +10,11 @@ namespace MyTable
 {
     public partial class Form1 : Form
     {
-        
+
         string UserKey = "electro";                             //"arenda" "electro" "voda" ""
 
         List<string> File = new List<string>();
-        
+
         //переменные графической части   (начало)
         Bitmap bitmap;
         Graphics g;
@@ -137,50 +137,50 @@ namespace MyTable
                 y = 0;
             }
 
-           // double x = ((cur.X - 9 - pictureBox1.Location.X - this.Location.X) * 20 / scale);
-           // double y = ((cur.Y - 37 - pictureBox1.Location.Y - this.Location.Y) * 20 / scale);
+            // double x = ((cur.X - 9 - pictureBox1.Location.X - this.Location.X) * 20 / scale);
+            // double y = ((cur.Y - 37 - pictureBox1.Location.Y - this.Location.Y) * 20 / scale);
             if (e.Delta > 0)
             {
                 scale += 5;
                 pictureBox1.Width = scalekX * scale;
                 pictureBox1.Height = scalekY * scale;
-                pictureBox1.Location = new Point((int)xpos - (int)x/4, (int)ypos - (int)y/4);//4 -коэффициент увеличения(20/5) 5= scale
+                pictureBox1.Location = new Point((int)xpos - (int)x / 4, (int)ypos - (int)y / 4);//4 -коэффициент увеличения(20/5) 5= scale
             }
             else
             {
-                if(scale!=5)scale -= 5;
+                if (scale != 5) scale -= 5;
                 pictureBox1.Width = scalekX * scale;
                 pictureBox1.Height = scalekY * scale;
-                pictureBox1.Location = new Point((int)xpos + (int)x/4, (int)ypos + (int)y/4);
+                pictureBox1.Location = new Point((int)xpos + (int)x / 4, (int)ypos + (int)y / 4);
             }
 
             //new Point(pictureBox1.Location.X - (int)x / 2, pictureBox1.Location.Y - (int)y / 2); 
-            curnew = pictureBox1.Location;              
+            curnew = pictureBox1.Location;
             label39.Text = "Размер картинки x=" + pictureBox1.Size.Width + " y=" + pictureBox1.Size.Height + "skale=" + scale;
-        }    
-        
+        }
+
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            if (GlobalP ==21)
+            if (GlobalP == 21)
             {
                 double X = (Cursor.Position.X - this.Location.X - pictureBox1.Location.X - 9) * 20 / scale;
                 double Y = (Cursor.Position.Y - this.Location.Y - pictureBox1.Location.Y - 37) * 20 / scale;
-                
+
                 if (g3)
                 {
                     int pom1 = equationSystem(new Point((int)X, (int)Y), out figa1);
                     if (pom1 > -1)
                     {
                         if (tabControl1.SelectedIndex != 0) tabControl1.SelectedIndex = 0;
-                        comboBox5.Text=data[floorGlobal, 0, pom1];//корпус
-                        comboBox6.Text=data[floorGlobal, 1, pom1];//помещение
+                        comboBox5.Text = data[floorGlobal, 0, pom1];//корпус
+                        comboBox6.Text = data[floorGlobal, 1, pom1];//помещение
                         timer1.Enabled = true;
                     }
                     else timer1.Enabled = false;
                 }
             }
         }
-        
+
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
             pictureBox1.Focus();
@@ -220,11 +220,11 @@ namespace MyTable
         {
             //List<string> Arend1 = new List<string>();//арендатор
             List<string> data1 = new List<string>();//корпус
-            for (int et = 0; et < 4;et++ )
+            for (int et = 0; et < 4; et++)
                 for (int i = 0; i < maxRoom; i++)
                 {
-                   // if (arenda[0, et, 1, i] != null) Arend1.Add(arenda[0, et, 1, i]);
-                    if(floorGlobal==et)if (data[floorGlobal, 0, i] != null) data1.Add(data[floorGlobal, 0, i]);
+                    // if (arenda[0, et, 1, i] != null) Arend1.Add(arenda[0, et, 1, i]);
+                    if (floorGlobal == et) if (data[floorGlobal, 0, i] != null) data1.Add(data[floorGlobal, 0, i]);
                 }
             comboBox1.Items.Clear();
             //Arend1.Sort();
@@ -296,7 +296,7 @@ namespace MyTable
             timer2.Enabled = true;
         }
 
-        private string DobavitRazdeliteli(string stroka,int Kol_vo)
+        private string DobavitRazdeliteli(string stroka, int Kol_vo)
         {
             int i = 0;
             string temp = stroka;
@@ -348,7 +348,7 @@ namespace MyTable
                     PomOnEt = int.Parse(File[i].Substring(8, File[i].Length - 8)) - 1;
                     schetchik = 0;
                     i++;
-                }                
+                }
                 if (File[i] == "[" + schetchik + "]")
                 {
                     schetchik++;
@@ -360,7 +360,7 @@ namespace MyTable
                     i++;
                 }
                 if (flag_pokazanie) File[i] = DobavitRazdeliteli(File[i], 5);//counters
-                if (File[i] != "[pokazanie]" && flag_pokazanie==false)
+                if (File[i] != "[pokazanie]" && flag_pokazanie == false)
                 {
                     File[i] = DobavitRazdeliteli(File[i], 6);//arendator's
                 }
@@ -368,7 +368,7 @@ namespace MyTable
                 {
                     flag_pokazanie = true;
                 }
-                
+
             }
         }
 
@@ -385,6 +385,136 @@ namespace MyTable
             else return s;
         }
 
+        //Преборазует строку string с разделителями ";" в массив координат Point[]
+        private Point[] StrToPoint(string coordinates)
+        {
+            List<string> x = new List<string>();
+            List<string> y = new List<string>();
+            while (true)
+            {
+                int k = coordinates.IndexOf(";");
+                if (k > 0)
+                {
+                    x.Add(coordinates.Substring(0, k));
+                    coordinates = coordinates.Substring(k + 1);
+                }
+                else break;
+                k = coordinates.IndexOf(";");
+                if (k > 0)
+                {
+                    y.Add(coordinates.Substring(0, k));
+                    coordinates = coordinates.Substring(k + 1);
+                }
+                else
+                {
+                    y.Add(coordinates);
+                    break;
+                }
+            }
+            Point[] points = new Point[x.Count];
+            for (int i = 0; i < x.Count; i++)
+            {
+                points[i].X = int.Parse(x[i]);
+                points[i].Y = int.Parse(y[i]);
+            }
+            return points;
+        }
+
+        void DataToOBJ(Room room, string Data)
+        {
+            CounterE counterE = new CounterE();
+            room.building = DataToValue(Data, out Data);                //корпус
+            room.room = DataToValue(Data, out Data);                    //помещение
+            counterE.substantionNo = DataToValue(Data, out Data);        //запитка от тп 
+            counterE.substantionCabNo = DataToValue(Data, out Data);     //запитка от сп
+            counterE.cableModel = DataToValue(Data, out Data);           //марка кабеля
+            counterE.cableLenght = doubleParse(DataToValue(Data, out Data));    //длина кабеля (м)
+            counterE.power = doubleParse(DataToValue(Data, out Data));          //мощность кВт
+            counterE.switchType = DataToValue(Data, out Data);                   //тип отключающего устройства
+            counterE.switchValue = intParse(DataToValue(Data, out Data));       //Уставка (А) In
+            counterE.number = DataToValue(Data, out Data);                       //Номер электросчетчика
+            counterE.model = DataToValue(Data, out Data);                        //марка электросчетчика
+            counterE.verificationYear = new DateTimeQ(DataToValue(Data, out Data));  //год в/поверки эл.счетчика
+            room.countersE = new List<CounterE>();
+            room.countersE.Add(counterE);
+        }
+        double doubleParse(string value)
+        {
+            if (value != "")
+            {
+                return double.Parse(value.Replace(".", ","));
+            }
+            return 0;
+        }
+        int intParse(string value)
+        {
+            if (value != "")
+            {
+                return int.Parse(value);
+            }
+            return 0;
+        }
+        DateTime DateTimeParse(string value)
+        {
+            if (value != "")
+            {
+                return DateTime.Parse(value);
+            }
+            return new DateTime();
+        }
+        string DataToValue(string Data, out string Data2)
+        {
+            Data2 = Data.Substring(Data.IndexOf(";") + 1);
+            return Data.Substring(0, Data.IndexOf(";"));            
+        }
+
+        private void LoadOBJ()
+        {
+            int roomNuber = 0;
+            int floorNumber = 0;
+            //int PomeshenieM = int.Parse(File[0]);            
+            for (int i = 0; i < File.Count; i++)
+            {
+                if (File[i].IndexOf("[etaz_") > -1)
+                {
+                    countRoom[floorNumber] = int.Parse(File[i].Substring(8, File[i].Length - 8)) - 1;//количество помещений на этаже
+                    //if (countRoom[floor] > maxRoom) maxRoom = countRoom[floor];
+                    floorNumber++;
+                }
+            }
+            floorNumber = 0;
+            List<Room> Rooms = new List<Room>();
+            for (int i = 0; i < File.Count; i++)
+            {
+                if (File[i].IndexOf("[etaz_") > -1)
+                {
+                    floorNumber = int.Parse(File[i].Substring(6, 1)) - 1;//номер этажа
+                    roomNuber = 0;
+                }
+                if (File[i] == "[" + roomNuber + "]")
+                {
+                    Room room = new Room();
+                    room.floor = floorNumber;
+                    i++;
+                    string s = File[i];
+                    if (File[i] != "=no koord=")
+                    {
+                        room.coordinatesPoints = StrToPoint(s);
+                    }
+                    i++;
+                    if (i >= File.Count()) break;
+                    s = File[i];
+                    DataToOBJ(room, s);
+                    Rooms.Add(room);
+                    ///*
+                    roomNuber++;
+                    i--;
+                }
+
+            }
+
+        }
+                    
         //основная функция загрузки с раздельным внесением информации
         private void LoadDB()
         {
@@ -447,7 +577,7 @@ namespace MyTable
                             data[floor, j, room] = ToData(floor, j, room, s);
                             break;
                         }
-                    }
+                    }///*
                     for (int k = 0; k < 10; k++)
                     {
                         i++;
@@ -2259,17 +2389,11 @@ namespace MyTable
             return rezult;
         }
 
-        //Кнопка - test (проверка списка листов и возможность добавления новых листов в книгу)
+        //Кнопка - test 
         private void button20_Click(object sender, EventArgs e)
         {
-
-           /* Variables.newWorkbook("Отчет1");
-            Variables.newSheet("List2");
-            List<string> List1 = Variables.ListSheet();
-            for (int i = 0; i < List1.Count; i++)
-            {
-                richTextBox1.Text += List1[i] + "\r\n";
-            }*/
+            File = System.IO.File.ReadAllLines(@"Data.txt", Encoding.Default).ToList();
+            LoadOBJ();
         }
 
         private void comboBox6_TextChanged(object sender, EventArgs e)
