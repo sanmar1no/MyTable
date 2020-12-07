@@ -22,7 +22,10 @@ namespace MyTable
         public double ratioC;            //	Коэффициент трансформации тока 		
         public double accuracyClassCA;   //	Класс точности тр-ра тока фазы "А"		
         public double accuracyClassCB;   //	Класс точности тр-ра тока фазы "В"		
-        public double accuracyClassCC;   //	Класс точности тр-ра тока фазы "С"		
+        public double accuracyClassCC;   //	Класс точности тр-ра тока фазы "С"
+        public DateTimeQ verificationYearCA;// год в/поверки ТТ ф.А
+        public DateTimeQ verificationYearCB;// год в/поверки ТТ ф.B
+        public DateTimeQ verificationYearCC;// год в/поверки ТТ ф.C
         public string numVA;             //	Номер тр-ра напр. фазы "А"		
         public string numVB;             //	Номер тр-ра напр. фазы "В"		
         public string numVC;             //	Номер тр-ра напр. фазы "С"		
@@ -35,8 +38,9 @@ namespace MyTable
         public double ratioV;            //	Коэффициент трансформации напр. 		
         public double accuracyClassVA;   //	Класс точности тр-ра напр. фазы "А"		
         public double accuracyClassVB;   //	Класс точности тр-ра напр. фазы "В"		
-        public double accuracyClassVC;	 //	Класс точности тр-ра напр. фазы "С"	
-
-
+        public double accuracyClassVC;   //	Класс точности тр-ра напр. фазы "С"	
+        public DateTimeQ verificationYearVA;// год в/поверки ТH ф.А
+        public DateTimeQ verificationYearVB;// год в/поверки ТH ф.B
+        public DateTimeQ verificationYearVC;// год в/поверки ТH ф.C
     }
 }

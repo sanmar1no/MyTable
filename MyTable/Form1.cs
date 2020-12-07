@@ -75,6 +75,8 @@ namespace MyTable
 
         Point positionDTP3 = new Point();//исправляем ошибку на 10-ке... Почему-то статика не работает. хм..
 
+        List<Room> Rooms = new List<Room>();                    //массив объектов помещений.
+
         public Form1()
         {
             InitializeComponent();
@@ -423,20 +425,82 @@ namespace MyTable
         void DataToOBJ(Room room, string Data)
         {
             CounterE counterE = new CounterE();
-            room.building = DataToValue(Data, out Data);                //корпус
-            room.room = DataToValue(Data, out Data);                    //помещение
-            counterE.substantionNo = DataToValue(Data, out Data);        //запитка от тп 
-            counterE.substantionCabNo = DataToValue(Data, out Data);     //запитка от сп
-            counterE.cableModel = DataToValue(Data, out Data);           //марка кабеля
+            CounterW counterW = new CounterW();
+            Transformer transformer = new Transformer();
+            room.building = DataToValue(Data, out Data);                        //корпус
+            room.room = DataToValue(Data, out Data);                            //помещение
+            counterE.substantionNo = DataToValue(Data, out Data);               //запитка от тп 
+            counterE.substantionCabNo = DataToValue(Data, out Data);            //запитка от сп
+            counterE.cableModel = DataToValue(Data, out Data);                  //марка кабеля
             counterE.cableLenght = doubleParse(DataToValue(Data, out Data));    //длина кабеля (м)
             counterE.power = doubleParse(DataToValue(Data, out Data));          //мощность кВт
-            counterE.switchType = DataToValue(Data, out Data);                   //тип отключающего устройства
+            counterE.switchType = DataToValue(Data, out Data);                  //тип отключающего устройства
             counterE.switchValue = intParse(DataToValue(Data, out Data));       //Уставка (А) In
-            counterE.number = DataToValue(Data, out Data);                       //Номер электросчетчика
-            counterE.model = DataToValue(Data, out Data);                        //марка электросчетчика
+            counterE.number = DataToValue(Data, out Data);                      //Номер электросчетчика
+            counterE.model = DataToValue(Data, out Data);                       //марка электросчетчика
             counterE.verificationYear = new DateTimeQ(DataToValue(Data, out Data));  //год в/поверки эл.счетчика
+            counterW.number = DataToValue(Data, out Data);                           //номер водомера
+            counterW.model = DataToValue(Data, out Data);                            //марка водомера
+            counterW.verificationYear = new DateTimeQ(DataToValue(Data, out Data));  //год в/поверки водомера
+            transformer.ratioC = doubleParse(DataToValue(Data, out Data));           //коэффициент ТТ
+            transformer.numCA = DataToValue(Data, out Data);                         //номер фазы А
+            transformer.numCB = DataToValue(Data, out Data);                         //номер фазы B
+            transformer.numCC = DataToValue(Data, out Data);                         //номер фазы C
+            transformer.verificationYearCA = new DateTimeQ(DataToValue(Data, out Data));//год в/поверки TT
+            transformer.verificationYearCB = transformer.verificationYearCA;            // в блокноте было все в одном
+            transformer.verificationYearCC = transformer.verificationYearCA;            // в блокноте было все в одном
+            counterE.sealDate = DateTimeParse(DataToValue(Data, out Data));             //дата опломбировки эл.счетчика
+            counterE.sealList = StrToList(DataToValue(Data, out Data));                 //№ пломбы эл.счетчика
+            transformer.sealCA = StrToList(DataToValue(Data, out Data));                //№ пломбы ТТ "А"
+            transformer.sealCB = StrToList(DataToValue(Data, out Data));                //№ пломбы ТТ "B"
+            transformer.sealCC = StrToList(DataToValue(Data, out Data));                //№ пломбы ТТ "C"
+            counterW.sealDate = DateTimeParse(DataToValue(Data, out Data));             //дата опломбировки водомера
+            counterW.sealList = StrToList(DataToValue(Data, out Data));                 //№ пломбы водомера
+            room.roomArea = doubleParse(DataToValue(Data, out Data));                   //кв.м.
+            room.addressPlan = DataToValue(Data, out Data);                             //Планировка
+            room.addressCircuitLine = DataToValue(Data, out Data);                      //Однолинейная схема
+            room.addressCircuitPlan = DataToValue(Data, out Data);                      //План электросети
+            room.addressCircuitWater = DataToValue(Data, out Data);                     //План водоснабжения
+
+            //заполняем вспомогательные данные
+            counterE.transformers = new List<Transformer>();
+            counterE.transformers.Add(transformer);
+            room.countersW = new List<CounterW>();
+            room.countersW.Add(counterW);
             room.countersE = new List<CounterE>();
             room.countersE.Add(counterE);
+        }
+
+        List<string> StrToList(string str)
+        {
+            List<string> List = new List<string>();
+            int k = 0;
+            while(true)
+            {
+                if (str.Count() > 0)
+                {
+                    k = str.IndexOf(" ");
+                    if (k == 0)
+                    {
+                        k = str.IndexOf(",");
+                    }
+                    if (k > 0)
+                    {
+                        List.Add(str.Substring(0, k));
+                        str = str.Substring(k + 1);
+                    }
+                    else
+                    {
+                        List.Add(str);
+                        break;
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }            
+            return List;
         }
         double doubleParse(string value)
         {
@@ -483,7 +547,7 @@ namespace MyTable
                 }
             }
             floorNumber = 0;
-            List<Room> Rooms = new List<Room>();
+            Rooms = new List<Room>();
             for (int i = 0; i < File.Count; i++)
             {
                 if (File[i].IndexOf("[etaz_") > -1)
@@ -2394,6 +2458,11 @@ namespace MyTable
         {
             File = System.IO.File.ReadAllLines(@"Data.txt", Encoding.Default).ToList();
             LoadOBJ();
+            foreach (Room elem in Rooms)
+            {
+                richTextBox1.Text += "корп. " + elem.building + ", пом." + elem.room + "\r\n";
+            }
+            
         }
 
         private void comboBox6_TextChanged(object sender, EventArgs e)
