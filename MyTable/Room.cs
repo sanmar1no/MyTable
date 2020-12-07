@@ -23,5 +23,6 @@ namespace MyTable
         public Point[] coordinatesPoints;   //	Координаты расположения помещения
         public List<CounterE> countersE;    //  Список электросчетчиков	
         public List<CounterW> countersW;    //  Список водомеров
+        public List<Client> clientsList;        //  Список арендаторов/абонентов
     }
 }

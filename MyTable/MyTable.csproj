@@ -98,6 +98,8 @@
     <Compile Include="NPOIPrinter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RecordE.cs" />
+    <Compile Include="RecordW.cs" />
     <Compile Include="ReportPrinter.cs" />
     <Compile Include="Room.cs" />
     <Compile Include="Transformer.cs" />

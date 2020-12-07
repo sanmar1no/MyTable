@@ -22,5 +22,6 @@ namespace MyTable
         public Point[] coordinatesPointsC;   //	Координаты расположения водомера	
         public List<string> addressListC;    //	Расположение фотографий счетчика	
         public string coordinatesRoomsID;    //	ID Помещения в котором уст. счетчик	
+        public List<RecordW> recordsList;    // Показания водомеров
     }
 }

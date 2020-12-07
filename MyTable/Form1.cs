@@ -422,6 +422,7 @@ namespace MyTable
             return points;
         }
 
+        //строка основных данных по помещению в объект room и проч.
         void DataToOBJ(Room room, string Data)
         {
             CounterE counterE = new CounterE();
@@ -469,6 +470,40 @@ namespace MyTable
             room.countersW.Add(counterW);
             room.countersE = new List<CounterE>();
             room.countersE.Add(counterE);
+        }
+
+        //арендаторы из строки файла в объект
+        void ClientToOBJ(Room room, string Data)
+        {
+            Client client = new Client();
+            client.startDate = DateTimeParse(DataToValue(Data, out Data));  //дата начала аренды
+            client.name = DataToValue(Data, out Data);                      //Наименование арендатора
+            client.FIO = DataToValue(Data, out Data);                       //ФИО
+            client.post = DataToValue(Data, out Data);                      //должность
+            client.workersAmount = intParse(DataToValue(Data, out Data));   //кол-во сотрудников
+            client.email = DataToValue(Data, out Data);                     //e-mail
+            client.info = DataToValue(Data, out Data).Replace("\n", "&rn"); //прочее и телефоны
+            client.addressFolder = DataToValue(Data, out Data);             // Папка арендатора
+            room.clientsList.Add(client);
+        }
+
+        //счетчики из строки файла в объект
+        void CounterToOBJ(Room room, string Data)
+        {
+            RecordE recordE = new RecordE();
+            RecordW recordW = new RecordW();
+            recordE.date = DateTimeParse(DataToValue(Data, out Data));   //Дата съема показаний
+            recordE.value = doubleParse(DataToValue(Data, out Data));    //Показание электросчетчика
+            recordW.date = recordE.date;    //в блокноте даты счетчиков равны
+            recordW.value = doubleParse(DataToValue(Data, out Data));    //Показание водомера
+            DataToValue(Data, out Data);    //в блокноте здесь хранится номер электросчетчика
+            recordE.ratio = doubleParse(DataToValue(Data, out Data));    //Коэфф. учета ЭЭ
+            DataToValue(Data, out Data);    //в блокноте здесь хранится номер водомера
+            DataToValue(Data, out Data);    //в блокноте здесь хранится расход ЭЭ (пока не используем???)
+            recordW.workersAmount = intParse(DataToValue(Data, out Data));//кол-во сотрудников для воды
+            //сч-р_В-8, тех-хо_В-9, расход_В-10, корп_Э-11, помещ_Э-12, этаж_Э-13, %_Э-14, С-кВт_Э-15        
+            room.countersE[0].recordsList.Add(recordE);     //добавим строку показаний в строку электросчетчиков объекта помещений
+            room.countersW[0].recordsList.Add(recordW);     //добавим строку показаний в строку водомеров объекта помещений
         }
 
         List<string> StrToList(string str)
@@ -528,10 +563,16 @@ namespace MyTable
         }
         string DataToValue(string Data, out string Data2)
         {
-            Data2 = Data.Substring(Data.IndexOf(";") + 1);
-            return Data.Substring(0, Data.IndexOf(";"));            
+            if (Data != "")
+            {
+                Data2 = Data.Substring(Data.IndexOf(";") + 1);
+                return Data.Substring(0, Data.IndexOf(";"));
+            }
+            Data2 = "";
+            return "";
         }
 
+        //загрузить блокнот в объекты
         private void LoadOBJ()
         {
             int roomNuber = 0;
@@ -568,15 +609,40 @@ namespace MyTable
                     i++;
                     if (i >= File.Count()) break;
                     s = File[i];
-                    DataToOBJ(room, s);
+                    DataToOBJ(room, s); //загрузить data данные
+                    room.countersE[0].recordsList = new List<RecordE>();
+                    room.countersW[0].recordsList = new List<RecordW>();
+                    
+                    //прогрузим арендаторов
+                    room.clientsList = new List<Client>();
+
+                    for (int k = 0; k < 10; k++)
+                    {
+                        i++;
+                        if (i >= File.Count()) break;
+                        s = File[i];
+                        if (s == "[pokazanie]")
+                        {
+                            break;
+                        }
+                        ClientToOBJ(room, s);//загрузка строки арендаторов
+                    }
+
+                    //прогружаем все счетчики как обычно
+                    for (int k = 0; k < 60; k++)
+                    {
+                        i++;
+                        if (i >= File.Count()) break;
+                        s = File[i];
+                        if (s.Substring(0, 1) == "[" || s == "=no koord=") break;
+                        CounterToOBJ(room, s);
+                    }
+
                     Rooms.Add(room);
-                    ///*
                     roomNuber++;
                     i--;
                 }
-
             }
-
         }
                     
         //основная функция загрузки с раздельным внесением информации
@@ -2461,8 +2527,7 @@ namespace MyTable
             foreach (Room elem in Rooms)
             {
                 richTextBox1.Text += "корп. " + elem.building + ", пом." + elem.room + "\r\n";
-            }
-            
+            }            
         }
 
         private void comboBox6_TextChanged(object sender, EventArgs e)

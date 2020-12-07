@@ -18,7 +18,7 @@ namespace MyTable
         public string email;               //	Email
         public string info;                //	Доп. Информация
         public int workersAmount;          //	Кол-во сотрудников
-        public string client_folder;	   //   Папка арендатора
+        public string addressFolder;	   //   Папка арендатора
 
     }
 }
