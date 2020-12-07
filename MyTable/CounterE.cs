@@ -29,6 +29,7 @@ namespace MyTable
         public double power;                 //	Разрешенная мощность, кВт		
         public string switchType;            //	Тип отключающего устройства		
         public int switchValue;              //	Уставка In(А) вводного устройства	
-        public List<Transformer> transformers; // Список трансформаторов			
+        public List<Transformer> transformers; // Список трансформаторов	
+        public List<RecordE> recordsList;      // Показания электросчетчиков
     }
 }
