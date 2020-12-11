@@ -119,6 +119,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DateTimeQ.cs" />
+    <Compile Include="DbWorker.cs" />
     <Compile Include="ExcelPrinter.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -149,6 +150,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="ClassDiagram1.cd" />
+    <None Include="MyTableDB.db" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
