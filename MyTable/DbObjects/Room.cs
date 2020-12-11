@@ -25,5 +25,18 @@ namespace MyTable
         public List<CounterE> countersE{ get; set; }    //  Список электросчетчиков	
         public List<CounterW> countersW{ get; set; }    //  Список водомеров
         public List<Client> clientsList{ get; set; }        //  Список арендаторов/абонентов
+
+        public string getStr() {
+            return $"id: {ID}, " +
+                $"корп: {building}, " +
+                $"этаж: {floor}, " +
+                $"пом: {room}, " +
+                $"площ.: {roomArea}, " +
+                $"объем.: {roomVolume}, " +
+                $"коэфф.: {ratioHeat}" +
+                $"\r\n";
+        }
+
+
     }
 }

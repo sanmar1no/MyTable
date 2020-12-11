@@ -2524,10 +2524,21 @@ namespace MyTable
         {
             File = System.IO.File.ReadAllLines(@"Data.txt", Encoding.Default).ToList();
             LoadOBJ();
-            foreach (Room elem in Rooms)
-            {
-                richTextBox1.Text += "корп. " + elem.building + ", пом." + elem.room + "\r\n";
-            }            
+
+            DbWorker db = new DbWorker();
+            db.creatRoomsTable();                                   //Создаём таблицу в БД, если её не было
+
+            /*
+            foreach (Room elem in Rooms) {
+                //richTextBox1.Text += $"корп. {elem.building}, пом. {elem.room}\r\n";
+                db.insertRoomsTable(elem);                          //Вставляем данные в таблицу
+            }
+            */
+
+            foreach (Room elem in db.selectRoomsTable()) {          //Вытаскивает данные из таблицы Rooms
+                richTextBox1.Text += elem.getStr();                 //Выводим поочереди информацию в richTextBox1
+            }
+
         }
 
         private void comboBox6_TextChanged(object sender, EventArgs e)
