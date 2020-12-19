@@ -2499,6 +2499,7 @@ namespace MyTable
             LoadOBJ();
 
             DbWorker db = new DbWorker();
+            //db.deleteRoomsTable();                                  //Удаляем таблицу в БД, если она была
             db.creatRoomsTable();                                   //Создаём таблицу в БД, если её не было
 
             /*
@@ -2507,11 +2508,11 @@ namespace MyTable
                 db.insertRoomsTable(elem);                          //Вставляем данные в таблицу
             }
             */
-
+            
             foreach (Room elem in db.selectRoomsTable()) {          //Вытаскивает данные из таблицы Rooms
                 richTextBox1.Text += elem.getStr();                 //Выводим поочереди информацию в richTextBox1
             }
-
+            
         }
 
         private void comboBox6_TextChanged(object sender, EventArgs e)
