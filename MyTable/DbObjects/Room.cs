@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace MyTable {
     class Room {
-        public int ID { get; set; }                     //	Уникальный номер
+        public int id { get; set; }                     //	Уникальный номер
         public string building { get; set; }             //	№ корпуса/адрес:улица
         public int floor { get; set; }                   //	№ этажа
         public string room { get; set; }                 //	№ помещения/номер дома+помещение
@@ -25,7 +25,7 @@ namespace MyTable {
         public List<Client> clientsList { get; set; }        //  Список арендаторов/абонентов
 
         public string getStr() {
-            return $"id: {ID}, " +
+            return $"id: {id}, " +
                 $"корп: {building}, " +
                 $"этаж: {floor}, " +
                 $"пом: {room}, " +

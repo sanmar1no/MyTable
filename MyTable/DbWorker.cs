@@ -34,7 +34,8 @@ namespace MyTable {
                                 "addressCircuitWater TEXT NOT NULL," +
                                 "addressCircuitHeat TEXT NOT NULL," +
                                 "roomVolume REAL NOT NULL," +
-                                "ratioHeat REAL NOT NULL" +
+                                "ratioHeat REAL NOT NULL," +
+                                "coordinatesPoints TEXT DEFAULT ''" +
                                 ");";
 
             using (SqliteConnection connection = getConnection()) {
@@ -44,6 +45,19 @@ namespace MyTable {
                 cmd.CommandText = s;
                 cmd.ExecuteNonQuery();
             }
+        }
+
+        public void deleteRoomsTable() {
+            string s = "DROP TABLE IF EXISTS rooms;";
+
+            using (SqliteConnection connection = getConnection()) {
+                connection.Open();
+
+                SqliteCommand cmd = connection.CreateCommand();
+                cmd.CommandText = s;
+                cmd.ExecuteNonQuery();
+            }
+
         }
 
         //Метод вставляет данные в таблицу rooms из одного объекта Room
@@ -82,18 +96,19 @@ namespace MyTable {
                     while (reader.Read()) {
 
                         Room r = new Room();
-                        r.ID = reader.GetInt32(0);
+                        r.id = reader.GetInt32(0);
                         r.building = reader.GetString(1);
                         r.floor = reader.GetInt32(2);
                         r.room = reader.GetString(3);
-                        r.roomArea = reader.GetDouble(4);
+                        r.roomArea = Convert.ToDouble(reader.GetValue(4));
                         r.addressPlan = reader.GetString(5);
                         r.addressCircuitPlan = reader.GetString(6);
                         r.addressCircuitLine = reader.GetString(7);
                         r.addressCircuitWater = reader.GetString(8);
                         r.addressCircuitHeat = reader.GetString(9);
-                        r.roomVolume = reader.GetDouble(10);
-                        r.ratioHeat = reader.GetDouble(11);
+                        r.roomVolume = Convert.ToDouble(reader.GetValue(10));
+                        r.ratioHeat = Convert.ToDouble(reader.GetValue(11));
+                        r.coordinatesPoints = reader.GetString(12);
 
                         list.Add(r);
                     }
