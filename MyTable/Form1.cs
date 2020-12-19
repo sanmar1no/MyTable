@@ -387,49 +387,15 @@ namespace MyTable
             else return s;
         }
 
-        //Преборазует строку string с разделителями ";" в массив координат Point[]
-        private Point[] StrToPoint(string coordinates)
-        {
-            List<string> x = new List<string>();
-            List<string> y = new List<string>();
-            while (true)
-            {
-                int k = coordinates.IndexOf(";");
-                if (k > 0)
-                {
-                    x.Add(coordinates.Substring(0, k));
-                    coordinates = coordinates.Substring(k + 1);
-                }
-                else break;
-                k = coordinates.IndexOf(";");
-                if (k > 0)
-                {
-                    y.Add(coordinates.Substring(0, k));
-                    coordinates = coordinates.Substring(k + 1);
-                }
-                else
-                {
-                    y.Add(coordinates);
-                    break;
-                }
-            }
-            Point[] points = new Point[x.Count];
-            for (int i = 0; i < x.Count; i++)
-            {
-                points[i].X = int.Parse(x[i]);
-                points[i].Y = int.Parse(y[i]);
-            }
-            return points;
-        }
-
         //строка основных данных по помещению в объект room и проч.
-        void DataToOBJ(Room room, string Data)
-        {
+        void DataToOBJ(Room room, string Data) {
             CounterE counterE = new CounterE();
             CounterW counterW = new CounterW();
             Transformer transformer = new Transformer();
+
             room.building = DataToValue(Data, out Data);                        //корпус
             room.room = DataToValue(Data, out Data);                            //помещение
+
             counterE.substantionNo = DataToValue(Data, out Data);               //запитка от тп 
             counterE.substantionCabNo = DataToValue(Data, out Data);            //запитка от сп
             counterE.cableModel = DataToValue(Data, out Data);                  //марка кабеля
@@ -443,6 +409,7 @@ namespace MyTable
             counterW.number = DataToValue(Data, out Data);                           //номер водомера
             counterW.model = DataToValue(Data, out Data);                            //марка водомера
             counterW.verificationYear = new DateTimeQ(DataToValue(Data, out Data));  //год в/поверки водомера
+            
             transformer.ratioC = doubleParse(DataToValue(Data, out Data));           //коэффициент ТТ
             transformer.numCA = DataToValue(Data, out Data);                         //номер фазы А
             transformer.numCB = DataToValue(Data, out Data);                         //номер фазы B
@@ -450,13 +417,17 @@ namespace MyTable
             transformer.verificationYearCA = new DateTimeQ(DataToValue(Data, out Data));//год в/поверки TT
             transformer.verificationYearCB = transformer.verificationYearCA;            // в блокноте было все в одном
             transformer.verificationYearCC = transformer.verificationYearCA;            // в блокноте было все в одном
+            
             counterE.sealDate = DateTimeParse(DataToValue(Data, out Data));             //дата опломбировки эл.счетчика
             counterE.sealList = StrToList(DataToValue(Data, out Data));                 //№ пломбы эл.счетчика
+            
             transformer.sealCA = StrToList(DataToValue(Data, out Data));                //№ пломбы ТТ "А"
             transformer.sealCB = StrToList(DataToValue(Data, out Data));                //№ пломбы ТТ "B"
             transformer.sealCC = StrToList(DataToValue(Data, out Data));                //№ пломбы ТТ "C"
+            
             counterW.sealDate = DateTimeParse(DataToValue(Data, out Data));             //дата опломбировки водомера
             counterW.sealList = StrToList(DataToValue(Data, out Data));                 //№ пломбы водомера
+            
             room.roomArea = doubleParse(DataToValue(Data, out Data));                   //кв.м.
             room.addressPlan = DataToValue(Data, out Data);                             //Планировка
             room.addressCircuitLine = DataToValue(Data, out Data);                      //Однолинейная схема
@@ -466,8 +437,10 @@ namespace MyTable
             //заполняем вспомогательные данные
             counterE.transformers = new List<Transformer>();
             counterE.transformers.Add(transformer);
+            
             room.countersW = new List<CounterW>();
             room.countersW.Add(counterW);
+            
             room.countersE = new List<CounterE>();
             room.countersE.Add(counterE);
         }
@@ -573,67 +546,67 @@ namespace MyTable
         }
 
         //загрузить блокнот в объекты
-        private void LoadOBJ()
-        {
+        private void LoadOBJ() {
             int roomNuber = 0;
             int floorNumber = 0;
-            //int PomeshenieM = int.Parse(File[0]);            
-            for (int i = 0; i < File.Count; i++)
-            {
-                if (File[i].IndexOf("[etaz_") > -1)
-                {
+            //int PomeshenieM = int.Parse(File[0]);  
+            
+            for (int i = 0; i < File.Count; i++) {
+                if (File[i].IndexOf("[etaz_") > -1) {
                     countRoom[floorNumber] = int.Parse(File[i].Substring(8, File[i].Length - 8)) - 1;//количество помещений на этаже
                     //if (countRoom[floor] > maxRoom) maxRoom = countRoom[floor];
                     floorNumber++;
                 }
             }
+
             floorNumber = 0;
+
             Rooms = new List<Room>();
-            for (int i = 0; i < File.Count; i++)
-            {
-                if (File[i].IndexOf("[etaz_") > -1)
-                {
+            for (int i = 0; i < File.Count; i++) {
+                if (File[i].IndexOf("[etaz_") > -1) {
                     floorNumber = int.Parse(File[i].Substring(6, 1)) - 1;//номер этажа
                     roomNuber = 0;
                 }
-                if (File[i] == "[" + roomNuber + "]")
-                {
+
+                if (File[i] == "[" + roomNuber + "]") {
                     Room room = new Room();
                     room.floor = floorNumber;
+
                     i++;
+
                     string s = File[i];
-                    if (File[i] != "=no koord=")
-                    {
-                        room.coordinatesPoints = StrToPoint(s);
+                    if (File[i] != "=no koord=") {
+                        room.coordinatesPoints = s;
                     }
+
                     i++;
+
                     if (i >= File.Count()) break;
                     s = File[i];
+
                     DataToOBJ(room, s); //загрузить data данные
+                    
                     room.countersE[0].recordsList = new List<RecordE>();
                     room.countersW[0].recordsList = new List<RecordW>();
                     
                     //прогрузим арендаторов
                     room.clientsList = new List<Client>();
 
-                    for (int k = 0; k < 10; k++)
-                    {
+                    for (int k = 0; k < 10; k++) {
                         i++;
                         if (i >= File.Count()) break;
                         s = File[i];
-                        if (s == "[pokazanie]")
-                        {
-                            break;
-                        }
+                        
+                        if (s == "[pokazanie]") break;
                         ClientToOBJ(room, s);//загрузка строки арендаторов
                     }
 
                     //прогружаем все счетчики как обычно
-                    for (int k = 0; k < 60; k++)
-                    {
+                    for (int k = 0; k < 60; k++) {
                         i++;
                         if (i >= File.Count()) break;
                         s = File[i];
+                        
                         if (s.Substring(0, 1) == "[" || s == "=no koord=") break;
                         CounterToOBJ(room, s);
                     }
