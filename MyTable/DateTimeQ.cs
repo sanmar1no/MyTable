@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace MyTable
 {
-    class DateTimeQ
+    public class DateTimeQ
     {
         public int Year { get; set; }
-        private int quarter=0;
+        private int quarter = 0;
         public int Quarter
         {
             get
             {
-                return Quarter;
+                return quarter;
             }
             set
             {
@@ -29,13 +29,13 @@ namespace MyTable
             }
         }
         private int month = 0;
-        public int Month 
-        { 
-            get 
+        public int Month
+        {
+            get
             {
                 return month;
-            } 
-            set 
+            }
+            set
             {
                 if (value > 12 && value < 0)
                 {
@@ -53,22 +53,22 @@ namespace MyTable
         }
         public DateTimeQ(string Date)
         {
-                ToDateQ(Date);
+            ToDateQ(Date);
         }
-        public new string ToString()
+        public override string ToString()
         {
             string s;
-            if ((month != 0)&&(quarter == 0))
+            if ((month != 0) && (quarter == 0))
             {
-                MonthToQuarter();                
+                MonthToQuarter();
             }
             if (Year == 0 || quarter == 0)
             {
-                s= "";
+                s = "";
             }
             else
             {
-                s = QuarterToRome() + " " + Year.ToString();
+                s = QuarterToRome() + " " + Year.ToString(); //например "II 2021"
             }
             return s;
         }
@@ -104,7 +104,7 @@ namespace MyTable
             if (Date.IndexOf("-") > 0) k = Date.IndexOf("-");
             if (k > 0)
             {
-                s= Date.Substring(0, k);
+                s = Date.Substring(0, k);
                 if (s == "I" || s == "1")
                 {
                     quarter = 1;
@@ -125,16 +125,18 @@ namespace MyTable
                     quarter = 4;
                     month = 10;
                 }
-                s=s.Substring(k);
+                s = Date.Substring(k + 1);
+                if (s != "")
+                {
+                    Year = int.Parse(s);
+                }
+                else
+                {
+                    Year = 0;
+                }
             }
-            if (s != "")
-            {
-                Year = int.Parse(s);
-            }
-            else
-            {
-                Year = 0;
-            }
+
         }
+
     }
 }
