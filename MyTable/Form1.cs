@@ -10,11 +10,11 @@ namespace MyTable
 {
     public partial class Form1 : Form
     {
-        
+
         string UserKey = "electro";                             //"arenda" "electro" "voda" ""
 
         List<string> File = new List<string>();
-        
+
         //переменные графической части   (начало)
         Bitmap bitmap;
         Graphics g;
@@ -74,6 +74,8 @@ namespace MyTable
         int ind1 = -1;
 
         Point positionDTP3 = new Point();//исправляем ошибку на 10-ке... Почему-то статика не работает. хм..
+
+        List<Room> Rooms = new List<Room>();                    //массив объектов помещений.
 
         public Form1()
         {
@@ -137,50 +139,50 @@ namespace MyTable
                 y = 0;
             }
 
-           // double x = ((cur.X - 9 - pictureBox1.Location.X - this.Location.X) * 20 / scale);
-           // double y = ((cur.Y - 37 - pictureBox1.Location.Y - this.Location.Y) * 20 / scale);
+            // double x = ((cur.X - 9 - pictureBox1.Location.X - this.Location.X) * 20 / scale);
+            // double y = ((cur.Y - 37 - pictureBox1.Location.Y - this.Location.Y) * 20 / scale);
             if (e.Delta > 0)
             {
                 scale += 5;
                 pictureBox1.Width = scalekX * scale;
                 pictureBox1.Height = scalekY * scale;
-                pictureBox1.Location = new Point((int)xpos - (int)x/4, (int)ypos - (int)y/4);//4 -коэффициент увеличения(20/5) 5= scale
+                pictureBox1.Location = new Point((int)xpos - (int)x / 4, (int)ypos - (int)y / 4);//4 -коэффициент увеличения(20/5) 5= scale
             }
             else
             {
-                if(scale!=5)scale -= 5;
+                if (scale != 5) scale -= 5;
                 pictureBox1.Width = scalekX * scale;
                 pictureBox1.Height = scalekY * scale;
-                pictureBox1.Location = new Point((int)xpos + (int)x/4, (int)ypos + (int)y/4);
+                pictureBox1.Location = new Point((int)xpos + (int)x / 4, (int)ypos + (int)y / 4);
             }
 
             //new Point(pictureBox1.Location.X - (int)x / 2, pictureBox1.Location.Y - (int)y / 2); 
-            curnew = pictureBox1.Location;              
+            curnew = pictureBox1.Location;
             label39.Text = "Размер картинки x=" + pictureBox1.Size.Width + " y=" + pictureBox1.Size.Height + "skale=" + scale;
-        }    
-        
+        }
+
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            if (GlobalP ==21)
+            if (GlobalP == 21)
             {
                 double X = (Cursor.Position.X - this.Location.X - pictureBox1.Location.X - 9) * 20 / scale;
                 double Y = (Cursor.Position.Y - this.Location.Y - pictureBox1.Location.Y - 37) * 20 / scale;
-                
+
                 if (g3)
                 {
                     int pom1 = equationSystem(new Point((int)X, (int)Y), out figa1);
                     if (pom1 > -1)
                     {
                         if (tabControl1.SelectedIndex != 0) tabControl1.SelectedIndex = 0;
-                        comboBox5.Text=data[floorGlobal, 0, pom1];//корпус
-                        comboBox6.Text=data[floorGlobal, 1, pom1];//помещение
+                        comboBox5.Text = data[floorGlobal, 0, pom1];//корпус
+                        comboBox6.Text = data[floorGlobal, 1, pom1];//помещение
                         timer1.Enabled = true;
                     }
                     else timer1.Enabled = false;
                 }
             }
         }
-        
+
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
             pictureBox1.Focus();
@@ -220,11 +222,11 @@ namespace MyTable
         {
             //List<string> Arend1 = new List<string>();//арендатор
             List<string> data1 = new List<string>();//корпус
-            for (int et = 0; et < 4;et++ )
+            for (int et = 0; et < 4; et++)
                 for (int i = 0; i < maxRoom; i++)
                 {
-                   // if (arenda[0, et, 1, i] != null) Arend1.Add(arenda[0, et, 1, i]);
-                    if(floorGlobal==et)if (data[floorGlobal, 0, i] != null) data1.Add(data[floorGlobal, 0, i]);
+                    // if (arenda[0, et, 1, i] != null) Arend1.Add(arenda[0, et, 1, i]);
+                    if (floorGlobal == et) if (data[floorGlobal, 0, i] != null) data1.Add(data[floorGlobal, 0, i]);
                 }
             comboBox1.Items.Clear();
             //Arend1.Sort();
@@ -296,7 +298,7 @@ namespace MyTable
             timer2.Enabled = true;
         }
 
-        private string DobavitRazdeliteli(string stroka,int Kol_vo)
+        private string DobavitRazdeliteli(string stroka, int Kol_vo)
         {
             int i = 0;
             string temp = stroka;
@@ -348,7 +350,7 @@ namespace MyTable
                     PomOnEt = int.Parse(File[i].Substring(8, File[i].Length - 8)) - 1;
                     schetchik = 0;
                     i++;
-                }                
+                }
                 if (File[i] == "[" + schetchik + "]")
                 {
                     schetchik++;
@@ -360,7 +362,7 @@ namespace MyTable
                     i++;
                 }
                 if (flag_pokazanie) File[i] = DobavitRazdeliteli(File[i], 5);//counters
-                if (File[i] != "[pokazanie]" && flag_pokazanie==false)
+                if (File[i] != "[pokazanie]" && flag_pokazanie == false)
                 {
                     File[i] = DobavitRazdeliteli(File[i], 6);//arendator's
                 }
@@ -368,7 +370,7 @@ namespace MyTable
                 {
                     flag_pokazanie = true;
                 }
-                
+
             }
         }
 
@@ -385,6 +387,237 @@ namespace MyTable
             else return s;
         }
 
+        //строка основных данных по помещению в объект room и проч.
+        void DataToOBJ(Room room, string Data) {
+            CounterE counterE = new CounterE();
+            CounterW counterW = new CounterW();
+            Transformer transformer = new Transformer();
+
+            room.building = DataToValue(Data, out Data);                        //корпус
+            room.room = DataToValue(Data, out Data);                            //помещение
+
+            counterE.substantionNo = DataToValue(Data, out Data);               //запитка от тп 
+            counterE.substantionCabNo = DataToValue(Data, out Data);            //запитка от сп
+            counterE.cableModel = DataToValue(Data, out Data);                  //марка кабеля
+            counterE.cableLenght = doubleParse(DataToValue(Data, out Data));    //длина кабеля (м)
+            counterE.power = doubleParse(DataToValue(Data, out Data));          //мощность кВт
+            counterE.switchType = DataToValue(Data, out Data);                  //тип отключающего устройства
+            counterE.switchValue = intParse(DataToValue(Data, out Data));       //Уставка (А) In
+            counterE.number = DataToValue(Data, out Data);                      //Номер электросчетчика
+            counterE.model = DataToValue(Data, out Data);                       //марка электросчетчика
+            counterE.verificationYear = new DateTimeQ(DataToValue(Data, out Data));  //год в/поверки эл.счетчика
+            counterW.number = DataToValue(Data, out Data);                           //номер водомера
+            counterW.model = DataToValue(Data, out Data);                            //марка водомера
+            counterW.verificationYear = new DateTimeQ(DataToValue(Data, out Data));  //год в/поверки водомера
+            
+            transformer.ratioC = doubleParse(DataToValue(Data, out Data));           //коэффициент ТТ
+            transformer.numCA = DataToValue(Data, out Data);                         //номер фазы А
+            transformer.numCB = DataToValue(Data, out Data);                         //номер фазы B
+            transformer.numCC = DataToValue(Data, out Data);                         //номер фазы C
+            transformer.verificationYearCA = new DateTimeQ(DataToValue(Data, out Data));//год в/поверки TT
+            transformer.verificationYearCB = transformer.verificationYearCA;            // в блокноте было все в одном
+            transformer.verificationYearCC = transformer.verificationYearCA;            // в блокноте было все в одном
+            
+            counterE.sealDate = DateTimeParse(DataToValue(Data, out Data));             //дата опломбировки эл.счетчика
+            counterE.sealList = StrToList(DataToValue(Data, out Data));                 //№ пломбы эл.счетчика
+            
+            transformer.sealCA = StrToList(DataToValue(Data, out Data));                //№ пломбы ТТ "А"
+            transformer.sealCB = StrToList(DataToValue(Data, out Data));                //№ пломбы ТТ "B"
+            transformer.sealCC = StrToList(DataToValue(Data, out Data));                //№ пломбы ТТ "C"
+            
+            counterW.sealDate = DateTimeParse(DataToValue(Data, out Data));             //дата опломбировки водомера
+            counterW.sealList = StrToList(DataToValue(Data, out Data));                 //№ пломбы водомера
+            
+            room.roomArea = doubleParse(DataToValue(Data, out Data));                   //кв.м.
+            room.addressPlan = DataToValue(Data, out Data);                             //Планировка
+            room.addressCircuitLine = DataToValue(Data, out Data);                      //Однолинейная схема
+            room.addressCircuitPlan = DataToValue(Data, out Data);                      //План электросети
+            room.addressCircuitWater = DataToValue(Data, out Data);                     //План водоснабжения
+
+            //заполняем вспомогательные данные
+            counterE.transformers = new List<Transformer>();
+            counterE.transformers.Add(transformer);
+            
+            room.countersW = new List<CounterW>();
+            room.countersW.Add(counterW);
+            
+            room.countersE = new List<CounterE>();
+            room.countersE.Add(counterE);
+        }
+
+        //арендаторы из строки файла в объект
+        void ClientToOBJ(Room room, string Data)
+        {
+            Client client = new Client();
+            client.startDate = DateTimeParse(DataToValue(Data, out Data));  //дата начала аренды
+            client.name = DataToValue(Data, out Data);                      //Наименование арендатора
+            client.FIO = DataToValue(Data, out Data);                       //ФИО
+            client.post = DataToValue(Data, out Data);                      //должность
+            client.workersAmount = intParse(DataToValue(Data, out Data));   //кол-во сотрудников
+            client.email = DataToValue(Data, out Data);                     //e-mail
+            client.info = DataToValue(Data, out Data).Replace("\n", "&rn"); //прочее и телефоны
+            client.addressFolder = DataToValue(Data, out Data);             // Папка арендатора
+            room.clientsList.Add(client);
+        }
+
+        //счетчики из строки файла в объект
+        void CounterToOBJ(Room room, string Data)
+        {
+            RecordE recordE = new RecordE();
+            RecordW recordW = new RecordW();
+            recordE.date = DateTimeParse(DataToValue(Data, out Data));   //Дата съема показаний
+            recordE.value = doubleParse(DataToValue(Data, out Data));    //Показание электросчетчика
+            recordW.date = recordE.date;    //в блокноте даты счетчиков равны
+            recordW.value = doubleParse(DataToValue(Data, out Data));    //Показание водомера
+            DataToValue(Data, out Data);    //в блокноте здесь хранится номер электросчетчика
+            recordE.ratio = doubleParse(DataToValue(Data, out Data));    //Коэфф. учета ЭЭ
+            DataToValue(Data, out Data);    //в блокноте здесь хранится номер водомера
+            DataToValue(Data, out Data);    //в блокноте здесь хранится расход ЭЭ (пока не используем???)
+            recordW.workersAmount = intParse(DataToValue(Data, out Data));//кол-во сотрудников для воды
+            //сч-р_В-8, тех-хо_В-9, расход_В-10, корп_Э-11, помещ_Э-12, этаж_Э-13, %_Э-14, С-кВт_Э-15        
+            room.countersE[0].recordsList.Add(recordE);     //добавим строку показаний в строку электросчетчиков объекта помещений
+            room.countersW[0].recordsList.Add(recordW);     //добавим строку показаний в строку водомеров объекта помещений
+        }
+
+        List<string> StrToList(string str)
+        {
+            List<string> List = new List<string>();
+            int k = 0;
+            while(true)
+            {
+                if (str.Count() > 0)
+                {
+                    k = str.IndexOf(" ");
+                    if (k == 0)
+                    {
+                        k = str.IndexOf(",");
+                    }
+                    if (k > 0)
+                    {
+                        List.Add(str.Substring(0, k));
+                        str = str.Substring(k + 1);
+                    }
+                    else
+                    {
+                        List.Add(str);
+                        break;
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }            
+            return List;
+        }
+        double doubleParse(string value)
+        {
+            if (value != "")
+            {
+                return double.Parse(value.Replace(".", ","));
+            }
+            return 0;
+        }
+        int intParse(string value)
+        {
+            if (value != "")
+            {
+                return int.Parse(value);
+            }
+            return 0;
+        }
+        DateTime DateTimeParse(string value)
+        {
+            if (value != "")
+            {
+                return DateTime.Parse(value);
+            }
+            return new DateTime();
+        }
+        string DataToValue(string Data, out string Data2)
+        {
+            if (Data != "")
+            {
+                Data2 = Data.Substring(Data.IndexOf(";") + 1);
+                return Data.Substring(0, Data.IndexOf(";"));
+            }
+            Data2 = "";
+            return "";
+        }
+
+        //загрузить блокнот в объекты
+        private void LoadOBJ() {
+            int roomNuber = 0;
+            int floorNumber = 0;
+            //int PomeshenieM = int.Parse(File[0]);  
+            
+            for (int i = 0; i < File.Count; i++) {
+                if (File[i].IndexOf("[etaz_") > -1) {
+                    countRoom[floorNumber] = int.Parse(File[i].Substring(8, File[i].Length - 8)) - 1;//количество помещений на этаже
+                    //if (countRoom[floor] > maxRoom) maxRoom = countRoom[floor];
+                    floorNumber++;
+                }
+            }
+
+            floorNumber = 0;
+
+            Rooms = new List<Room>();
+            for (int i = 0; i < File.Count; i++) {
+                if (File[i].IndexOf("[etaz_") > -1) {
+                    floorNumber = int.Parse(File[i].Substring(6, 1)) - 1;//номер этажа
+                    roomNuber = 0;
+                }
+
+                if (File[i] == "[" + roomNuber + "]") {
+                    Room room = new Room();
+                    room.floor = floorNumber;
+
+                    i++;
+
+                    string s = File[i];
+                    if (File[i] != "=no koord=") {
+                        room.coordinatesPoints = s;
+                    }
+
+                    i++;
+
+                    if (i >= File.Count()) break;
+                    s = File[i];
+
+                    DataToOBJ(room, s); //загрузить data данные
+                    
+                    room.countersE[0].recordsList = new List<RecordE>();
+                    room.countersW[0].recordsList = new List<RecordW>();
+                    
+                    //прогрузим арендаторов
+                    room.clientsList = new List<Client>();
+
+                    for (int k = 0; k < 10; k++) {
+                        i++;
+                        if (i >= File.Count()) break;
+                        s = File[i];
+                        
+                        if (s == "[pokazanie]") break;
+                        ClientToOBJ(room, s);//загрузка строки арендаторов
+                    }
+
+                    //прогружаем все счетчики как обычно
+                    for (int k = 0; k < 60; k++) {
+                        i++;
+                        if (i >= File.Count()) break;
+                        s = File[i];
+                        
+                        if (s.Substring(0, 1) == "[" || s == "=no koord=") break;
+                        CounterToOBJ(room, s);
+                    }
+
+                    Rooms.Add(room);
+                    roomNuber++;
+                    i--;
+                }
+            }
+        }
+                    
         //основная функция загрузки с раздельным внесением информации
         private void LoadDB()
         {
@@ -447,7 +680,7 @@ namespace MyTable
                             data[floor, j, room] = ToData(floor, j, room, s);
                             break;
                         }
-                    }
+                    }///*
                     for (int k = 0; k < 10; k++)
                     {
                         i++;
@@ -2259,17 +2492,27 @@ namespace MyTable
             return rezult;
         }
 
-        //Кнопка - test (проверка списка листов и возможность добавления новых листов в книгу)
+        //Кнопка - test 
         private void button20_Click(object sender, EventArgs e)
         {
+            File = System.IO.File.ReadAllLines(@"Data.txt", Encoding.Default).ToList();
+            LoadOBJ();
 
-           /* Variables.newWorkbook("Отчет1");
-            Variables.newSheet("List2");
-            List<string> List1 = Variables.ListSheet();
-            for (int i = 0; i < List1.Count; i++)
-            {
-                richTextBox1.Text += List1[i] + "\r\n";
-            }*/
+            DbWorker db = new DbWorker();
+            //db.deleteRoomsTable();                                  //Удаляем таблицу в БД, если она была
+            db.creatRoomsTable();                                   //Создаём таблицу в БД, если её не было
+
+            /*
+            foreach (Room elem in Rooms) {
+                //richTextBox1.Text += $"корп. {elem.building}, пом. {elem.room}\r\n";
+                db.insertRoomsTable(elem);                          //Вставляем данные в таблицу
+            }
+            */
+            
+            foreach (Room elem in db.selectRoomsTable()) {          //Вытаскивает данные из таблицы Rooms
+                richTextBox1.Text += elem.getStr();                 //Выводим поочереди информацию в richTextBox1
+            }
+            
         }
 
         private void comboBox6_TextChanged(object sender, EventArgs e)
