@@ -3447,7 +3447,7 @@ namespace MyTable
                             {//если произошел переход через ноль (показание кратно 10к, а следуюшее (если существует, меньше текущего)
                                 if (k + 1 < 60) if (counters[k + 1, EtazR, 1, PomesR] != null) if (double.Parse(counters[k + 1, EtazR, 1, PomesR]) < double.Parse(counters[k, EtazR, 1, PomesR]))
                                 {
-                                    rezult += double.Parse(counters[k, EtazR, 1, PomesR]) * int.Parse(counters[k, EtazR, 4, PomesR]);
+                                    rezult += double.Parse(counters[k, EtazR, 1, PomesR]) * double.Parse(counters[k, EtazR, 4, PomesR]); //ошибка
                                     value1 = double.Parse(counters[k+1, EtazR, 1, PomesR]);
                                 }  
                             } 

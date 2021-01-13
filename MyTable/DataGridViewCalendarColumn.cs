@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Data;
 
-namespace System.Windows.Forms
+namespace MyTable
 {
     public class DataGridViewCalendarColumn : DataGridViewColumn
     {
