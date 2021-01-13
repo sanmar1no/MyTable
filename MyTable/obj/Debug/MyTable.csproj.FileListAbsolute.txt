@@ -109,3 +109,20 @@ C:\Git\MyTable\MyTable\bin\Debug\System.Buffers.xml
 C:\Git\MyTable\MyTable\bin\Debug\System.Memory.xml
 C:\Git\MyTable\MyTable\bin\Debug\System.Numerics.Vectors.xml
 C:\Git\MyTable\MyTable\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\runtimes\win-x86\native\e_sqlite3.dll
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\runtimes\win-x64\native\e_sqlite3.dll
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\runtimes\win-arm\native\e_sqlite3.dll
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\Microsoft.Data.Sqlite.dll
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\SQLitePCLRaw.batteries_v2.dll
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\SQLitePCLRaw.core.dll
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\SQLitePCLRaw.nativelibrary.dll
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\SQLitePCLRaw.provider.dynamic_cdecl.dll
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\System.Buffers.dll
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\System.Memory.dll
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\Microsoft.Data.Sqlite.xml
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\System.Buffers.xml
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\System.Memory.xml
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
