@@ -4581,6 +4581,13 @@ namespace MyTable
             Process.Start(report.fileNameExcel);
         }
 
+        private void button64_Click(object sender, EventArgs e)
+        {
+            ShellGrid shell = new ShellGrid();
+            shell.GetRoom();
+            propertyGrid1.SelectedObject = shell;
+        }
+
         private List<Cell> InvertoryTable(Variables.UserKeyEnum keyEnum)
         {
             var timer = Stopwatch.StartNew();

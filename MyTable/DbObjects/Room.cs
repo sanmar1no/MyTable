@@ -19,7 +19,7 @@ namespace MyTable {
         public string addressCircuitHeat { get; set; }   //	Расположение  плана теплоснабжения
         public double roomVolume { get; set; }           //	Объем помещения
         public double ratioHeat { get; set; }            //	Коэффициент для расчета тепла
-        public string coordinatesPoints { get; set; }   //	Координаты расположения помещения
+        public string coordinatesPoints { get; set; }    //	Координаты расположения помещения
         public List<CounterE> countersE { get; set; }    //  Список электросчетчиков	
         public List<CounterW> countersW { get; set; }    //  Список водомеров
         public List<Client> clientsList { get; set; }        //  Список арендаторов/абонентов

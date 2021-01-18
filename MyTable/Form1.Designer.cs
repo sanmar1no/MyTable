@@ -183,6 +183,7 @@
             this.button32 = new System.Windows.Forms.Button();
             this.button31 = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.button60 = new System.Windows.Forms.Button();
             this.button59 = new System.Windows.Forms.Button();
             this.button58 = new System.Windows.Forms.Button();
@@ -240,7 +241,7 @@
             this.Hint = new System.Windows.Forms.ToolTip(this.components);
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
+            this.button64 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -1984,6 +1985,7 @@
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.Transparent;
+            this.tabPage1.Controls.Add(this.button64);
             this.tabPage1.Controls.Add(this.propertyGrid1);
             this.tabPage1.Controls.Add(this.button60);
             this.tabPage1.Controls.Add(this.button59);
@@ -2041,6 +2043,13 @@
             this.tabPage1.Size = new System.Drawing.Size(661, 771);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Отладка";
+            // 
+            // propertyGrid1
+            // 
+            this.propertyGrid1.Location = new System.Drawing.Point(287, 420);
+            this.propertyGrid1.Name = "propertyGrid1";
+            this.propertyGrid1.Size = new System.Drawing.Size(366, 343);
+            this.propertyGrid1.TabIndex = 57;
             // 
             // button60
             // 
@@ -2629,12 +2638,16 @@
             // 
             this.folderBrowserDialog1.SelectedPath = "@";
             // 
-            // propertyGrid1
+            // button64
             // 
-            this.propertyGrid1.Location = new System.Drawing.Point(287, 420);
-            this.propertyGrid1.Name = "propertyGrid1";
-            this.propertyGrid1.Size = new System.Drawing.Size(366, 343);
-            this.propertyGrid1.TabIndex = 57;
+            this.button64.Location = new System.Drawing.Point(387, 336);
+            this.button64.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.button64.Name = "button64";
+            this.button64.Size = new System.Drawing.Size(71, 25);
+            this.button64.TabIndex = 58;
+            this.button64.Text = "prGrid";
+            this.button64.UseVisualStyleBackColor = true;
+            this.button64.Click += new System.EventHandler(this.button64_Click);
             // 
             // Form1
             // 
@@ -2885,6 +2898,7 @@
         private System.Windows.Forms.Button button62;
         private System.Windows.Forms.Button button63;
         private System.Windows.Forms.PropertyGrid propertyGrid1;
+        private System.Windows.Forms.Button button64;
     }
 }
 
