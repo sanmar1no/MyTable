@@ -11,7 +11,7 @@ using System.Windows.Forms.Design;
 
 namespace MyTable
 {
-    class ShellGrid
+    class ShellGrid //no using
     {
         public Client ShClient { get; set; }
         public RecordE ShRecordE { get; set; }
@@ -114,7 +114,6 @@ namespace MyTable
                 {
                     filenameAddressCircuitLine = "";
                 }
-
             }
         }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyTable
 {
-    class Client
+    public class Client
     {
         public int roomsID{ get; set; }                //	ID Помещения
         public DateTime startDate{ get; set; }         //	Дата начала аренды

@@ -386,7 +386,7 @@ namespace MyTable
             }
             else return s;
         }
-
+        
         //строка основных данных по помещению в объект room и проч.
         void DataToOBJ(Room room, string Data) {
             CounterE counterE = new CounterE();
@@ -435,8 +435,8 @@ namespace MyTable
             room.addressCircuitWater = DataToValue(Data, out Data);                     //План водоснабжения
 
             //заполняем вспомогательные данные
-            counterE.transformers = new List<Transformer>();
-            counterE.transformers.Add(transformer);
+            counterE.transformers = transformer;//new Transformer();
+            //counterE.transformers.Add(transformer);
             
             room.countersW = new List<CounterW>();
             room.countersW.Add(counterW);
@@ -4583,9 +4583,11 @@ namespace MyTable
 
         private void button64_Click(object sender, EventArgs e)
         {
-            ShellGrid shell = new ShellGrid();
-            shell.GetRoom();
-            propertyGrid1.SelectedObject = shell;
+            Room shell = new Room();
+            //shell.GetRoom();            
+            DynamicTypeDescriptor dtd = new DynamicTypeDescriptor(typeof(Room));
+            //dtd.RemoveProperty("addressPlan");
+            propertyGrid1.SelectedObject = dtd.FromComponent(shell);
         }
 
         private List<Cell> InvertoryTable(Variables.UserKeyEnum keyEnum)

@@ -126,3 +126,4 @@ C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\Sys
 C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\System.Memory.xml
 C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\System.Numerics.Vectors.xml
 C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\San\Documents\Visual Studio 2013\Projects\MyTable\MyTable\obj\Debug\MyTable.SelectDTQ.resources
