@@ -48,7 +48,7 @@ namespace MyTable {
             }
             set
             {
-                if (value != null)
+                if (!(value == null||value==""))
                 {
                     System.IO.FileInfo file = new System.IO.FileInfo(value);
                     filenameAddressPlan = file.Name;
@@ -73,7 +73,7 @@ namespace MyTable {
             }
             set
             {
-                if (value != null)
+                if (!(value == null || value == ""))
                 {
                     System.IO.FileInfo file = new System.IO.FileInfo(value);
                     filenameAddressCircuitPlan = file.Name;
@@ -105,7 +105,7 @@ namespace MyTable {
                     filename = value.Substring(i1, value.Length - i1);
                 }
                 else filename = value;*/
-                if (value != null)
+                if (!(value == null || value == ""))
                 {
                     System.IO.FileInfo file = new System.IO.FileInfo(value);
                     filenameAddressCircuitLine = file.Name;
@@ -131,7 +131,7 @@ namespace MyTable {
             }
             set
             {
-                if (value != null)
+                if (!(value == null || value == ""))
                 {
                     System.IO.FileInfo file = new System.IO.FileInfo(value);
                     filenameAddressCircuitWater = file.Name;
@@ -157,7 +157,7 @@ namespace MyTable {
             }
             set
             {
-                if (value != null)
+                if (!(value == null || value == ""))
                 {
                     System.IO.FileInfo file = new System.IO.FileInfo(value);
                     filenameAddressCircuitHeat = file.Name;

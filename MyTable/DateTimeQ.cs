@@ -128,7 +128,7 @@ namespace MyTable
                 s = Date.Substring(k + 1);
                 if (s != "")
                 {
-                    Year = int.Parse(s);
+                    Year = YearStrToInt(s);
                 }
                 else
                 {
@@ -136,6 +136,25 @@ namespace MyTable
                 }
             }
 
+        }
+
+        private int YearStrToInt(string s)
+        {
+            int pos = s.IndexOf(" ");
+            if (pos < 0)
+            {
+                pos = s.IndexOf("г");
+                if (pos < 0)
+                {
+                    pos = s.Length;
+                }
+            }
+            int year = 0;
+            if (pos > -1)
+            {
+                year = int.Parse(s.Substring(0, pos));
+            }
+            return year;
         }
 
     }

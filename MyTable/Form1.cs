@@ -2507,7 +2507,7 @@ namespace MyTable
                 //richTextBox1.Text += $"корп. {elem.building}, пом. {elem.room}\r\n";
                 db.insertRoomsTable(elem);                          //Вставляем данные в таблицу
             }
-            */
+            //*/
             
             foreach (Room elem in db.selectRoomsTable()) {          //Вытаскивает данные из таблицы Rooms
                 richTextBox1.Text += elem.getStr();                 //Выводим поочереди информацию в richTextBox1
@@ -4590,7 +4590,7 @@ namespace MyTable
             propertyGrid1.SelectedObject = dtd.FromComponent(shell);
         }
 
-        private List<Cell> InvertoryTable(Variables.UserKeyEnum keyEnum)
+        private List<Cell> InvertoryTable(Variables.UserKeyEnum keyEnum) //инвентаризация счетчиков
         {
             var timer = Stopwatch.StartNew();
             List<Cell> Temp = new List<Cell>();

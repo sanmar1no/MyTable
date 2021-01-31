@@ -15,7 +15,7 @@ namespace MyTable
         public SelectDTQ(DateTimeQ dataQ)
         {
             InitializeComponent();
-            if(dataQ.Quarter>0&& dataQ.Quarter<5) numericUpDown1.Value = dataQ.Quarter;
+            if (dataQ.Quarter>0&& dataQ.Quarter<5) numericUpDown1.Value = dataQ.Quarter;
             if (dataQ.Year > 1899 && dataQ.Year < 2201) numericUpDown2.Value = dataQ.Year;
         }
 
