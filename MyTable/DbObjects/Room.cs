@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
+using System.Reflection;
 
 namespace MyTable {
     public class Room {
@@ -248,6 +249,44 @@ namespace MyTable {
             return points;
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType() != this.GetType()) return false;
+            Type objType = typeof(Room);
+            FieldInfo[] fields = objType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            foreach (FieldInfo field in fields)
+            {
+                object obj1 = field.GetValue(this);
+                object obj2 = field.GetValue(obj);
+
+                if (obj1 == null)
+                {
+                    if (obj2 != null)
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (field.FieldType.Name == "List`1")
+                    {
+                        //этот код не работает
+                        if (!field.GetValue(this).Equals(field.GetValue(obj)))//list1.SequenceEquals(list2, comparer)
+                        {
+                            return false;
+                        }
+                    }
+                    else 
+                    {
+                        if (!obj1.Equals(obj2))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
 
     }
 }

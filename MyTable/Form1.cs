@@ -2495,24 +2495,13 @@ namespace MyTable
         //Кнопка - test 
         private void button20_Click(object sender, EventArgs e)
         {
-            File = System.IO.File.ReadAllLines(@"Data.txt", Encoding.Default).ToList();
-            LoadOBJ();
-
-            DbWorker db = new DbWorker();
-            //db.deleteRoomsTable();                                  //Удаляем таблицу в БД, если она была
-            db.creatRoomsTable();                                   //Создаём таблицу в БД, если её не было
-
-            /*
-            foreach (Room elem in Rooms) {
-                //richTextBox1.Text += $"корп. {elem.building}, пом. {elem.room}\r\n";
-                db.insertRoomsTable(elem);                          //Вставляем данные в таблицу
-            }
-            //*/
-            
-            foreach (Room elem in db.selectRoomsTable()) {          //Вытаскивает данные из таблицы Rooms
-                richTextBox1.Text += elem.getStr();                 //Выводим поочереди информацию в richTextBox1
-            }
-            
+            Room room = new Room();
+            room.building = "123";
+            Room room1 = new Room();
+            room1.building = "321";
+            richTextBox1.Text += room.Equals(room1).ToString();
+            room1.building = "123";
+            richTextBox1.Text += room.Equals(room1).ToString();
         }
 
         private void comboBox6_TextChanged(object sender, EventArgs e)
